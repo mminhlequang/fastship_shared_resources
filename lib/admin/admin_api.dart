@@ -16,6 +16,11 @@ class _AdminEndpoint {
   static String roles() => "/api/v1/admin/roles";
   static String roleDetail(int roleId) => "/api/v1/admin/roles/$roleId";
 
+  // User Role Management Endpoints
+  static String updateUserRole() => "/api/v1/admin/user-roles/update";
+  static String deleteUserRole() => "/api/v1/admin/user-roles/delete";
+  static String userResetPassword() => "/api/v1/admin/users/reset-password";
+
   // Registration Request Endpoints
   static String guestSubmit() => "/api/v1/registration-requests/guest_submit";
   static String registrationRequests() =>
@@ -40,6 +45,7 @@ abstract class AdminApi {
     int limit = 100,
     int? driverOrgId,
     int? restaurantOrgId,
+    int? restaurantId,
     String? userType,
     String? role,
     String? search,
@@ -65,6 +71,16 @@ abstract class AdminApi {
     RoleUpdate roleUpdate,
   );
   Future<NetworkResponse<void>> deleteRole(int roleId);
+
+  // User Role Management
+  Future<NetworkResponse<void>> updateUserRole(
+    UserRoleUpdateRequest userRoleUpdate,
+  );
+  Future<NetworkResponse<void>> deleteUserRole(int userRoleId, bool deleteUser);
+  Future<NetworkResponse<void>> resetUserPassword(
+    String userId,
+    String newPassword,
+  );
 
   // Registration Request Management
   Future<NetworkResponse<RegistrationRequestResponse>>
@@ -118,6 +134,7 @@ class AdminApiImpl extends AdminApi {
     int limit = 100,
     int? driverOrgId,
     int? restaurantOrgId,
+    int? restaurantId,
     String? userType,
     String? role,
     String? search,
@@ -128,6 +145,7 @@ class AdminApiImpl extends AdminApi {
         if (driverOrgId != null) params['driver_org_id'] = driverOrgId;
         if (restaurantOrgId != null)
           params['restaurant_org_id'] = restaurantOrgId;
+        if (restaurantId != null) params['restaurant_id'] = restaurantId;
         if (userType != null) params['user_type'] = userType;
         if (role != null) params['role'] = role;
         if (search != null) params['search'] = search;
@@ -287,6 +305,63 @@ class AdminApiImpl extends AdminApi {
           response,
           converter: (json) => null,
         );
+      },
+    );
+  }
+
+  // User Role Management Implementation
+  @override
+  Future<NetworkResponse<void>> updateUserRole(
+    UserRoleUpdateRequest userRoleUpdate,
+  ) async {
+    return await handleNetworkError(
+      proccess: () async {
+        Response response = await AppClient(
+          token: await appPrefs.getNormalToken(),
+        ).put(_AdminEndpoint.updateUserRole(), data: userRoleUpdate.toJson());
+        return NetworkResponse.fromResponse(
+          response,
+          converter: (json) => null,
+        );
+      },
+    );
+  }
+
+  @override
+  Future<NetworkResponse<void>> deleteUserRole(
+    int userRoleId,
+    bool deleteUser,
+  ) async {
+    return await handleNetworkError(
+      proccess: () async {
+        Response response = await AppClient(
+          token: await appPrefs.getNormalToken(),
+        ).delete(
+          _AdminEndpoint.deleteUserRole(),
+          data: {"user_role_id": userRoleId, "delete_user": deleteUser},
+        );
+        return NetworkResponse.fromResponse(
+          response,
+          converter: (json) => null,
+        );
+      },
+    );
+  }
+
+  @override
+  Future<NetworkResponse<void>> resetUserPassword(
+    String userId,
+    String newPassword,
+  ) async {
+    return await handleNetworkError(
+      proccess: () async {
+        Response response = await AppClient(
+          token: await appPrefs.getNormalToken(),
+        ).post(
+          _AdminEndpoint.userResetPassword(),
+          data: {"user_id": userId, "new_password": newPassword},
+        );
+        return NetworkResponse.fromResponse(response, converter: (_) => null);
       },
     );
   }

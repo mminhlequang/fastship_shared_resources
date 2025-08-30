@@ -16,10 +16,6 @@ class _RestaurantOrgEndpoint {
   static String adminOrganizations() => "/api/v1/admin/restaurant-org/";
   static String adminOrganizationDetail(int id) =>
       "/api/v1/admin/restaurant-org//$id";
-  static String adminOrganizationUsers() =>
-      "/api/v1/admin/restaurant-org/users";
-  static String adminOrganizationAssignRole() =>
-      "/api/v1/admin/restaurant-org/roles/assign";
 }
 
 abstract class RestaurantOrgsApi {
@@ -42,21 +38,6 @@ abstract class RestaurantOrgsApi {
   Future<NetworkResponse<RestaurantOrganizationResponse>>
   updateOrganizationAdmin(int id, RestaurantOrganizationInput update);
   Future<NetworkResponse<void>> deleteOrganizationAdmin(int id);
-
-  // Admin - Users within organization
-  Future<NetworkResponse<ListResponse<UnifiedUserResponse>>>
-  getOrganizationUsersAdmin({
-    int offset,
-    int limit,
-    int? organizationId,
-    int? restaurantId,
-  });
-  Future<NetworkResponse<UserWithRolesResponse>> createRestaurantUserAdmin(
-    UserCreateForOrg request,
-  );
-  Future<NetworkResponse<void>> assignRoleToUserAdmin(
-    RoleAssignmentRequest request,
-  );
 }
 
 class RestaurantOrgsApiImpl extends RestaurantOrgsApi {
@@ -164,75 +145,6 @@ class RestaurantOrgsApiImpl extends RestaurantOrgsApi {
         Response response = await AppClient(
           token: await appPrefs.getNormalToken(),
         ).delete(_RestaurantOrgEndpoint.adminOrganizationDetail(id));
-        return NetworkResponse.fromResponse(response, converter: (_) => null);
-      },
-    );
-  }
-
-  // Admin - Users
-  @override
-  Future<NetworkResponse<ListResponse<UnifiedUserResponse>>>
-  getOrganizationUsersAdmin({
-    int? organizationId,
-    int offset = 0,
-    int limit = 100,
-    int? restaurantId,
-  }) async {
-    return await handleNetworkError(
-      proccess: () async {
-        final params = <String, dynamic>{'offset': offset, 'limit': limit};
-        if (restaurantId != null) params['restaurant_id'] = restaurantId;
-        if (organizationId != null) params['restaurant_org_id'] = organizationId;
-        Response response = await AppClient(
-          token: await appPrefs.getNormalToken(),
-        ).get(
-          _RestaurantOrgEndpoint.adminOrganizationUsers(),
-          queryParameters: params,
-        );
-        return NetworkResponse.fromResponse(
-          response,
-          converter:
-              (json) => ListResponse.fromJson(
-                json,
-                (item) => UnifiedUserResponse.fromJson(item),
-              ),
-        );
-      },
-    );
-  }
-
-  @override
-  Future<NetworkResponse<UserWithRolesResponse>> createRestaurantUserAdmin(
-    UserCreateForOrg request,
-  ) async {
-    return await handleNetworkError(
-      proccess: () async {
-        Response response = await AppClient(
-          token: await appPrefs.getNormalToken(),
-        ).post(
-          _RestaurantOrgEndpoint.adminOrganizationUsers(),
-          data: request.toJson(),
-        );
-        return NetworkResponse.fromResponse(
-          response,
-          converter: (json) => UserWithRolesResponse.fromJson(json),
-        );
-      },
-    );
-  }
-
-  @override
-  Future<NetworkResponse<void>> assignRoleToUserAdmin(
-    RoleAssignmentRequest request,
-  ) async {
-    return await handleNetworkError(
-      proccess: () async {
-        Response response = await AppClient(
-          token: await appPrefs.getNormalToken(),
-        ).post(
-          _RestaurantOrgEndpoint.adminOrganizationAssignRole(),
-          data: request.toJson(),
-        );
         return NetworkResponse.fromResponse(response, converter: (_) => null);
       },
     );

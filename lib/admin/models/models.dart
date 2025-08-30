@@ -6,7 +6,6 @@ export 'unified_user_response.dart';
 // Role Management Models
 export 'role_response.dart';
 export 'role_detail_response.dart';
-export 'user_role_assignment_request.dart';
 
 // Registration Request Models
 export 'registration_request_response.dart';

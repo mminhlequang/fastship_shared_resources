@@ -23,22 +23,11 @@ class AvailabilityRuleInput {
     required this.startTime,
     required this.endTime,
     required this.isActive,
-  });
-
-  factory AvailabilityRuleInput.fromJson(Map<String, dynamic> json) {
-    return AvailabilityRuleInput(
-      refType: json['ref_type'] as String,
-      refId: json['ref_id'] as String,
-      dayOfWeek: json['day_of_week'] as String,
-      startTime: json['start_time'] as String,
-      endTime: json['end_time'] as String,
-      isActive: json['is_active'] as bool,
-    );
-  }
+  }); 
 
   Map<String, dynamic> toJson() => {
-        'type': refType,
-        'ref_type': refId,
+        'ref_type': refType,
+        'ref_id': refId,
         'day_of_week': dayOfWeek,
         'start_time': startTime,
         'end_time': endTime,

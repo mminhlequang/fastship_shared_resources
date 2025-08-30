@@ -19,8 +19,8 @@ abstract class AvailabilityRulesApi {
 
   Future<NetworkResponse<ListResponse<AvailabilityRuleResponse>>>
   getAvailabilityRules({
-    String? ruleType,
-    String? referenceId,
+    String? refType,
+    String? refId,
     String? dayOfWeek,
     int offset = 0,
     int limit = 100,
@@ -59,8 +59,8 @@ class AvailabilityRulesApiImpl extends AvailabilityRulesApi {
   @override
   Future<NetworkResponse<ListResponse<AvailabilityRuleResponse>>>
   getAvailabilityRules({
-    String? ruleType,
-    String? referenceId,
+    String? refType,
+    String? refId,
     String? dayOfWeek,
     int offset = 0,
     int limit = 100,
@@ -72,8 +72,8 @@ class AvailabilityRulesApiImpl extends AvailabilityRulesApi {
           if (v != null) params[k] = v;
         }
 
-        put('rule_type', ruleType);
-        put('ref_id', referenceId);
+        put('ref_type', refType);
+        put('ref_id', refId);
         put('day_of_week', dayOfWeek);
 
         final response = await AppClient(

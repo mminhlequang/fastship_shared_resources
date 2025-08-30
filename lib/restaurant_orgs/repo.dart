@@ -53,26 +53,4 @@ class RestaurantOrgsRepo {
 
   Future<NetworkResponse<void>> deleteOrganizationAdmin(int id) async =>
       _api.deleteOrganizationAdmin(id);
-
-  // Admin - Users
-  Future<NetworkResponse<ListResponse<UnifiedUserResponse>>>
-  getOrganizationUsersAdmin({
-    int offset = 0,
-    int limit = 100,
-    int? organizationId,
-    int? restaurantId,
-  }) async => _api.getOrganizationUsersAdmin(
-    organizationId: organizationId,
-    offset: offset,
-    limit: limit,
-    restaurantId: restaurantId,
-  );
-
-  Future<NetworkResponse<UserWithRolesResponse>> createRestaurantUserAdmin(
-    UserCreateForOrg request,
-  ) async => _api.createRestaurantUserAdmin(request);
-
-  Future<NetworkResponse<void>> assignRoleToUserAdmin(
-    RoleAssignmentRequest request,
-  ) async => _api.assignRoleToUserAdmin(request);
 }

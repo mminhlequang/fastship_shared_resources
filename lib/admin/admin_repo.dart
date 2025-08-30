@@ -27,6 +27,7 @@ class AdminRepo {
     int limit = 100,
     int? driverOrgId,
     int? restaurantOrgId,
+    int? restaurantId,
     String? userType,
     String? role,
     String? search,
@@ -36,6 +37,7 @@ class AdminRepo {
       limit: limit,
       driverOrgId: driverOrgId,
       restaurantOrgId: restaurantOrgId,
+      restaurantId: restaurantId,
       userType: userType,
       role: role,
       search: search,
@@ -57,6 +59,23 @@ class AdminRepo {
 
   Future<NetworkResponse<void>> deleteUser(String userId) async {
     return await _api.deleteUser(userId);
+  }
+
+  // User Role Management
+  Future<NetworkResponse<void>> updateUserRole(
+    UserRoleUpdateRequest userRoleUpdate,
+  ) async {
+    return await _api.updateUserRole(userRoleUpdate);
+  }
+
+  Future<NetworkResponse<void>> deleteUserRole(dynamic userRoleId, bool deleteUser) async {
+    return await _api.deleteUserRole(userRoleId, deleteUser);
+  } 
+  Future<NetworkResponse<void>> resetUserPassword(
+    String userId,
+    String newPassword,
+  ) async {
+    return await _api.resetUserPassword(userId, newPassword);
   }
 
   // Role Management

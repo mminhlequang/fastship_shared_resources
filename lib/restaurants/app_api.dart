@@ -158,11 +158,13 @@ class RestaurantsApiImpl extends RestaurantsApi {
   ) async {
     return await handleNetworkError(
       proccess: () async {
+        Map<String, dynamic> data = update.toJson();
+        data.removeWhere((key, value) => value == null);
         final response = await AppClient(
           token: await appPrefs.getNormalToken(),
         ).put(
           _RestaurantsEndpoint.adminRestaurantDetail(id),
-          data: update.toJson(),
+          data: data,
         );
         return NetworkResponse.fromResponse(
           response,

@@ -1,9 +1,20 @@
+enum UserCreateByAdminUserType {
+  driver("driver"),
+  customer("customer"),
+  admin(
+    "admin",
+  ); //User type (customer, driver, admin: system admin or restaurant manager)
+
+  const UserCreateByAdminUserType(this.value);
+  final String value;
+}
+
 class UserCreateByAdmin {
   String? email;
   String? password;
   String? fullName;
   String? phoneNumber;
-  String? userType;
+  UserCreateByAdminUserType userType;
   List<AssignRolesCreateByAdmin>? assignRoles;
 
   //detail
@@ -25,7 +36,7 @@ class UserCreateByAdmin {
     this.password,
     this.fullName,
     this.phoneNumber,
-    this.userType,
+    required this.userType,
     this.assignRoles,
     this.companyName,
     this.websiteUrl,
@@ -41,38 +52,13 @@ class UserCreateByAdmin {
     this.emailVerified,
   });
 
-  UserCreateByAdmin.fromJson(Map<String, dynamic> json) {
-    email = json["email"];
-    password = json["password"];
-    fullName = json["full_name"];
-    phoneNumber = json["phone_number"];
-    userType = json["user_type"];
-    assignRoles = json["assign_roles"]
-        ?.map((e) => AssignRolesCreateByAdmin.fromJson(e))
-        .toList();
-    companyName = json["company_name"];
-    websiteUrl = json["website_url"];
-    avatarUrl = json["avatar_url"];
-    countryCode = json["country_code"];
-    locale = json["locale"];
-    timezone = json["timezone"];
-    currency = json["currency"];
-    gender = json["gender"];
-    birthDate = json["birth_date"] != null
-        ? DateTime.tryParse(json["birth_date"])
-        : null;
-    bio = json["bio"];
-    jobTitle = json["job_title"];
-    emailVerified = json["email_verified"];
-  }
-
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = <String, dynamic>{};
     data["email"] = email;
     data["password"] = password;
     data["full_name"] = fullName;
     data["phone_number"] = phoneNumber;
-    data["user_type"] = userType;
+    data["user_type"] = userType.value;
     data["assign_roles"] = assignRoles?.map((e) => e.toJson()).toList();
     data["company_name"] = companyName;
     data["website_url"] = websiteUrl;
@@ -94,28 +80,25 @@ class AssignRolesCreateByAdmin {
   String? role;
   int? driverOrgId;
   int? restaurantOrgId;
+  int? restaurantId;
 
   AssignRolesCreateByAdmin({
     this.role,
     this.driverOrgId,
     this.restaurantOrgId,
+    this.restaurantId,
   });
-
-  AssignRolesCreateByAdmin.fromJson(Map<String, dynamic> json) {
-    role = json["role"];
-    driverOrgId = json["driver_org_id"];
-    restaurantOrgId = json["restaurant_org_id"];
-  }
+ 
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = <String, dynamic>{};
     data["role"] = role;
     data["driver_org_id"] = driverOrgId;
     data["restaurant_org_id"] = restaurantOrgId;
+    data["restaurant_id"] = restaurantId;
     return data;
   }
 }
-
 
 /// Model cập nhật thông tin người dùng cho admin
 class UserUpdate {
@@ -163,9 +146,10 @@ class UserUpdate {
     timezone = json["timezone"];
     currency = json["currency"];
     gender = json["gender"];
-    birthDate = json["birth_date"] != null
-        ? DateTime.tryParse(json["birth_date"])
-        : null;
+    birthDate =
+        json["birth_date"] != null
+            ? DateTime.tryParse(json["birth_date"])
+            : null;
     bio = json["bio"];
     jobTitle = json["job_title"];
     emailVerified = json["email_verified"];
@@ -191,3 +175,43 @@ class UserUpdate {
     return data;
   }
 }
+
+
+/// Model cập nhật vai trò người dùng (UserRoleUpdateRequest)
+class UserRoleUpdateRequest {
+  /// ID của UserRole cần cập nhật
+  int userRoleId;
+
+  /// Tên vai trò mới (nếu có)
+  String? roleName;
+
+  /// ID tổ chức tài xế (nếu có)
+  int? driverOrgId;
+
+  /// ID tổ chức nhà hàng (nếu có)
+  int? restaurantOrgId;
+
+  /// ID nhà hàng (nếu có)
+  int? restaurantId;
+
+  UserRoleUpdateRequest({
+    required this.userRoleId,
+    this.roleName,
+    this.driverOrgId,
+    this.restaurantOrgId,
+    this.restaurantId,
+  });
+
+  /// Chuyển model sang JSON
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['user_role_id'] = userRoleId;
+    if (roleName != null) data['role_name'] = roleName;
+    if (driverOrgId != null) data['driver_org_id'] = driverOrgId;
+    if (restaurantOrgId != null) data['restaurant_org_id'] = restaurantOrgId;
+    if (restaurantId != null) data['restaurant_id'] = restaurantId;
+    return data;
+  }
+}
+
+

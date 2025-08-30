@@ -17,32 +17,32 @@ class AvailabilityRulesRepo {
   late AvailabilityRulesApi _api;
 
   Future<NetworkResponse<AvailabilityRuleResponse>> createAvailabilityRule(
-          AvailabilityRuleInput create) =>
-      _api.createAvailabilityRule(create);
+    AvailabilityRuleInput create,
+  ) => _api.createAvailabilityRule(create);
 
   Future<NetworkResponse<ListResponse<AvailabilityRuleResponse>>>
-      getAvailabilityRules({
-    String? ruleType,
-    String? referenceId,
+  getAvailabilityRules({
+    String? refType,
+    String? refId,
     String? dayOfWeek,
     int offset = 0,
     int limit = 100,
-  }) =>
-          _api.getAvailabilityRules(
-            ruleType: ruleType,
-            referenceId: referenceId,
-            dayOfWeek: dayOfWeek,
-            offset: offset,
-            limit: limit,
-          );
+  }) => _api.getAvailabilityRules(
+    refType: refType,
+    refId: refId,
+    dayOfWeek: dayOfWeek,
+    offset: offset,
+    limit: limit,
+  );
 
   Future<NetworkResponse<AvailabilityRuleResponse>> getAvailabilityRule(
-          String ruleId) =>
-      _api.getAvailabilityRule(ruleId);
+    String ruleId,
+  ) => _api.getAvailabilityRule(ruleId);
 
   Future<NetworkResponse<AvailabilityRuleResponse>> updateAvailabilityRule(
-          String ruleId, AvailabilityRuleInput update) =>
-      _api.updateAvailabilityRule(ruleId, update);
+    String ruleId,
+    AvailabilityRuleInput update,
+  ) => _api.updateAvailabilityRule(ruleId, update);
 
   Future<NetworkResponse<void>> deleteAvailabilityRule(String ruleId) =>
       _api.deleteAvailabilityRule(ruleId);
