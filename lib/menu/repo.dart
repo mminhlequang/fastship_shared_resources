@@ -226,4 +226,31 @@ class MenuRepo {
   Future<NetworkResponse<void>> deleteMenuItemTranslation(
     String translationId,
   ) async => _api.deleteMenuItemTranslation(translationId);
+
+  // Customer APIs
+  Future<NetworkResponse<ListResponse<MenuItemResponse>>> getMenuItemsCustomer({
+    double? lat,
+    double? lng,
+    MenuItemSortBy? sortBy,
+    int? restaurantId,
+    String? cuisineType,
+    bool? isAvailable,
+    double? minRating,
+    double? maxDistance,
+    String? search,
+    int? limit,
+    int? offset,
+  }) => _api.getMenuItemsCustomer(
+    lat: lat,
+    lng: lng,
+    sortBy: sortBy,
+    restaurantId: restaurantId,
+    cuisineType: cuisineType,
+    isAvailable: isAvailable,
+    minRating: minRating,
+    maxDistance: maxDistance,
+    search: search,
+    limit: limit,
+    offset: offset,
+  );
 }

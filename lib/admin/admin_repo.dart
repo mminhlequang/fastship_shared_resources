@@ -28,8 +28,8 @@ class AdminRepo {
     int? driverOrgId,
     int? restaurantOrgId,
     int? restaurantId,
-    String? userType,
-    String? role,
+    String? roleName,
+    String? roleScope,
     String? search,
   }) async {
     return await _api.getUsers(
@@ -38,8 +38,8 @@ class AdminRepo {
       driverOrgId: driverOrgId,
       restaurantOrgId: restaurantOrgId,
       restaurantId: restaurantId,
-      userType: userType,
-      role: role,
+      roleName: roleName,
+      roleScope: roleScope,
       search: search,
     );
   }
@@ -68,9 +68,13 @@ class AdminRepo {
     return await _api.updateUserRole(userRoleUpdate);
   }
 
-  Future<NetworkResponse<void>> deleteUserRole(dynamic userRoleId, bool deleteUser) async {
+  Future<NetworkResponse<void>> deleteUserRole(
+    dynamic userRoleId,
+    bool deleteUser,
+  ) async {
     return await _api.deleteUserRole(userRoleId, deleteUser);
-  } 
+  }
+
   Future<NetworkResponse<void>> resetUserPassword(
     String userId,
     String newPassword,
@@ -158,90 +162,5 @@ class AdminRepo {
 
   Future<NetworkResponse<void>> deleteRegistrationRequest(int requestId) async {
     return await _api.deleteRegistrationRequest(requestId);
-  }
-
-  Future<NetworkResponse<RegistrationRequestResponse>>
-  approveRegistrationRequest(int requestId, {String? note}) async {
-    return await _api.approveRegistrationRequest(requestId, note: note);
-  }
-
-  Future<NetworkResponse<RegistrationRequestResponse>>
-  rejectRegistrationRequest(int requestId, {String? note}) async {
-    return await _api.rejectRegistrationRequest(requestId, note: note);
-  }
-
-  // Convenience Methods for Registration Requests
-  Future<bool> isRegistrationRequestApprovalSuccessful(
-    int requestId, {
-    String? note,
-  }) async {
-    final response = await approveRegistrationRequest(requestId, note: note);
-    return response.isSuccess;
-  }
-
-  Future<bool> isRegistrationRequestRejectionSuccessful(
-    int requestId, {
-    String? note,
-  }) async {
-    final response = await rejectRegistrationRequest(requestId, note: note);
-    return response.isSuccess;
-  }
-
-  // Convenience methods for filtering users by type
-  Future<NetworkResponse<ListResponse<UnifiedUserResponse>>> getDrivers({
-    int offset = 0,
-    int limit = 100,
-    int? driverOrgId,
-    String? search,
-  }) async {
-    return await getUsers(
-      offset: offset,
-      limit: limit,
-      userType: 'driver',
-      driverOrgId: driverOrgId,
-      search: search,
-    );
-  }
-
-  Future<NetworkResponse<ListResponse<UnifiedUserResponse>>>
-  getRestaurantStaff({
-    int offset = 0,
-    int limit = 100,
-    int? restaurantOrgId,
-    String? search,
-  }) async {
-    return await getUsers(
-      offset: offset,
-      limit: limit,
-      userType: 'restaurant_staff',
-      restaurantOrgId: restaurantOrgId,
-      search: search,
-    );
-  }
-
-  Future<NetworkResponse<ListResponse<UnifiedUserResponse>>> getCustomers({
-    int offset = 0,
-    int limit = 100,
-    String? search,
-  }) async {
-    return await getUsers(
-      offset: offset,
-      limit: limit,
-      userType: 'customer',
-      search: search,
-    );
-  }
-
-  Future<NetworkResponse<ListResponse<UnifiedUserResponse>>> getAdmins({
-    int offset = 0,
-    int limit = 100,
-    String? search,
-  }) async {
-    return await getUsers(
-      offset: offset,
-      limit: limit,
-      userType: 'admin',
-      search: search,
-    );
   }
 }

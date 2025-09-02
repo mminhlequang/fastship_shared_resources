@@ -77,24 +77,5 @@ class DriversRepo {
 
   Future<NetworkResponse<void>> deleteDriverAdmin(int driverId) =>
       _api.deleteDriverAdmin(driverId);
-
-  Future<NetworkResponse<ListResponse<UnifiedUserResponse>>>
-      getDriversByOrganizationAdmin(
-    int driverOrgId, {
-    int offset = 0,
-    int limit = 100,
-    bool? isActive,
-    bool? isAvailable,
-    String? onboardingStatus,
-    String? search,
-  }) =>
-          _api.getDriversByOrganizationAdmin(
-            driverOrgId,
-            offset: offset,
-            limit: limit,
-            isActive: isActive,
-            isAvailable: isAvailable,
-            onboardingStatus: onboardingStatus,
-            search: search,
-          );
+ 
 }

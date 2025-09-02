@@ -15,7 +15,7 @@ class _RestaurantOrgEndpoint {
   // Admin base
   static String adminOrganizations() => "/api/v1/admin/restaurant-org/";
   static String adminOrganizationDetail(int id) =>
-      "/api/v1/admin/restaurant-org//$id";
+      "/api/v1/admin/restaurant-org/$id";
 }
 
 abstract class RestaurantOrgsApi {

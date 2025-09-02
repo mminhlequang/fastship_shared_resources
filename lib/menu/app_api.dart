@@ -60,6 +60,9 @@ class _MenuEndpoint {
       "/api/v1/menu/items/$itemId/translations";
   static String menuItemTranslation(String translationId) =>
       "/api/v1/menu/translations/$translationId";
+
+  // Customer APIs
+  static String customerMenuItems() => "/api/v1/customer/menu/items";
 }
 
 abstract class MenuApi {
@@ -195,6 +198,21 @@ abstract class MenuApi {
     MenuItemTranslationUpdate update,
   );
   Future<NetworkResponse<void>> deleteMenuItemTranslation(String translationId);
+
+  // Customer APIs
+  Future<NetworkResponse<ListResponse<MenuItemResponse>>> getMenuItemsCustomer({
+    double? lat,
+    double? lng,
+    MenuItemSortBy? sortBy,
+    int? restaurantId,
+    String? cuisineType,
+    bool? isAvailable,
+    double? minRating,
+    double? maxDistance,
+    String? search,
+    int? limit,
+    int? offset,
+  });
 }
 
 class MenuApiImpl extends MenuApi {
@@ -1017,6 +1035,50 @@ class MenuApiImpl extends MenuApi {
         return NetworkResponse.fromResponse(
           response,
           converter: (json) => null,
+        );
+      },
+    );
+  }
+
+  @override
+  Future<NetworkResponse<ListResponse<MenuItemResponse>>> getMenuItemsCustomer({
+    double? lat,
+    double? lng,
+    MenuItemSortBy? sortBy,
+    int? restaurantId,
+    String? cuisineType,
+    bool? isAvailable,
+    double? minRating,
+    double? maxDistance,
+    String? search,
+    int? limit,
+    int? offset,
+  }) async {
+    return await handleNetworkError(
+      proccess: () async {
+        final params = <String, dynamic>{};
+        if (lat != null) params['lat'] = lat;
+        if (lng != null) params['lng'] = lng;
+        if (sortBy != null) params['sort_by'] = sortBy.name;
+        if (restaurantId != null) params['restaurant_id'] = restaurantId;
+        if (cuisineType != null) params['cuisine_type'] = cuisineType;
+        if (isAvailable != null) params['is_available'] = isAvailable;
+        if (minRating != null) params['min_rating'] = minRating;
+        if (maxDistance != null) params['max_distance'] = maxDistance;
+        if (search != null) params['search'] = search;
+        if (limit != null) params['limit'] = limit;
+        if (offset != null) params['offset'] = offset;
+
+        Response response = await AppClient(
+          token: await appPrefs.getNormalToken(),
+        ).get(_MenuEndpoint.customerMenuItems(), queryParameters: params);
+        return NetworkResponse.fromResponse(
+          response,
+          converter:
+              (json) => ListResponse.fromJson(
+                json,
+                (item) => MenuItemResponse.fromJson(item),
+              ),
         );
       },
     );

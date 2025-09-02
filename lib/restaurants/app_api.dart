@@ -9,16 +9,14 @@ class _RestaurantsEndpoint {
   _RestaurantsEndpoint._();
 
   // Admin
-  static String adminRestaurants() => "/api/v1/restaurants/admin";
+  static String adminRestaurants() => "/api/v1/admin/restaurants/";
   static String adminRestaurantDetail(int id) =>
-      "/api/v1/restaurants/admin/$id";
-  static String adminRestaurantStats(int id) =>
-      "/api/v1/restaurants/admin/$id/stats";
-  static String adminRestaurantsByOrg(int orgId) =>
-      "/api/v1/restaurants/admin/organization/$orgId";
-  static String adminFeatured() => "/api/v1/restaurants/admin/featured";
-  static String adminSearchCriteria() =>
-      "/api/v1/restaurants/admin/search/criteria";
+      "/api/v1/admin/restaurants/$id";
+
+  // Customer
+  static String customerRestaurants() => "/api/v1/customer/restaurants/";
+  static String customerRestaurantDetail(String restaurantId) =>
+      "/api/v1/customer/restaurants/$restaurantId";
 }
 
 abstract class RestaurantsApi {
@@ -46,31 +44,25 @@ abstract class RestaurantsApi {
     RestaurantInput update,
   );
   Future<NetworkResponse<void>> deleteRestaurantAdmin(int id);
-  Future<NetworkResponse<RestaurantResponse>> updateRestaurantStatsAdmin(
-    int id, {
-    int? totalOrders,
-    int? completedOrders,
-    int? cancelledOrders,
-    int? totalRevenue,
-    double? averageOrderValue,
-    double? ratingAverage,
-    int? ratingCount,
-    double? onTimeDeliveryRate,
-  });
 
-  // Optional extras (admin)
-  Future<NetworkResponse<List<RestaurantResponse>>>
-  getRestaurantsByOrganizationAdmin(int orgId, {int offset, int limit});
-  Future<NetworkResponse<List<RestaurantResponse>>>
-  getFeaturedRestaurantsAdmin({int limit});
-  Future<NetworkResponse<List<RestaurantResponse>>>
-  getRestaurantsByCriteriaAdmin({
-    bool? isHalal,
-    bool? isVegetarianFriendly,
+  // Customer APIs
+  Future<NetworkResponse<ListResponse<RestaurantResponse>>>
+  getRestaurantsCustomer({
+    double? lat,
+    double? lng,
+    RestaurantSortBy? sortBy,
+    String? cuisineType,
+    bool? isOpen,
+    bool? isFeatured,
+    bool? isVerified,
     double? minRating,
-    int? maxPreparationTime,
-    int limit,
+    double? maxDistance,
+    int? limit,
+    int? offset,
   });
+  Future<NetworkResponse<RestaurantResponse>> getRestaurantCustomer(
+    String restaurantId,
+  );
 }
 
 class RestaurantsApiImpl extends RestaurantsApi {
@@ -162,10 +154,7 @@ class RestaurantsApiImpl extends RestaurantsApi {
         data.removeWhere((key, value) => value == null);
         final response = await AppClient(
           token: await appPrefs.getNormalToken(),
-        ).put(
-          _RestaurantsEndpoint.adminRestaurantDetail(id),
-          data: data,
-        );
+        ).put(_RestaurantsEndpoint.adminRestaurantDetail(id), data: data);
         return NetworkResponse.fromResponse(
           response,
           converter: (json) => RestaurantResponse.fromJson(json),
@@ -187,129 +176,65 @@ class RestaurantsApiImpl extends RestaurantsApi {
   }
 
   @override
-  Future<NetworkResponse<RestaurantResponse>> updateRestaurantStatsAdmin(
-    int id, {
-    int? totalOrders,
-    int? completedOrders,
-    int? cancelledOrders,
-    int? totalRevenue,
-    double? averageOrderValue,
-    double? ratingAverage,
-    int? ratingCount,
-    double? onTimeDeliveryRate,
+  Future<NetworkResponse<ListResponse<RestaurantResponse>>>
+  getRestaurantsCustomer({
+    double? lat,
+    double? lng,
+    RestaurantSortBy? sortBy,
+    String? cuisineType,
+    bool? isOpen,
+    bool? isFeatured,
+    bool? isVerified,
+    double? minRating,
+    double? maxDistance,
+    int? limit,
+    int? offset,
   }) async {
     return await handleNetworkError(
       proccess: () async {
         final params = <String, dynamic>{};
-        if (totalOrders != null) params['total_orders'] = totalOrders;
-        if (completedOrders != null)
-          params['completed_orders'] = completedOrders;
-        if (cancelledOrders != null)
-          params['cancelled_orders'] = cancelledOrders;
-        if (totalRevenue != null) params['total_revenue'] = totalRevenue;
-        if (averageOrderValue != null)
-          params['average_order_value'] = averageOrderValue;
-        if (ratingAverage != null) params['rating_average'] = ratingAverage;
-        if (ratingCount != null) params['rating_count'] = ratingCount;
-        if (onTimeDeliveryRate != null)
-          params['on_time_delivery_rate'] = onTimeDeliveryRate;
+        if (lat != null) params['lat'] = lat;
+        if (lng != null) params['lng'] = lng;
+        if (sortBy != null) params['sort_by'] = sortBy.name;
+        if (cuisineType != null) params['cuisine_type'] = cuisineType;
+        if (isOpen != null) params['is_open'] = isOpen;
+        if (isFeatured != null) params['is_featured'] = isFeatured;
+        if (isVerified != null) params['is_verified'] = isVerified;
+        if (minRating != null) params['min_rating'] = minRating;
+        if (maxDistance != null) params['max_distance'] = maxDistance;
+        if (limit != null) params['limit'] = limit;
+        if (offset != null) params['offset'] = offset;
 
         final response = await AppClient(
           token: await appPrefs.getNormalToken(),
-        ).put(
-          _RestaurantsEndpoint.adminRestaurantStats(id),
+        ).get(
+          _RestaurantsEndpoint.customerRestaurants(),
           queryParameters: params,
         );
+        return NetworkResponse.fromResponse(
+          response,
+          converter:
+              (json) => ListResponse.fromJson(
+                json,
+                (item) => RestaurantResponse.fromJson(item),
+              ),
+        );
+      },
+    );
+  }
+
+  @override
+  Future<NetworkResponse<RestaurantResponse>> getRestaurantCustomer(
+    String restaurantId,
+  ) async {
+    return await handleNetworkError(
+      proccess: () async {
+        final response = await AppClient(
+          token: await appPrefs.getNormalToken(),
+        ).get(_RestaurantsEndpoint.customerRestaurantDetail(restaurantId));
         return NetworkResponse.fromResponse(
           response,
           converter: (json) => RestaurantResponse.fromJson(json),
-        );
-      },
-    );
-  }
-
-  @override
-  Future<NetworkResponse<List<RestaurantResponse>>>
-  getRestaurantsByOrganizationAdmin(
-    int orgId, {
-    int offset = 0,
-    int limit = 100,
-  }) async {
-    return await handleNetworkError(
-      proccess: () async {
-        final params = <String, dynamic>{'offset': offset, 'limit': limit};
-        final response = await AppClient(
-          token: await appPrefs.getNormalToken(),
-        ).get(
-          _RestaurantsEndpoint.adminRestaurantsByOrg(orgId),
-          queryParameters: params,
-        );
-        return NetworkResponse.fromResponse(
-          response,
-          converter:
-              (json) =>
-                  (json as List)
-                      .map((e) => RestaurantResponse.fromJson(e))
-                      .toList(),
-        );
-      },
-    );
-  }
-
-  @override
-  Future<NetworkResponse<List<RestaurantResponse>>>
-  getFeaturedRestaurantsAdmin({int limit = 10}) async {
-    return await handleNetworkError(
-      proccess: () async {
-        final response = await AppClient(
-          token: await appPrefs.getNormalToken(),
-        ).get(
-          _RestaurantsEndpoint.adminFeatured(),
-          queryParameters: {'limit': limit},
-        );
-        return NetworkResponse.fromResponse(
-          response,
-          converter:
-              (json) =>
-                  (json as List)
-                      .map((e) => RestaurantResponse.fromJson(e))
-                      .toList(),
-        );
-      },
-    );
-  }
-
-  @override
-  Future<NetworkResponse<List<RestaurantResponse>>>
-  getRestaurantsByCriteriaAdmin({
-    bool? isHalal,
-    bool? isVegetarianFriendly,
-    double? minRating,
-    int? maxPreparationTime,
-    int limit = 20,
-  }) async {
-    return await handleNetworkError(
-      proccess: () async {
-        final params = <String, dynamic>{'limit': limit};
-        if (isHalal != null) params['is_halal'] = isHalal;
-        if (isVegetarianFriendly != null)
-          params['is_vegetarian_friendly'] = isVegetarianFriendly;
-        if (minRating != null) params['min_rating'] = minRating;
-        if (maxPreparationTime != null)
-          params['max_preparation_time'] = maxPreparationTime;
-        final response = await AppClient(
-          token: await appPrefs.getNormalToken(),
-        ).get(
-          _RestaurantsEndpoint.adminSearchCriteria(),
-          queryParameters: params,
-        );
-        return NetworkResponse.fromResponse(
-          response,
-          converter:
-              (json) =>
-                  (json as List)
-                      .map((e) => RestaurantResponse.fromJson(e))
-                      .toList(),
         );
       },
     );

@@ -8,7 +8,7 @@ import 'models/models.dart';
 class _AddressesEndpoint {
   _AddressesEndpoint._();
 
-  static String base() => "/api/v1/addresses";
+  static String base() => "/api/v1/addresses/";
   static String byId(String addressId) => "/api/v1/addresses/$addressId";
 }
 

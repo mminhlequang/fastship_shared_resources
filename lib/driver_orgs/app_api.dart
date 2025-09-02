@@ -7,23 +7,17 @@ import 'package:internal_core/internal_core.dart';
 import 'package:internal_network/internal_network.dart';
 import 'package:internal_network/network_resources/resources.dart';
 import 'package:dio/dio.dart';
-import 'package:shared_resources/admin/admin.dart';
 
 import '../models/models.dart';
-import '../admin/models/models.dart'
-    show RoleAssignmentRequest, UserWithRolesResponse, UnifiedUserResponse;
 import 'models/models.dart';
-import '../restaurant_orgs/models/restaurant_org_models.dart'
-    show UserCreateForOrg;
 
 class _DriverOrgEndpoint {
   _DriverOrgEndpoint._();
 
   // Admin base
-  static String adminOrganizations() =>
-      "/api/v1/driver-org/admin/organizations";
+  static String adminOrganizations() => "/api/v1/admin/driver-org/";
   static String adminOrganizationDetail(int id) =>
-      "/api/v1/driver-org/admin/organizations/$id";
+      "/api/v1/admin/driver-org/$id";
 }
 
 abstract class DriverOrganizationsApi {

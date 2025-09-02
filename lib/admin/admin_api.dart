@@ -24,15 +24,11 @@ class _AdminEndpoint {
   // Registration Request Endpoints
   static String guestSubmit() => "/api/v1/registration-requests/guest_submit";
   static String registrationRequests() =>
-      "/api/v1/registration-requests/admin/";
+      "/api/v1/admin/registration-requests/";
   static String registrationRequestDetail(int requestId) =>
-      "/api/v1/registration-requests/admin/$requestId";
-  static String registrationRequestApprove(int requestId) =>
-      "/api/v1/registration-requests/admin/$requestId/approve";
-  static String registrationRequestReject(int requestId) =>
-      "/api/v1/registration-requests/admin/$requestId/reject";
+      "/api/v1/admin/registration-requests/$requestId";
   static String registrationStatistics() =>
-      "/api/v1/registration-requests/admin/statistics";
+      "/api/v1/admin/registration-requests/statistics";
 }
 
 abstract class AdminApi {
@@ -46,8 +42,8 @@ abstract class AdminApi {
     int? driverOrgId,
     int? restaurantOrgId,
     int? restaurantId,
-    String? userType,
-    String? role,
+    String? roleName,
+    String? roleScope,
     String? search,
   });
   Future<NetworkResponse<UnifiedUserResponse>> getUserDetail(String userId);
@@ -103,10 +99,6 @@ abstract class AdminApi {
     RegistrationRequestUpdate requestUpdate,
   );
   Future<NetworkResponse<void>> deleteRegistrationRequest(int requestId);
-  Future<NetworkResponse<RegistrationRequestResponse>>
-  approveRegistrationRequest(int requestId, {String? note});
-  Future<NetworkResponse<RegistrationRequestResponse>>
-  rejectRegistrationRequest(int requestId, {String? note});
 }
 
 class AdminApiImpl extends AdminApi {
@@ -135,19 +127,20 @@ class AdminApiImpl extends AdminApi {
     int? driverOrgId,
     int? restaurantOrgId,
     int? restaurantId,
-    String? userType,
-    String? role,
+    String? roleName,
+    String? roleScope,
     String? search,
   }) async {
     return await handleNetworkError(
       proccess: () async {
         final params = <String, dynamic>{'offset': offset, 'limit': limit};
         if (driverOrgId != null) params['driver_org_id'] = driverOrgId;
-        if (restaurantOrgId != null)
+        if (restaurantOrgId != null) {
           params['restaurant_org_id'] = restaurantOrgId;
+        }
         if (restaurantId != null) params['restaurant_id'] = restaurantId;
-        if (userType != null) params['user_type'] = userType;
-        if (role != null) params['role'] = role;
+        if (roleName != null) params['role_name'] = roleName;
+        if (roleScope != null) params['role_scope'] = roleScope;
         if (search != null) params['search'] = search;
 
         Response response = await AppClient(
@@ -477,50 +470,6 @@ class AdminApiImpl extends AdminApi {
           token: await appPrefs.getNormalToken(),
         ).delete(_AdminEndpoint.registrationRequestDetail(requestId));
         return NetworkResponse.fromResponse(response, converter: (_) => null);
-      },
-    );
-  }
-
-  @override
-  Future<NetworkResponse<RegistrationRequestResponse>>
-  approveRegistrationRequest(int requestId, {String? note}) async {
-    return await handleNetworkError(
-      proccess: () async {
-        final params = <String, dynamic>{};
-        if (note != null) params['note'] = note;
-
-        Response response = await AppClient(
-          token: await appPrefs.getNormalToken(),
-        ).post(
-          _AdminEndpoint.registrationRequestApprove(requestId),
-          queryParameters: params,
-        );
-        return NetworkResponse.fromResponse(
-          response,
-          converter: (json) => RegistrationRequestResponse.fromJson(json),
-        );
-      },
-    );
-  }
-
-  @override
-  Future<NetworkResponse<RegistrationRequestResponse>>
-  rejectRegistrationRequest(int requestId, {String? note}) async {
-    return await handleNetworkError(
-      proccess: () async {
-        final params = <String, dynamic>{};
-        if (note != null) params['note'] = note;
-
-        Response response = await AppClient(
-          token: await appPrefs.getNormalToken(),
-        ).post(
-          _AdminEndpoint.registrationRequestReject(requestId),
-          queryParameters: params,
-        );
-        return NetworkResponse.fromResponse(
-          response,
-          converter: (json) => RegistrationRequestResponse.fromJson(json),
-        );
       },
     );
   }

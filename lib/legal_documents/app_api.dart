@@ -12,10 +12,10 @@ import 'models/models.dart';
 class _LegalDocumentsEndpoint {
   _LegalDocumentsEndpoint._();
 
-  static String getDocs() => "/api/v1/legal_documents/admin/get_docs";
-  static String createUpload() => "/api/v1/legal_documents/admin/create_upload";
+  static String getDocs() => "/api/v1/admin/legal_documents/get_docs";
+  static String createUpload() => "/api/v1/admin/legal_documents/create_upload";
   static String documentDetail(String documentId) =>
-      "/api/v1/legal_documents/admin/$documentId";
+      "/api/v1/admin/legal_documents/$documentId";
 }
 
 abstract class LegalDocumentsApi {

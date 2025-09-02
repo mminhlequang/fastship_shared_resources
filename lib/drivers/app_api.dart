@@ -2,7 +2,6 @@ import 'package:internal_core/internal_core.dart';
 import 'package:internal_network/internal_network.dart';
 import 'package:internal_network/network_resources/resources.dart';
 
-
 import '../admin/models/models.dart';
 import '../models/list_response.dart';
 import 'models/models.dart';
@@ -10,10 +9,8 @@ import 'models/models.dart';
 class _DriversEndpoint {
   _DriversEndpoint._();
 
-  static String base() => "/api/v1/drivers/admin";
-  static String byId(int driverId) => "/api/v1/drivers/admin/$driverId";
-  static String byOrganization(int driverOrgId) =>
-      "/api/v1/drivers/admin/organization/$driverOrgId";
+  static String base() => "/api/v1/admin/drivers/";
+  static String byId(int driverId) => "/api/v1/admin/drivers/$driverId";
 }
 
 abstract class DriversApi {
@@ -53,17 +50,6 @@ abstract class DriversApi {
   );
 
   Future<NetworkResponse<void>> deleteDriverAdmin(int driverId);
-
-  Future<NetworkResponse<ListResponse<UnifiedUserResponse>>>
-  getDriversByOrganizationAdmin(
-    int driverOrgId, {
-    int offset,
-    int limit,
-    bool? isActive,
-    bool? isAvailable,
-    String? onboardingStatus,
-    String? search,
-  });
 }
 
 class DriversApiImpl extends DriversApi {
@@ -196,49 +182,6 @@ class DriversApiImpl extends DriversApi {
           token: await appPrefs.getNormalToken(),
         ).delete(_DriversEndpoint.byId(driverId));
         return NetworkResponse.fromResponse(response, converter: (_) => null);
-      },
-    );
-  }
-
-  @override
-  Future<NetworkResponse<ListResponse<UnifiedUserResponse>>>
-  getDriversByOrganizationAdmin(
-    int driverOrgId, {
-    int offset = 0,
-    int limit = 100,
-    bool? isActive,
-    bool? isAvailable,
-    String? onboardingStatus,
-    String? search,
-  }) async {
-    return await handleNetworkError(
-      proccess: () async {
-        final params = <String, dynamic>{'offset': offset, 'limit': limit};
-        void put(String k, dynamic v) {
-          if (v != null) params[k] = v;
-        }
-
-        put('is_active', isActive);
-        put('is_available', isAvailable);
-        put('onboarding_status', onboardingStatus);
-        put('search', search);
-
-        final response = await AppClient(
-          token: await appPrefs.getNormalToken(),
-        ).get(
-          _DriversEndpoint.byOrganization(driverOrgId),
-          queryParameters: params,
-        );
-        return NetworkResponse.fromResponse(
-          response,
-          converter: (json) {
-            return ListResponse<UnifiedUserResponse>.fromJson(
-              json,
-              (item) =>
-                  UnifiedUserResponse.fromJson(item as Map<String, dynamic>),
-            );
-          },
-        );
       },
     );
   }

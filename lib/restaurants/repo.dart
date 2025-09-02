@@ -16,12 +16,13 @@ class RestaurantsRepo {
 
   late RestaurantsApi _api;
 
+  // Admin CRUD
   Future<NetworkResponse<RestaurantResponse>> createRestaurantAdmin(
-          RestaurantInput create) =>
-      _api.createRestaurantAdmin(create);
+    RestaurantInput create,
+  ) => _api.createRestaurantAdmin(create);
 
   Future<NetworkResponse<ListResponse<RestaurantResponse>>>
-      getRestaurantsAdmin({
+  getRestaurantsAdmin({
     int offset = 0,
     int limit = 100,
     int? restaurantOrgId,
@@ -33,73 +34,58 @@ class RestaurantsRepo {
     bool? isHalal,
     bool? isVegetarianFriendly,
     String? search,
-  }) =>
-          _api.getRestaurantsAdmin(
-            offset: offset,
-            limit: limit,
-            restaurantOrgId: restaurantOrgId,
-            isActive: isActive,
-            isOpen: isOpen,
-            isFeatured: isFeatured,
-            isVerified: isVerified,
-            isChain: isChain,
-            isHalal: isHalal,
-            isVegetarianFriendly: isVegetarianFriendly,
-            search: search,
-          );
+  }) => _api.getRestaurantsAdmin(
+    offset: offset,
+    limit: limit,
+    restaurantOrgId: restaurantOrgId,
+    isActive: isActive,
+    isOpen: isOpen,
+    isFeatured: isFeatured,
+    isVerified: isVerified,
+    isChain: isChain,
+    isHalal: isHalal,
+    isVegetarianFriendly: isVegetarianFriendly,
+    search: search,
+  );
 
   Future<NetworkResponse<RestaurantResponse>> getRestaurantAdmin(int id) =>
       _api.getRestaurantAdmin(id);
   Future<NetworkResponse<RestaurantResponse>> updateRestaurantAdmin(
-          int id, RestaurantInput update) =>
-      _api.updateRestaurantAdmin(id, update);
+    int id,
+    RestaurantInput update,
+  ) => _api.updateRestaurantAdmin(id, update);
   Future<NetworkResponse<void>> deleteRestaurantAdmin(int id) =>
       _api.deleteRestaurantAdmin(id);
 
-  Future<NetworkResponse<RestaurantResponse>> updateRestaurantStatsAdmin(
-    int id, {
-    int? totalOrders,
-    int? completedOrders,
-    int? cancelledOrders,
-    int? totalRevenue,
-    double? averageOrderValue,
-    double? ratingAverage,
-    int? ratingCount,
-    double? onTimeDeliveryRate,
-  }) =>
-      _api.updateRestaurantStatsAdmin(
-        id,
-        totalOrders: totalOrders,
-        completedOrders: completedOrders,
-        cancelledOrders: cancelledOrders,
-        totalRevenue: totalRevenue,
-        averageOrderValue: averageOrderValue,
-        ratingAverage: ratingAverage,
-        ratingCount: ratingCount,
-        onTimeDeliveryRate: onTimeDeliveryRate,
-      );
-
-  Future<NetworkResponse<List<RestaurantResponse>>>
-      getRestaurantsByOrganizationAdmin(int orgId,
-              {int offset = 0, int limit = 100}) =>
-          _api.getRestaurantsByOrganizationAdmin(orgId,
-              offset: offset, limit: limit);
-  Future<NetworkResponse<List<RestaurantResponse>>> getFeaturedRestaurantsAdmin(
-          {int limit = 10}) =>
-      _api.getFeaturedRestaurantsAdmin(limit: limit);
-  Future<NetworkResponse<List<RestaurantResponse>>>
-      getRestaurantsByCriteriaAdmin({
-    bool? isHalal,
-    bool? isVegetarianFriendly,
+  // Customer APIs
+  Future<NetworkResponse<ListResponse<RestaurantResponse>>>
+  getRestaurantsCustomer({
+    double? lat,
+    double? lng,
+    RestaurantSortBy? sortBy,
+    String? cuisineType,
+    bool? isOpen,
+    bool? isFeatured,
+    bool? isVerified,
     double? minRating,
-    int? maxPreparationTime,
-    int limit = 20,
-  }) =>
-          _api.getRestaurantsByCriteriaAdmin(
-            isHalal: isHalal,
-            isVegetarianFriendly: isVegetarianFriendly,
-            minRating: minRating,
-            maxPreparationTime: maxPreparationTime,
-            limit: limit,
-          );
+    double? maxDistance,
+    int? limit,
+    int? offset,
+  }) => _api.getRestaurantsCustomer(
+    lat: lat,
+    lng: lng,
+    sortBy: sortBy,
+    cuisineType: cuisineType,
+    isOpen: isOpen,
+    isFeatured: isFeatured,
+    isVerified: isVerified,
+    minRating: minRating,
+    maxDistance: maxDistance,
+    limit: limit,
+    offset: offset,
+  );
+
+  Future<NetworkResponse<RestaurantResponse>> getRestaurantCustomer(
+    String restaurantId,
+  ) => _api.getRestaurantCustomer(restaurantId);
 }

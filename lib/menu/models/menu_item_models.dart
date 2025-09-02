@@ -1,7 +1,19 @@
 import 'package:dio/dio.dart';
 import 'package:flutter/services.dart';
 
+import '../../restaurants/restaurants.dart';
 import '../menu.dart';
+
+/// Enum for menu item sorting criteria
+enum MenuItemSortBy {
+  distance,
+  rating,
+  popular,
+  orders,
+  revenue,
+  newest,
+  featured,
+}
 
 class MenuItemInput {
   String? name;
@@ -63,6 +75,9 @@ class MenuItemResponse {
   List<MenuItemVariantResponse>? variants;
   List<MenuItemOptionResponse>? options;
 
+  RestaurantResponse? restaurant;
+  double? distance_km;
+
   MenuItemResponse({
     this.id,
     this.name,
@@ -76,6 +91,8 @@ class MenuItemResponse {
     this.createdAt,
     this.updatedAt,
     this.categoryId,
+    this.restaurant,
+    this.distance_km,
   });
 
   factory MenuItemResponse.fromJson(Map<String, dynamic> json) {
@@ -108,6 +125,10 @@ class MenuItemResponse {
               ? DateTime.parse(json['updated_at'])
               : null,
       categoryId: json['category_id'],
+      restaurant: json['restaurant'] != null
+          ? RestaurantResponse.fromJson(json['restaurant'])
+          : null,
+      distance_km: (json['distance_km'] as num?)?.toDouble(),
     );
   }
 
@@ -125,6 +146,8 @@ class MenuItemResponse {
     data['created_at'] = createdAt?.toIso8601String();
     data['updated_at'] = updatedAt?.toIso8601String();
     data['category_id'] = categoryId;
+    data['restaurant'] = restaurant?.toJson();
+    data['distance_km'] = distance_km;
     return data;
   }
 }

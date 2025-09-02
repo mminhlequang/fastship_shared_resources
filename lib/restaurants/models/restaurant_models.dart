@@ -2,6 +2,10 @@ import '../../addresses/models/models.dart';
 import '../../availability_rules/models/models.dart';
 import '../../common_assets/models/models.dart';
 
+/// Enum for restaurant sorting criteria
+enum RestaurantSortBy { distance, rating, popular, orders, revenue, newest, featured }
+ 
+
 /// Model class for restaurant input, used for creating or updating a restaurant.
 /// Các trường được map theo JSON yêu cầu.
 class RestaurantInput {
@@ -34,6 +38,7 @@ class RestaurantInput {
   bool? isHalal;
   bool? isVegetarianFriendly;
   String? description;
+  List<String>? cuisineType;
   List<String>? highlights;
   List<String>? amenities;
   int? minimumAge;
@@ -70,6 +75,7 @@ class RestaurantInput {
     this.description,
     this.highlights,
     this.amenities,
+    this.cuisineType,
     this.minimumAge,
   });
 
@@ -113,6 +119,10 @@ class RestaurantInput {
           (json['amenities'] as List<dynamic>?)
               ?.map((e) => e as String)
               .toList(),
+      cuisineType:
+          (json['cuisine_type'] as List<dynamic>?)
+              ?.map((e) => e as String)
+              .toList(),
       minimumAge: json['minimum_age'] as int?,
     );
   }
@@ -151,6 +161,7 @@ class RestaurantInput {
       'description': description,
       'highlights': highlights,
       'amenities': amenities,
+      'cuisine_type': cuisineType,
       'minimum_age': minimumAge,
     };
   }
@@ -189,6 +200,7 @@ class RestaurantResponse {
   String? description;
   List<String>? highlights;
   List<String>? amenities;
+  List<String>? cuisineType;
   int? minimumAge;
   String? availabilityRuleId;
 
@@ -226,6 +238,11 @@ class RestaurantResponse {
     this.isChain,
     this.isHalal,
     this.isVegetarianFriendly,
+    this.description,
+    this.highlights,
+    this.amenities,
+    this.cuisineType,
+    this.minimumAge,
     this.ratingAverage,
     this.ratingCount,
     this.addressDetails,
@@ -267,6 +284,10 @@ class RestaurantResponse {
     amenities =
         json['amenities'] != null
             ? (json['amenities'] as List).map((e) => e as String).toList()
+            : null;
+    cuisineType =
+        json['cuisine_type'] != null
+            ? (json['cuisine_type'] as List).map((e) => e as String).toList()
             : null;
     minimumAge = json['minimum_age'];
     availabilityRuleId = json['availability_rule_id'];
