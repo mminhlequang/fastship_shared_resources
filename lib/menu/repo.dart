@@ -253,4 +253,12 @@ class MenuRepo {
     limit: limit,
     offset: offset,
   );
+
+
+  Future<NetworkResponse<ListResponse<MenuCategoryResponse>>> getMenuRestaurantCategories(
+    dynamic restaurantId, {
+    int offset = 0,
+    int limit = 100,
+  }) async => _api.getMenuRestaurantCategories(restaurantId, offset: offset, limit: limit);
+
 }

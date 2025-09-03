@@ -63,6 +63,8 @@ class _MenuEndpoint {
 
   // Customer APIs
   static String customerMenuItems() => "/api/v1/customer/menu/items";
+  static String menuRestaurantCategories(dynamic restaurantId) =>
+      "/api/v1/customer/menu/restaurants/$restaurantId/categories";
 }
 
 abstract class MenuApi {
@@ -212,6 +214,12 @@ abstract class MenuApi {
     String? search,
     int? limit,
     int? offset,
+  });
+  Future<NetworkResponse<ListResponse<MenuCategoryResponse>>>
+  getMenuRestaurantCategories(
+    dynamic restaurantId, {
+    int offset = 0,
+    int limit = 100,
   });
 }
 
@@ -1078,6 +1086,34 @@ class MenuApiImpl extends MenuApi {
               (json) => ListResponse.fromJson(
                 json,
                 (item) => MenuItemResponse.fromJson(item),
+              ),
+        );
+      },
+    );
+  }
+
+  @override
+  Future<NetworkResponse<ListResponse<MenuCategoryResponse>>>
+  getMenuRestaurantCategories(
+    dynamic restaurantId, {
+    int offset = 0,
+    int limit = 100,
+  }) async {
+    return await handleNetworkError(
+      proccess: () async {
+        final params = <String, dynamic>{'offset': offset, 'limit': limit};
+        Response response = await AppClient(
+          token: await appPrefs.getNormalToken(),
+        ).get(
+          _MenuEndpoint.menuRestaurantCategories(restaurantId),
+          queryParameters: params,
+        );
+        return NetworkResponse.fromResponse(
+          response,
+          converter:
+              (json) => ListResponse.fromJson(
+                json,
+                (item) => MenuCategoryResponse.fromJson(item),
               ),
         );
       },
