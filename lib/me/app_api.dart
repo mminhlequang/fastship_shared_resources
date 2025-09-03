@@ -92,7 +92,9 @@ class UsersApiImpl extends UsersApi {
             formData.fields.add(MapEntry('full_name', userUpdate.fullName!));
           }
           if (userUpdate.phoneNumber != null) {
-            formData.fields.add(MapEntry('phone_number', userUpdate.phoneNumber!));
+            formData.fields.add(
+              MapEntry('phone_number', userUpdate.phoneNumber!),
+            );
           }
 
           // Add avatar file
@@ -170,7 +172,9 @@ class UsersApiImpl extends UsersApi {
             formData.fields.add(MapEntry('full_name', userUpdate.fullName!));
           }
           if (userUpdate.phoneNumber != null) {
-            formData.fields.add(MapEntry('phone_number', userUpdate.phoneNumber!));
+            formData.fields.add(
+              MapEntry('phone_number', userUpdate.phoneNumber!),
+            );
           }
 
           // Add avatar file

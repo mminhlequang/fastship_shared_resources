@@ -1,4 +1,3 @@
-
 import 'package:shared_resources/admin/models/models.dart';
 
 class TokenResponse {
