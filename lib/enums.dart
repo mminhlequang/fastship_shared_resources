@@ -45,23 +45,22 @@ const String appMapUrlTemplateGg =
     "https://mt.google.com/vt/lyrs=m&hl=en&x={x}&y={y}&z={z}";
 
 String _urlDebug = 'http://192.168.1.130:8002';
-String _urlPreprod = 'https://preprod-api.fastshiphu.com';
-String _urlAsset = 'https://api.fastshiphu.com';
+String _urlProd = 'https://api.fastshiphu.com';
+String _urlAsset = 'https://fastship.sgp1.digitaloceanspaces.com';
 
 String get apiBaseUrl => 
 kDebugMode ? _urlDebug :
- _urlPreprod;
+ _urlProd;
 String get socketIOUrl => "$apiBaseUrl/socket.io";
 
 String correctAssetUrl(String url) {
-  String baseUrl = "https://fastship.sgp1.digitaloceanspaces.com";
   if (url.startsWith('http')) {
     return url;
   }
   if (url.startsWith('/')) {
-    return '$baseUrl$url';
+    return '$_urlAsset$url';
   }
-  return '$baseUrl/$url';
+  return '$_urlAsset/$url';
 }
 
 enum AppOrderDeliveryType {
