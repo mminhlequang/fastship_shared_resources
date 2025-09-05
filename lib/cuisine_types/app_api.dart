@@ -242,16 +242,19 @@ class CuisineTypesApiImpl extends CuisineTypesApi {
     required String languageCode,
     bool? isHomePage,
   }) async {
+    Map<String, dynamic> queryParameters = {
+      'language_code': languageCode, 
+    };
+    if (isHomePage != null) {
+      queryParameters['is_home_page'] = isHomePage;
+    }
     return await handleNetworkError(
       proccess: () async {
         final response = await AppClient(
           token: await appPrefs.getNormalToken(),
         ).get(
           _CuisineTypesEndpoint.getCuisineTypes(),
-          queryParameters: {
-            'language_code': languageCode,
-            'is_home_page': isHomePage,
-          },
+          queryParameters: queryParameters,
         );
         return NetworkResponse.fromResponse(
           response,

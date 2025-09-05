@@ -44,12 +44,12 @@ String get appMapUrlTemplateHERE =>
 const String appMapUrlTemplateGg =
     "https://mt.google.com/vt/lyrs=m&hl=en&x={x}&y={y}&z={z}";
 
-String _urlDebug = 'http://192.168.1.130:8002';
+String _urlDebug = 'http://192.168.1.156:8002';
 String _urlProd = 'https://api.fastshiphu.com';
 String _urlAsset = 'https://fastship.sgp1.digitaloceanspaces.com';
 
 String get apiBaseUrl => 
-// kDebugMode ? _urlDebug :
+kDebugMode ? _urlDebug :
  _urlProd;
 String get socketIOUrl => "$apiBaseUrl/socket.io";
 

@@ -9,6 +9,28 @@ class CuisineTypeResponse {
   int? id;
   List<CuisineTypeResponseTranslation>? translations;
 
+  String getName(String languageCode) {
+    return translations
+            ?.firstWhere(
+              (e) => e.languageCode == languageCode,
+              orElse:
+                  () => translations?.first ?? CuisineTypeResponseTranslation(),
+            )
+            .name ??
+        '';
+  }
+
+  String getDescription(String languageCode) {
+    return translations
+            ?.firstWhere(
+              (e) => e.languageCode == languageCode,
+              orElse:
+                  () => translations?.first ?? CuisineTypeResponseTranslation(),
+            )
+            .description ??
+        '';
+  }
+
   CuisineTypeResponse({
     this.slugCode,
     this.iconUrl,

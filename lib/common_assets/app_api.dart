@@ -11,7 +11,7 @@ import '../models/list_response.dart';
 class _CommonAssetsEndpoint {
   _CommonAssetsEndpoint._();
 
-  static String base() => "/api/v1/common-assets";
+  static String base() => "/api/v1/common-assets/";
   static String byId(String assetId) => "/api/v1/common-assets/$assetId";
   static String upload() => "/api/v1/common-assets/upload";
 }

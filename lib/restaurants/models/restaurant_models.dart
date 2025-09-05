@@ -1,10 +1,19 @@
+import 'package:shared_resources/cuisine_types/models/models.dart';
+
 import '../../addresses/models/models.dart';
 import '../../availability_rules/models/models.dart';
 import '../../common_assets/models/models.dart';
 
 /// Enum for restaurant sorting criteria
-enum RestaurantSortBy { distance, rating, popular, orders, revenue, newest, featured }
- 
+enum RestaurantSortBy {
+  distance,
+  rating,
+  popular,
+  orders,
+  revenue,
+  newest,
+  featured,
+}
 
 /// Model class for restaurant input, used for creating or updating a restaurant.
 /// Các trường được map theo JSON yêu cầu.
@@ -15,6 +24,7 @@ class RestaurantInput {
   String? contactEmail;
   String? contactPhone;
   String? websiteUrl;
+  String? subDomain;
   String? taxCode;
   String? businessLicense;
   String? addressId;
@@ -38,10 +48,11 @@ class RestaurantInput {
   bool? isHalal;
   bool? isVegetarianFriendly;
   String? description;
-  List<String>? cuisineType;
+  List<int>? cuisineTypeIds;
   List<String>? highlights;
   List<String>? amenities;
   int? minimumAge;
+
 
   RestaurantInput({
     this.name,
@@ -50,6 +61,7 @@ class RestaurantInput {
     this.contactEmail,
     this.contactPhone,
     this.websiteUrl,
+    this.subDomain,
     this.taxCode,
     this.businessLicense,
     this.addressId,
@@ -75,7 +87,7 @@ class RestaurantInput {
     this.description,
     this.highlights,
     this.amenities,
-    this.cuisineType,
+    this.cuisineTypeIds,
     this.minimumAge,
   });
 
@@ -88,6 +100,7 @@ class RestaurantInput {
       contactEmail: json['contact_email'] as String?,
       contactPhone: json['contact_phone'] as String?,
       websiteUrl: json['website_url'] as String?,
+      subDomain: json['sub_domain'] as String?,
       taxCode: json['tax_code'] as String?,
       businessLicense: json['business_license'] as String?,
       addressId: json['address_id'] as String?,
@@ -119,9 +132,9 @@ class RestaurantInput {
           (json['amenities'] as List<dynamic>?)
               ?.map((e) => e as String)
               .toList(),
-      cuisineType:
-          (json['cuisine_type'] as List<dynamic>?)
-              ?.map((e) => e as String)
+      cuisineTypeIds:
+          (json['cuisine_type_ids'] as List<dynamic>?)
+              ?.map((e) => e as int)
               .toList(),
       minimumAge: json['minimum_age'] as int?,
     );
@@ -136,6 +149,7 @@ class RestaurantInput {
       'contact_email': contactEmail,
       'contact_phone': contactPhone,
       'website_url': websiteUrl,
+      'sub_domain': subDomain,
       'tax_code': taxCode,
       'business_license': businessLicense,
       'address_id': addressId,
@@ -161,7 +175,7 @@ class RestaurantInput {
       'description': description,
       'highlights': highlights,
       'amenities': amenities,
-      'cuisine_type': cuisineType,
+      'cuisine_type_ids': cuisineTypeIds,
       'minimum_age': minimumAge,
     };
   }
@@ -175,6 +189,7 @@ class RestaurantResponse {
   String? contactEmail;
   String? contactPhone;
   String? websiteUrl;
+  String? subDomain;
   String? taxCode;
   String? businessLicense;
   String? addressId;
@@ -200,12 +215,13 @@ class RestaurantResponse {
   String? description;
   List<String>? highlights;
   List<String>? amenities;
-  List<String>? cuisineType;
+  List<int>? cuisineTypeIds;
   int? minimumAge;
   String? availabilityRuleId;
 
   AddressResponse? addressDetails;
   List<AvailabilityRuleResponse>? availabilityRules;
+  List<CuisineTypeResponse>? cuisineTypes;
 
   CommonAssetResponse? restaurantLogo;
   List<CommonAssetResponse>? restaurantBanners;
@@ -220,6 +236,7 @@ class RestaurantResponse {
     this.contactEmail,
     this.contactPhone,
     this.websiteUrl,
+    this.subDomain,
     this.taxCode,
     this.businessLicense,
     this.addressId,
@@ -241,7 +258,7 @@ class RestaurantResponse {
     this.description,
     this.highlights,
     this.amenities,
-    this.cuisineType,
+    this.cuisineTypeIds,
     this.minimumAge,
     this.ratingAverage,
     this.ratingCount,
@@ -251,6 +268,7 @@ class RestaurantResponse {
     this.restaurantBanners,
     this.createdAt,
     this.updatedAt,
+    this.cuisineTypes,
   });
 
   RestaurantResponse.fromJson(Map<String, dynamic> json) {
@@ -260,6 +278,7 @@ class RestaurantResponse {
     contactEmail = json['contact_email'];
     contactPhone = json['contact_phone'];
     websiteUrl = json['website_url'];
+    subDomain = json['sub_domain'];
     taxCode = json['tax_code'];
     businessLicense = json['business_license'];
     addressId = json['address_id'];
@@ -285,9 +304,9 @@ class RestaurantResponse {
         json['amenities'] != null
             ? (json['amenities'] as List).map((e) => e as String).toList()
             : null;
-    cuisineType =
-        json['cuisine_type'] != null
-            ? (json['cuisine_type'] as List).map((e) => e as String).toList()
+    cuisineTypeIds =
+        json['cuisine_type_ids'] != null
+            ? (json['cuisine_type_ids'] as List).map((e) => e as int).toList()
             : null;
     minimumAge = json['minimum_age'];
     availabilityRuleId = json['availability_rule_id'];
@@ -324,6 +343,12 @@ class RestaurantResponse {
         json['created_at'] != null ? DateTime.parse(json['created_at']) : null;
     updatedAt =
         json['updated_at'] != null ? DateTime.parse(json['updated_at']) : null;
+    cuisineTypes =
+        json['cuisine_types'] != null
+            ? (json['cuisine_types'] as List)
+                .map((e) => CuisineTypeResponse.fromJson(e))
+                .toList()
+            : null;
   }
 
   Map<String, dynamic> toJson() {
@@ -335,6 +360,7 @@ class RestaurantResponse {
     data['contact_email'] = contactEmail;
     data['contact_phone'] = contactPhone;
     data['website_url'] = websiteUrl;
+    data['sub_domain'] = subDomain;
     data['tax_code'] = taxCode;
     data['business_license'] = businessLicense;
     data['address_id'] = addressId;
@@ -371,6 +397,7 @@ class RestaurantResponse {
         restaurantBanners?.map((e) => e.toJson()).toList();
     data['created_at'] = createdAt?.toIso8601String();
     data['updated_at'] = updatedAt?.toIso8601String();
+    data['cuisine_types'] = cuisineTypes?.map((e) => e.toJson()).toList();
     return data;
   }
 }
