@@ -1,4 +1,4 @@
-import 'package:shared_resources/menu/menu.dart';
+import 'package:shared_resources/common_assets/common_assets.dart';
 
 /// Model for cart item add request
 /// Model cho request thêm item vào giỏ hàng, phù hợp với API mới
@@ -107,8 +107,7 @@ class CartModel {
   String? cartId;
   int? restaurantId;
   String? restaurantName;
-  String? restaurantAddress;
-  String? restaurantImageUrl;
+  CommonAssetResponse? restaurantLogo;
   List<CartItemModel>? items;
   num? totalItems;
   num? totalPrice;
@@ -119,8 +118,7 @@ class CartModel {
     this.cartId,
     this.restaurantId,
     this.restaurantName,
-    this.restaurantAddress,
-    this.restaurantImageUrl,
+    this.restaurantLogo,
     this.items,
     this.totalItems,
     this.totalPrice,
@@ -132,8 +130,9 @@ class CartModel {
     cartId = json["cart_id"];
     restaurantId = json["restaurant_id"];
     restaurantName = json["restaurant_name"];
-    restaurantAddress = json["restaurant_address"];
-    restaurantImageUrl = json["restaurant_image_url"];
+    restaurantLogo = json["restaurant_logo"] != null
+        ? CommonAssetResponse.fromJson(json["restaurant_logo"])
+        : null;
     items =
         json["items"] == null
             ? null
@@ -155,8 +154,7 @@ class CartModel {
     _data["cart_id"] = cartId;
     _data["restaurant_id"] = restaurantId;
     _data["restaurant_name"] = restaurantName;
-    _data["restaurant_address"] = restaurantAddress;
-    _data["restaurant_image_url"] = restaurantImageUrl;
+    _data["restaurant_logo"] = restaurantLogo?.toJson();
     if (items != null) {
       _data["items"] = items?.map((e) => e.toJson()).toList();
     }
@@ -173,10 +171,11 @@ class CartItemModel {
   String? menuItemId;
   int? quantity;
   String? note;
-  List<MenuItemVariantValueResponse>? selectedVariants;
-  List<MenuItemOptionValueResponse>? selectedOptions;
+  List<CartItemVariant>? selectedVariants;
+  List<CartItemOption>? selectedOptions;
   String? menuItemName;
   num? menuItemPrice;
+  String? menuItemDescription;
   String? menuItemImageUrl;
   num? totalPrice;
 
@@ -189,6 +188,7 @@ class CartItemModel {
     this.selectedOptions,
     this.menuItemName,
     this.menuItemPrice,
+    this.menuItemDescription,
     this.menuItemImageUrl,
     this.totalPrice,
   });
@@ -202,16 +202,17 @@ class CartItemModel {
         json["selected_variants"] == null
             ? null
             : (json["selected_variants"] as List)
-                .map((e) => MenuItemVariantValueResponse.fromJson(e))
+                .map((e) => CartItemVariant.fromJson(e))
                 .toList();
     selectedOptions =
         json["selected_options"] == null
             ? null
             : (json["selected_options"] as List)
-                .map((e) => MenuItemOptionValueResponse.fromJson(e))
+                .map((e) => CartItemOption.fromJson(e))
                 .toList();
     menuItemName = json["menu_item_name"];
     menuItemPrice = json["menu_item_price"];
+    menuItemDescription = json["menu_item_description"];
     menuItemImageUrl = json["menu_item_image_url"];
     totalPrice = json["total_price"];
   }
@@ -236,8 +237,139 @@ class CartItemModel {
     }
     _data["menu_item_name"] = menuItemName;
     _data["menu_item_price"] = menuItemPrice;
+    _data["menu_item_description"] = menuItemDescription;
     _data["menu_item_image_url"] = menuItemImageUrl;
     _data["total_price"] = totalPrice;
+    return _data;
+  }
+}
+
+
+
+
+
+class CartItemVariant {
+  String? variantGroupId;
+  String? variantGroupName;
+  String? variantGroupDescription;
+  bool? variantGroupIsRequired;
+  int? variantGroupMinSelect;
+  int? variantGroupMaxSelect;
+  String? variantValueId;
+  String? variantValueName;
+  String? variantValueDescription;
+  int? variantValueExtraPrice;
+  bool? variantValueIsDefault;
+  bool? variantValueIsAvailable;
+  String? variantValueImageUrl;
+
+  CartItemVariant({
+    this.variantGroupId,
+    this.variantGroupName,
+    this.variantGroupDescription,
+    this.variantGroupIsRequired,
+    this.variantGroupMinSelect,
+    this.variantGroupMaxSelect,
+    this.variantValueId,
+    this.variantValueName,
+    this.variantValueDescription,
+    this.variantValueExtraPrice,
+    this.variantValueIsDefault,
+    this.variantValueIsAvailable,
+    this.variantValueImageUrl,
+  });
+
+  CartItemVariant.fromJson(Map<String, dynamic> json) {
+    variantGroupId = json["variant_group_id"];
+    variantGroupName = json["variant_group_name"];
+    variantGroupDescription = json["variant_group_description"];
+    variantGroupIsRequired = json["variant_group_is_required"];
+    variantGroupMinSelect = json["variant_group_min_select"];
+    variantGroupMaxSelect = json["variant_group_max_select"];
+    variantValueId = json["variant_value_id"];
+    variantValueName = json["variant_value_name"];
+    variantValueDescription = json["variant_value_description"];
+    variantValueExtraPrice = json["variant_value_extra_price"];
+    variantValueIsDefault = json["variant_value_is_default"];
+    variantValueIsAvailable = json["variant_value_is_available"];
+    variantValueImageUrl = json["variant_value_image_url"];
+  }
+
+  static List<CartItemVariant> fromList(List<Map<String, dynamic>> list) {
+    return list.map(CartItemVariant.fromJson).toList();
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> _data = <String, dynamic>{};
+    _data["variant_group_id"] = variantGroupId;
+    _data["variant_group_name"] = variantGroupName;
+    _data["variant_group_description"] = variantGroupDescription;
+    _data["variant_group_is_required"] = variantGroupIsRequired;
+    _data["variant_group_min_select"] = variantGroupMinSelect;
+    _data["variant_group_max_select"] = variantGroupMaxSelect;
+    _data["variant_value_id"] = variantValueId;
+    _data["variant_value_name"] = variantValueName;
+    _data["variant_value_description"] = variantValueDescription;
+    _data["variant_value_extra_price"] = variantValueExtraPrice;
+    _data["variant_value_is_default"] = variantValueIsDefault;
+    _data["variant_value_is_available"] = variantValueIsAvailable;
+    _data["variant_value_image_url"] = variantValueImageUrl;
+    return _data;
+  }
+}
+
+
+
+class CartItemOption {
+  String? optionGroupId;
+  String? optionGroupName;
+  bool? optionGroupIsRequired;
+  int? optionGroupMinSelect;
+  int? optionGroupMaxSelect;
+  String? optionValueId;
+  String? optionValueName;
+  int? optionValueExtraPrice;
+  bool? optionValueIsDefault;
+
+  CartItemOption({
+    this.optionGroupId,
+    this.optionGroupName,
+    this.optionGroupIsRequired,
+    this.optionGroupMinSelect,
+    this.optionGroupMaxSelect,
+    this.optionValueId,
+    this.optionValueName,
+    this.optionValueExtraPrice,
+    this.optionValueIsDefault,
+  });
+
+  CartItemOption.fromJson(Map<String, dynamic> json) {
+    optionGroupId = json["option_group_id"];
+    optionGroupName = json["option_group_name"];
+    optionGroupIsRequired = json["option_group_is_required"];
+    optionGroupMinSelect = json["option_group_min_select"];
+    optionGroupMaxSelect = json["option_group_max_select"];
+    optionValueId = json["option_value_id"];
+    optionValueName = json["option_value_name"];
+    optionValueExtraPrice = json["option_value_extra_price"];
+    optionValueIsDefault = json["option_value_is_default"];
+  }
+
+  static List<CartItemOption> fromList(List<Map<String, dynamic>> list) {
+    return list.map(CartItemOption.fromJson).toList();
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> _data = <String, dynamic>{};
+    _data["option_group_id"] = optionGroupId;
+    _data["option_group_name"] = optionGroupName;
+    _data["option_group_is_required"] = optionGroupIsRequired;
+    _data["option_group_min_select"] = optionGroupMinSelect;
+    _data["option_group_max_select"] = optionGroupMaxSelect;
+    _data["option_value_id"] = optionValueId;
+    _data["option_value_name"] = optionValueName;
+    _data["option_value_extra_price"] = optionValueExtraPrice;
+    _data["option_value_is_default"] = optionValueIsDefault;
     return _data;
   }
 }

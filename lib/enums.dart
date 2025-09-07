@@ -48,9 +48,7 @@ String _urlDebug = 'http://192.168.1.5:8002';
 String _urlProd = 'https://api.fastshiphu.com';
 String _urlAsset = 'https://fastship.sgp1.digitaloceanspaces.com';
 
-String get apiBaseUrl => 
-kDebugMode ? _urlDebug :
- _urlProd;
+String get apiBaseUrl => kDebugMode ? _urlDebug : _urlProd;
 String get socketIOUrl => "$apiBaseUrl/socket.io";
 
 String correctAssetUrl(String url) {
@@ -66,6 +64,45 @@ String correctAssetUrl(String url) {
 enum AppOrderDeliveryType {
   ship, // Giao hàng
   pickup, // Món đặt lấy
+}
+
+enum AppPaymentMethod {
+  stripe,
+  faship_wallet,
+  cash;
+
+  String get description {
+    switch (this) {
+      case AppPaymentMethod.stripe:
+        return 'Pay with credit/debit card on Stripe';
+      case AppPaymentMethod.faship_wallet:
+        return 'Pay with FastShip wallet';
+      case AppPaymentMethod.cash:
+        return 'Pay with cash on delivery';
+    }
+  }
+
+  String get displayName {
+    switch (this) {
+      case AppPaymentMethod.stripe:
+        return 'Stripe Payment';
+      case AppPaymentMethod.faship_wallet:
+        return 'FastShip Wallet' ;
+      case AppPaymentMethod.cash:
+        return 'Cash on Delivery';
+    }
+  }
+
+  String get assetIcon {
+    switch (this) {
+      case AppPaymentMethod.stripe:
+        return 'icon35';
+      case AppPaymentMethod.faship_wallet:
+        return 'icon36';
+      case AppPaymentMethod.cash:
+        return 'icon34';
+    }
+  }
 }
 
 enum AppOrderStoreStatus {
