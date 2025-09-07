@@ -44,7 +44,7 @@ String get appMapUrlTemplateHERE =>
 const String appMapUrlTemplateGg =
     "https://mt.google.com/vt/lyrs=m&hl=en&x={x}&y={y}&z={z}";
 
-String _urlDebug = 'http://192.168.1.156:8002';
+String _urlDebug = 'http://192.168.1.5:8002';
 String _urlProd = 'https://api.fastshiphu.com';
 String _urlAsset = 'https://fastship.sgp1.digitaloceanspaces.com';
 
@@ -247,3 +247,93 @@ const List<Map> euroCounries = [
   {"name": "Ukraine", "code": "UA"},
   {"name": "Holy See (Vatican City State)", "code": "VA"},
 ];
+
+/// Enum cho loại client (ứng dụng)
+enum ClientType {
+  adminPanel('admin_panel'),
+  driverApp('driver_app'),
+  driverPanel('driver_panel'),
+  restaurantPanel('restaurant_panel'),
+  customerApp('customer_app');
+
+  final String value;
+  const ClientType(this.value);
+}
+
+/// Enum cho phạm vi vai trò người dùng
+enum UserRoleScope {
+  system('system'),
+  driverOrg('driver_org'),
+  restaurantOrg('restaurant_org'),
+  customer('customer');
+
+  final String value;
+  const UserRoleScope(this.value);
+}
+
+/// Enum cho tên các vai trò mặc định, đồng bộ với migration add_default_roles.py
+enum UserRoleName {
+  // System roles
+  admin('admin'),
+  adminDriverManager('admin_driver_manager'),
+  adminDriverSupport('admin_driver_support'),
+  adminRestaurantManager('admin_restaurant_manager'),
+  adminRestaurantSupport('admin_restaurant_support'),
+  adminCustomerManager('admin_customer_manager'),
+  adminCustomerSupport('admin_customer_support'),
+  adminFinancer('admin_financer'),
+
+  // Driver organization roles
+  driverOrgAdmin('driver_org_admin'),
+  driverOrgManager('driver_org_manager'),
+  driver('driver'),
+
+  // Restaurant organization roles
+  restaurantOrgAdmin('restaurant_org_admin'),
+  restaurantOrgManager('restaurant_org_manager'),
+  restaurantManager('restaurant_manager'),
+  restaurantStaff('restaurant_staff');
+
+  final String value;
+  const UserRoleName(this.value);
+
+  String get displayName => switch (this) {
+    driverOrgAdmin => 'Driver Organization Admin',
+    driverOrgManager => 'Driver Organization Manager',
+    driver => 'Driver',
+    restaurantOrgAdmin => 'Restaurant Organization Admin',
+    restaurantOrgManager => 'Restaurant Organization Manager',
+    restaurantManager => 'Restaurant Manager',
+    restaurantStaff => 'Restaurant Staff',
+    admin => 'Admin',
+    adminDriverManager => 'Admin Driver Manager',
+    adminDriverSupport => 'Admin Driver Support',
+    adminRestaurantManager => 'Admin Restaurant Manager',
+    adminRestaurantSupport => 'Admin Restaurant Support',
+    adminCustomerManager => 'Admin Customer Manager',
+    adminCustomerSupport => 'Admin Customer Support',
+    adminFinancer => 'Admin Financer',
+  };
+}
+
+/// Enum cho loại tổ chức
+enum OrgType {
+  driverOrg('driver_org'),
+  restaurantOrg('restaurant_org'),
+  customer('customer');
+
+  final String value;
+  const OrgType(this.value);
+}
+
+enum CommonAssetType {
+  restaurantLogo('restaurant_logo'),
+  restaurantBanner('restaurant_banner'),
+
+  restaurantOrgLogo('restaurant_org_logo'),
+
+  driverOrgLogo('driver_org_logo');
+
+  final String value;
+  const CommonAssetType(this.value);
+}
