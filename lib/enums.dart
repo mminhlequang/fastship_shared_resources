@@ -123,23 +123,23 @@ extension AppOrderProcessStatusExtension on AppOrderProcessStatus {
   String get friendlyName {
     switch (this) {
       case AppOrderProcessStatus.pending:
-        return 'Pending'.tr();
+        return 'Pending';
       case AppOrderProcessStatus.findDriver:
-        return 'Finding driver'.tr();
+        return 'Finding driver';
       case AppOrderProcessStatus.driverAccepted:
-        return 'Driver accepted'.tr();
+        return 'Driver accepted';
       case AppOrderProcessStatus.storeAccepted:
-        return 'Store accepted'.tr();
+        return 'Store accepted';
       case AppOrderProcessStatus.driverArrivedStore:
-        return 'Driver arrived store'.tr();
+        return 'Driver arrived store';
       case AppOrderProcessStatus.driverPicked:
-        return 'Driver picked'.tr();
+        return 'Driver picked';
       case AppOrderProcessStatus.driverArrivedDestination:
-        return 'Driver arrived destination'.tr();
+        return 'Driver arrived destination';
       case AppOrderProcessStatus.completed:
-        return 'Completed'.tr();
+        return 'Completed';
       case AppOrderProcessStatus.cancelled:
-        return 'Cancelled'.tr();
+        return 'Cancelled';
     }
   }
 }
@@ -190,11 +190,11 @@ enum AccountType {
   String get name {
     switch (this) {
       case AccountType.customer:
-        return 'Customer'.tr();
+        return 'Customer';
       case AccountType.driver:
-        return 'Driver'.tr();
+        return 'Driver';
       case AccountType.partner:
-        return 'Partner'.tr();
+        return 'Partner';
     }
   }
 }
@@ -217,11 +217,11 @@ enum Gender {
   String get name {
     switch (this) {
       case Gender.male:
-        return 'Male'.tr();
+        return 'Male';
       case Gender.female:
-        return 'Female'.tr();
+        return 'Female';
       case Gender.other:
-        return 'Other'.tr();
+        return 'Other';
     }
   }
 }
