@@ -1,5 +1,6 @@
 import 'package:internal_network/network_resources/resources.dart';
 
+import '../models/models.dart' show ListResponse;
 import 'app_api.dart';
 import 'models/models.dart';
 
@@ -21,7 +22,64 @@ class OrdersRepo {
   ) => _api.calculateCheckout(request);
 
   Future<NetworkResponse<CheckoutResponse>> processCheckout(
-    String customerId,
     CheckoutRequest request,
-  ) => _api.processCheckout(customerId, request);
+  ) => _api.processCheckout(request);
+
+  // Admin APIs (yêu cầu authentication)
+  Future<NetworkResponse<ListResponse<OrderResponse>>> getAllOrders({
+    int? limit,
+    int? offset,
+    String? customerId,
+    int? restaurantId,
+    String? driverId,
+    String? status,
+    String? paymentStatus,
+    String? deliveryType,
+  }) => _api.getAllOrders(
+    limit: limit,
+    offset: offset,
+    customerId: customerId,
+    restaurantId: restaurantId,
+    driverId: driverId,
+    status: status,
+    paymentStatus: paymentStatus,
+    deliveryType: deliveryType,
+  );
+
+  Future<NetworkResponse<OrderResponse>> updateOrder(
+    String orderId,
+    OrderUpdate request,
+  ) => _api.updateOrder(orderId, request);
+
+  Future<NetworkResponse<void>> deleteOrder(String orderId) =>
+      _api.deleteOrder(orderId);
+
+  // Customer APIs (yêu cầu authentication)
+  Future<NetworkResponse<ListResponse<OrderResponse>>> getMyOrders({
+    int? limit,
+    int? offset,
+    int? restaurantId,
+    String? driverId,
+    String? status,
+    String? paymentStatus,
+    String? deliveryType,
+  }) => _api.getMyOrders(
+    limit: limit,
+    offset: offset,
+    restaurantId: restaurantId,
+    driverId: driverId,
+    status: status,
+    paymentStatus: paymentStatus,
+    deliveryType: deliveryType,
+  );
+
+  Future<NetworkResponse<void>> cancelOrder(String orderId, {String? note}) =>
+      _api.cancelOrder(orderId, note: note);
+
+  // Status Update API (yêu cầu authentication - driver/restaurant)
+  Future<NetworkResponse<OrderResponse>> updateOrderStatus(
+    String orderId,
+    String newStatus, {
+    String? note,
+  }) => _api.updateOrderStatus(orderId, newStatus, note: note);
 }

@@ -1,32 +1,59 @@
+/// Model cho địa chỉ giao hàng trong request thanh toán
+class CheckoutRequestDeliveryAddress {
+  final String? address;
+  final double lat;
+  final double lng;
+  final String? city;
+  final String? district;
+  final String? ward;
+
+  CheckoutRequestDeliveryAddress({
+    this.address,
+    required this.lat,
+    required this.lng,
+    this.city,
+    this.district,
+    this.ward,
+  });
+
+  factory CheckoutRequestDeliveryAddress.fromJson(Map<String, dynamic> json) {
+    return CheckoutRequestDeliveryAddress(
+      address: json['address'] as String?,
+      lat: (json['lat'] as num).toDouble(),
+      lng: (json['lng'] as num).toDouble(),
+      city: json['city'] as String?,
+      district: json['district'] as String?,
+      ward: json['ward'] as String?,
+    );
+  }
+
+  Map<String, dynamic> toJson() {
+    return {
+      'address': address,
+      'lat': lat,
+      'lng': lng,
+      'city': city,
+      'district': district,
+      'ward': ward,
+    };
+  }
+}
+
 /// Model cho request thanh toán (checkout)
 class CheckoutRequest {
   final List<CheckoutCart> carts;
-  final String? paymentMethod;
+  final String paymentMethod;
   final String? couponCode;
-  final String? deliveryAddress;
+  final CheckoutRequestDeliveryAddress? deliveryAddress;
   final String? deliveryInstructions;
 
   CheckoutRequest({
     required this.carts,
-    this.paymentMethod,
+    required this.paymentMethod,
     this.couponCode,
     this.deliveryAddress,
     this.deliveryInstructions,
   });
-
-  /// Parse từ JSON
-  factory CheckoutRequest.fromJson(Map<String, dynamic> json) {
-    return CheckoutRequest(
-      carts:
-          (json['carts'] as List)
-              .map((e) => CheckoutCart.fromJson(e as Map<String, dynamic>))
-              .toList(),
-      paymentMethod: json['payment_method'] as String?,
-      couponCode: json['coupon_code'] as String?,
-      deliveryAddress: json['delivery_address'] as String?,
-      deliveryInstructions: json['delivery_instructions'] as String?,
-    );
-  }
 
   /// Chuyển sang JSON
   Map<String, dynamic> toJson() {
@@ -34,7 +61,7 @@ class CheckoutRequest {
       'carts': carts.map((e) => e.toJson()).toList(),
       'payment_method': paymentMethod,
       'coupon_code': couponCode,
-      'delivery_address': deliveryAddress,
+      'delivery_address': deliveryAddress?.toJson(),
       'delivery_instructions': deliveryInstructions,
     };
   }
@@ -119,407 +146,383 @@ class CheckoutCartItem {
   }
 }
 
-/// Model for checkout calculation response
 class CheckoutCalculationResponse {
-  final List<RestaurantCheckout> restaurantCheckouts;
-  final double grandTotal;
-  final double totalDeliveryFee;
-  final double totalTax;
-  final double totalDiscount;
+  int? subtotal;
+  int? discountAmount;
+  int? deliveryFee;
+  int? taxAmount;
+  int? totalAmount;
+  String? currencyCode;
+  String? currencySymbol;
+  dynamic appliedCoupon;
+  List<RestaurantBreakdown>? restaurantBreakdown;
 
   CheckoutCalculationResponse({
-    required this.restaurantCheckouts,
-    required this.grandTotal,
-    required this.totalDeliveryFee,
-    required this.totalTax,
-    required this.totalDiscount,
+    this.subtotal,
+    this.discountAmount,
+    this.deliveryFee,
+    this.taxAmount,
+    this.totalAmount,
+    this.currencyCode,
+    this.currencySymbol,
+    this.appliedCoupon,
+    this.restaurantBreakdown,
   });
 
-  /// Parse from JSON
-  factory CheckoutCalculationResponse.fromJson(Map<String, dynamic> json) {
-    return CheckoutCalculationResponse(
-      restaurantCheckouts:
-          (json['restaurant_checkouts'] as List)
-              .map((e) => RestaurantCheckout.fromJson(e))
-              .toList(),
-      grandTotal: (json['grand_total'] as num).toDouble(),
-      totalDeliveryFee: (json['total_delivery_fee'] as num).toDouble(),
-      totalTax: (json['total_tax'] as num).toDouble(),
-      totalDiscount: (json['total_discount'] as num).toDouble(),
-    );
+  CheckoutCalculationResponse.fromJson(Map<String, dynamic> json) {
+    subtotal = json["subtotal"];
+    discountAmount = json["discount_amount"];
+    deliveryFee = json["delivery_fee"];
+    taxAmount = json["tax_amount"];
+    totalAmount = json["total_amount"];
+    currencyCode = json["currency_code"];
+    currencySymbol = json["currency_symbol"];
+    appliedCoupon = json["applied_coupon"];
+    restaurantBreakdown =
+        json["restaurant_breakdown"] == null
+            ? null
+            : (json["restaurant_breakdown"] as List)
+                .map((e) => RestaurantBreakdown.fromJson(e))
+                .toList();
   }
 
-  /// Convert to JSON
+  static List<CheckoutCalculationResponse> fromList(
+    List<Map<String, dynamic>> list,
+  ) {
+    return list.map(CheckoutCalculationResponse.fromJson).toList();
+  }
+
   Map<String, dynamic> toJson() {
-    return {
-      'restaurant_checkouts':
-          restaurantCheckouts.map((e) => e.toJson()).toList(),
-      'grand_total': grandTotal,
-      'total_delivery_fee': totalDeliveryFee,
-      'total_tax': totalTax,
-      'total_discount': totalDiscount,
-    };
+    final Map<String, dynamic> _data = <String, dynamic>{};
+    _data["subtotal"] = subtotal;
+    _data["discount_amount"] = discountAmount;
+    _data["delivery_fee"] = deliveryFee;
+    _data["tax_amount"] = taxAmount;
+    _data["total_amount"] = totalAmount;
+    _data["currency_code"] = currencyCode;
+    _data["currency_symbol"] = currencySymbol;
+    _data["applied_coupon"] = appliedCoupon;
+    if (restaurantBreakdown != null) {
+      _data["restaurant_breakdown"] =
+          restaurantBreakdown?.map((e) => e.toJson()).toList();
+    }
+    return _data;
   }
 }
 
-/// Model for restaurant checkout
-class RestaurantCheckout {
-  final int restaurantId;
-  final String restaurantName;
-  final String? restaurantImageUrl;
-  final double? restaurantRating;
-  final int? restaurantRatingCount;
-  final double subtotal;
-  final double deliveryFee;
-  final double tax;
-  final double discount;
-  final double total;
-  final List<CheckoutItem> items;
+class RestaurantBreakdown {
+  int? restaurantId;
+  int? subtotal;
+  int? deliveryFee;
+  int? itemCount;
 
-  RestaurantCheckout({
-    required this.restaurantId,
-    required this.restaurantName,
-    this.restaurantImageUrl,
-    this.restaurantRating,
-    this.restaurantRatingCount,
-    required this.subtotal,
-    required this.deliveryFee,
-    required this.tax,
-    required this.discount,
-    required this.total,
-    required this.items,
+  RestaurantBreakdown({
+    this.restaurantId,
+    this.subtotal,
+    this.deliveryFee,
+    this.itemCount,
   });
 
-  /// Parse from JSON
-  factory RestaurantCheckout.fromJson(Map<String, dynamic> json) {
-    return RestaurantCheckout(
-      restaurantId: json['restaurant_id'] as int,
-      restaurantName: json['restaurant_name'] as String,
-      restaurantImageUrl: json['restaurant_image_url'] as String?,
-      restaurantRating:
-          json['restaurant_rating'] != null
-              ? (json['restaurant_rating'] as num).toDouble()
-              : null,
-      restaurantRatingCount: json['restaurant_rating_count'] as int?,
-      subtotal: (json['subtotal'] as num).toDouble(),
-      deliveryFee: (json['delivery_fee'] as num).toDouble(),
-      tax: (json['tax'] as num).toDouble(),
-      discount: (json['discount'] as num).toDouble(),
-      total: (json['total'] as num).toDouble(),
-      items:
-          (json['items'] as List).map((e) => CheckoutItem.fromJson(e)).toList(),
-    );
+  RestaurantBreakdown.fromJson(Map<String, dynamic> json) {
+    restaurantId = json["restaurant_id"];
+    subtotal = json["subtotal"];
+    deliveryFee = json["delivery_fee"];
+    itemCount = json["item_count"];
   }
 
-  /// Convert to JSON
+  static List<RestaurantBreakdown> fromList(List<Map<String, dynamic>> list) {
+    return list.map(RestaurantBreakdown.fromJson).toList();
+  }
+
   Map<String, dynamic> toJson() {
-    return {
-      'restaurant_id': restaurantId,
-      'restaurant_name': restaurantName,
-      'restaurant_image_url': restaurantImageUrl,
-      'restaurant_rating': restaurantRating,
-      'restaurant_rating_count': restaurantRatingCount,
-      'subtotal': subtotal,
-      'delivery_fee': deliveryFee,
-      'tax': tax,
-      'discount': discount,
-      'total': total,
-      'items': items.map((e) => e.toJson()).toList(),
-    };
+    final Map<String, dynamic> _data = <String, dynamic>{};
+    _data["restaurant_id"] = restaurantId;
+    _data["subtotal"] = subtotal;
+    _data["delivery_fee"] = deliveryFee;
+    _data["item_count"] = itemCount;
+    return _data;
   }
 }
+ 
 
-/// Model for checkout item
-class CheckoutItem {
+/// Model for checkout response
+/// Model cho PaymentIntent (Stripe hoặc các cổng thanh toán khác)
+class PaymentIntent {
   final String id;
-  final String menuItemId;
-  final String menuItemName;
-  final String? menuItemImageUrl;
-  final double menuItemPrice;
-  final int quantity;
-  final String? variantId;
-  final String? variantName;
-  final double? variantPrice;
-  final List<String>? optionIds;
-  final List<String>? optionNames;
-  final double? optionPrice;
-  final String? notes;
-  final double totalPrice;
+  final String clientSecret;
+  final int amount;
+  final String currency;
+  final String status;
+  final int created;
 
-  CheckoutItem({
+  PaymentIntent({
     required this.id,
-    required this.menuItemId,
-    required this.menuItemName,
-    this.menuItemImageUrl,
-    required this.menuItemPrice,
-    required this.quantity,
-    this.variantId,
-    this.variantName,
-    this.variantPrice,
-    this.optionIds,
-    this.optionNames,
-    this.optionPrice,
-    this.notes,
-    required this.totalPrice,
+    required this.clientSecret,
+    required this.amount,
+    required this.currency,
+    required this.status,
+    required this.created,
   });
 
-  /// Parse from JSON
-  factory CheckoutItem.fromJson(Map<String, dynamic> json) {
-    return CheckoutItem(
+  /// Parse từ JSON
+  factory PaymentIntent.fromJson(Map<String, dynamic> json) {
+    return PaymentIntent(
       id: json['id'] as String,
-      menuItemId: json['menu_item_id'] as String,
-      menuItemName: json['menu_item_name'] as String,
-      menuItemImageUrl: json['menu_item_image_url'] as String?,
-      menuItemPrice: (json['menu_item_price'] as num).toDouble(),
-      quantity: json['quantity'] as int,
-      variantId: json['variant_id'] as String?,
-      variantName: json['variant_name'] as String?,
-      variantPrice:
-          json['variant_price'] != null
-              ? (json['variant_price'] as num).toDouble()
-              : null,
-      optionIds:
-          json['option_ids'] != null
-              ? (json['option_ids'] as List).map((e) => e as String).toList()
-              : null,
-      optionNames:
-          json['option_names'] != null
-              ? (json['option_names'] as List).map((e) => e as String).toList()
-              : null,
-      optionPrice:
-          json['option_price'] != null
-              ? (json['option_price'] as num).toDouble()
-              : null,
-      notes: json['notes'] as String?,
-      totalPrice: (json['total_price'] as num).toDouble(),
+      clientSecret: json['client_secret'] as String,
+      amount: json['amount'] as int,
+      currency: json['currency'] as String,
+      status: json['status'] as String,
+      created: json['created'] as int,
     );
   }
 
-  /// Convert to JSON
+  /// Convert sang JSON
   Map<String, dynamic> toJson() {
     return {
       'id': id,
-      'menu_item_id': menuItemId,
-      'menu_item_name': menuItemName,
-      'menu_item_image_url': menuItemImageUrl,
-      'menu_item_price': menuItemPrice,
-      'quantity': quantity,
-      'variant_id': variantId,
-      'variant_name': variantName,
-      'variant_price': variantPrice,
-      'option_ids': optionIds,
-      'option_names': optionNames,
-      'option_price': optionPrice,
-      'notes': notes,
-      'total_price': totalPrice,
+      'client_secret': clientSecret,
+      'amount': amount,
+      'currency': currency,
+      'status': status,
+      'created': created,
     };
   }
 }
 
-/// Model for checkout response
-class CheckoutResponse {
-  final List<OrderResponse> orders;
-  final double grandTotal;
-  final String checkoutId;
+/// Model cho CheckoutSession (Stripe Checkout hoặc các cổng thanh toán khác)
+class CheckoutSession {
+  final String id;
+  final String url;
 
-  CheckoutResponse({
-    required this.orders,
-    required this.grandTotal,
-    required this.checkoutId,
+  CheckoutSession({
+    required this.id,
+    required this.url,
   });
 
-  /// Parse from JSON
-  factory CheckoutResponse.fromJson(Map<String, dynamic> json) {
-    return CheckoutResponse(
-      orders:
-          (json['orders'] as List)
-              .map((e) => OrderResponse.fromJson(e))
-              .toList(),
-      grandTotal: (json['grand_total'] as num).toDouble(),
-      checkoutId: json['checkout_id'] as String,
+  /// Parse từ JSON
+  factory CheckoutSession.fromJson(Map<String, dynamic> json) {
+    return CheckoutSession(
+      id: json['id'] as String,
+      url: json['url'] as String,
     );
   }
 
-  /// Convert to JSON
+  /// Convert sang JSON
+  Map<String, dynamic> toJson() {
+    return {
+      'id': id,
+      'url': url,
+    };
+  }
+}
+
+
+
+/// Model cho checkout response
+class CheckoutResponse {
+  final List<OrderResponse> orders;
+  final CheckoutCalculationResponse? checkoutCalculation;
+  final PaymentIntent? paymentIntent;
+  final CheckoutSession? checkoutSession;
+  CheckoutResponse({
+    required this.orders,
+    required this.checkoutCalculation,
+    this.paymentIntent,
+    this.checkoutSession,
+  });
+
+  /// Parse từ JSON
+  factory CheckoutResponse.fromJson(Map<String, dynamic> json) {
+    return CheckoutResponse(
+      orders: (json['orders'] as List)
+          .map((e) => OrderResponse.fromJson(e))
+          .toList(),
+      checkoutCalculation: json['checkout_calculation'] != null
+          ? CheckoutCalculationResponse.fromJson(json['checkout_calculation'])
+          : null,
+      paymentIntent: json['payment_intent'] != null
+          ? PaymentIntent.fromJson(json['payment_intent'])
+          : null,
+      checkoutSession: json['checkout_session'] != null
+          ? CheckoutSession.fromJson(json['checkout_session'])
+          : null,
+    );
+  }
+
+  /// Convert sang JSON
   Map<String, dynamic> toJson() {
     return {
       'orders': orders.map((e) => e.toJson()).toList(),
-      'grand_total': grandTotal,
-      'checkout_id': checkoutId,
+      'checkout_calculation': checkoutCalculation?.toJson(),
+      'payment_intent': paymentIntent?.toJson(),
+      'checkout_session': checkoutSession?.toJson(),
     };
   }
 }
 
-/// Model for order response
 class OrderResponse {
-  final String id;
-  final int restaurantId;
-  final String restaurantName;
-  final String? restaurantImageUrl;
-  final String customerId;
-  final String status;
-  final double subtotal;
-  final double deliveryFee;
-  final double tax;
-  final double discount;
-  final double total;
-  final String? deliveryAddressId;
-  final String? paymentMethodId;
-  final String? notes;
-  final DateTime createdAt;
-  final DateTime updatedAt;
-  final List<OrderItem> items;
+  String? createdAt;
+  String? updatedAt;
+  String? customerId;
+  int? restaurantId;
+  String? driverId;
+  String? status;
+  Map<String, dynamic>? cartSnapshot;
+  int? subtotal;
+  int? discountAmount;
+  int? deliveryFee;
+  int? taxAmount;
+  int? totalAmount;
+  String? paymentMethod;
+  String? paymentStatus;
+  String? stripeChargeId;
+  String? paymentIntentId;
+  String? couponId;
+  String? id;
+  List<dynamic>? orderItems;
+  String? currencyCode;
+  String? currencySymbol;
 
   OrderResponse({
-    required this.id,
-    required this.restaurantId,
-    required this.restaurantName,
-    this.restaurantImageUrl,
-    required this.customerId,
-    required this.status,
-    required this.subtotal,
-    required this.deliveryFee,
-    required this.tax,
-    required this.discount,
-    required this.total,
-    this.deliveryAddressId,
-    this.paymentMethodId,
-    this.notes,
-    required this.createdAt,
-    required this.updatedAt,
-    required this.items,
+    this.createdAt,
+    this.updatedAt,
+    this.customerId,
+    this.restaurantId,
+    this.driverId,
+    this.status,
+    this.cartSnapshot,
+    this.subtotal,
+    this.discountAmount,
+    this.deliveryFee,
+    this.taxAmount,
+    this.totalAmount,
+    this.paymentMethod,
+    this.paymentStatus,
+    this.stripeChargeId,
+    this.paymentIntentId,
+    this.couponId,
+    this.id,
+    this.orderItems,
+    this.currencyCode,
+    this.currencySymbol,
   });
 
-  /// Parse from JSON
-  factory OrderResponse.fromJson(Map<String, dynamic> json) {
-    return OrderResponse(
-      id: json['id'] as String,
-      restaurantId: json['restaurant_id'] as int,
-      restaurantName: json['restaurant_name'] as String,
-      restaurantImageUrl: json['restaurant_image_url'] as String?,
-      customerId: json['customer_id'] as String,
-      status: json['status'] as String,
-      subtotal: (json['subtotal'] as num).toDouble(),
-      deliveryFee: (json['delivery_fee'] as num).toDouble(),
-      tax: (json['tax'] as num).toDouble(),
-      discount: (json['discount'] as num).toDouble(),
-      total: (json['total'] as num).toDouble(),
-      deliveryAddressId: json['delivery_address_id'] as String?,
-      paymentMethodId: json['payment_method_id'] as String?,
-      notes: json['notes'] as String?,
-      createdAt: DateTime.parse(json['created_at'] as String),
-      updatedAt: DateTime.parse(json['updated_at'] as String),
-      items: (json['items'] as List).map((e) => OrderItem.fromJson(e)).toList(),
-    );
+  OrderResponse.fromJson(Map<String, dynamic> json) {
+    createdAt = json["created_at"];
+    updatedAt = json["updated_at"];
+    customerId = json["customer_id"];
+    restaurantId = json["restaurant_id"];
+    driverId = json["driver_id"];
+    status = json["status"];
+    cartSnapshot =
+        json["cart_snapshot"] == null
+            ? null
+            : Map<String, dynamic>.from(json["cart_snapshot"]);
+    subtotal = json["subtotal"];
+    discountAmount = json["discount_amount"];
+    deliveryFee = json["delivery_fee"];
+    taxAmount = json["tax_amount"];
+    totalAmount = json["total_amount"];
+    paymentMethod = json["payment_method"];
+    paymentStatus = json["payment_status"];
+    stripeChargeId = json["stripe_charge_id"];
+    paymentIntentId = json["payment_intent_id"];
+    couponId = json["coupon_id"];
+    id = json["id"];
+    orderItems = json["order_items"] ?? [];
+    currencyCode = json["currency_code"];
+    currencySymbol = json["currency_symbol"];
   }
 
-  /// Convert to JSON
+  static List<OrderResponse> fromList(List<Map<String, dynamic>> list) {
+    return list.map(OrderResponse.fromJson).toList();
+  }
+
   Map<String, dynamic> toJson() {
-    return {
-      'id': id,
-      'restaurant_id': restaurantId,
-      'restaurant_name': restaurantName,
-      'restaurant_image_url': restaurantImageUrl,
-      'customer_id': customerId,
-      'status': status,
-      'subtotal': subtotal,
-      'delivery_fee': deliveryFee,
-      'tax': tax,
-      'discount': discount,
-      'total': total,
-      'delivery_address_id': deliveryAddressId,
-      'payment_method_id': paymentMethodId,
-      'notes': notes,
-      'created_at': createdAt.toIso8601String(),
-      'updated_at': updatedAt.toIso8601String(),
-      'items': items.map((e) => e.toJson()).toList(),
-    };
+    final Map<String, dynamic> _data = <String, dynamic>{};
+    _data["created_at"] = createdAt;
+    _data["updated_at"] = updatedAt;
+    _data["customer_id"] = customerId;
+    _data["restaurant_id"] = restaurantId;
+    _data["driver_id"] = driverId;
+    _data["status"] = status;
+    if (cartSnapshot != null) {
+      _data["cart_snapshot"] = cartSnapshot;
+    }
+    _data["subtotal"] = subtotal;
+    _data["discount_amount"] = discountAmount;
+    _data["delivery_fee"] = deliveryFee;
+    _data["tax_amount"] = taxAmount;
+    _data["total_amount"] = totalAmount;
+    _data["payment_method"] = paymentMethod;
+    _data["payment_status"] = paymentStatus;
+    _data["stripe_charge_id"] = stripeChargeId;
+    _data["payment_intent_id"] = paymentIntentId;
+    _data["coupon_id"] = couponId;
+    _data["id"] = id;
+    if (orderItems != null) {
+      _data["order_items"] = orderItems;
+    }
+    _data["currency_code"] = currencyCode;
+    _data["currency_symbol"] = currencySymbol;
+    return _data;
   }
 }
 
-/// Model for order item
-class OrderItem {
-  final String id;
-  final String menuItemId;
-  final String menuItemName;
-  final String? menuItemImageUrl;
-  final double menuItemPrice;
-  final int quantity;
-  final String? variantId;
-  final String? variantName;
-  final double? variantPrice;
-  final List<String>? optionIds;
-  final List<String>? optionNames;
-  final double? optionPrice;
-  final String? notes;
-  final double totalPrice;
+/// Model cho cập nhật order (Admin)
+class OrderUpdate {
+  String? status;
+  String? paymentStatus;
+  String? deliveryType;
+  String? driverId;
+  String? notes;
+  double? deliveryFee;
+  double? taxAmount;
+  double? totalAmount;
 
-  OrderItem({
-    required this.id,
-    required this.menuItemId,
-    required this.menuItemName,
-    this.menuItemImageUrl,
-    required this.menuItemPrice,
-    required this.quantity,
-    this.variantId,
-    this.variantName,
-    this.variantPrice,
-    this.optionIds,
-    this.optionNames,
-    this.optionPrice,
+  OrderUpdate({
+    this.status,
+    this.paymentStatus,
+    this.deliveryType,
+    this.driverId,
     this.notes,
-    required this.totalPrice,
+    this.deliveryFee,
+    this.taxAmount,
+    this.totalAmount,
   });
 
-  /// Parse from JSON
-  factory OrderItem.fromJson(Map<String, dynamic> json) {
-    return OrderItem(
-      id: json['id'] as String,
-      menuItemId: json['menu_item_id'] as String,
-      menuItemName: json['menu_item_name'] as String,
-      menuItemImageUrl: json['menu_item_image_url'] as String?,
-      menuItemPrice: (json['menu_item_price'] as num).toDouble(),
-      quantity: json['quantity'] as int,
-      variantId: json['variant_id'] as String?,
-      variantName: json['variant_name'] as String?,
-      variantPrice:
-          json['variant_price'] != null
-              ? (json['variant_price'] as num).toDouble()
-              : null,
-      optionIds:
-          json['option_ids'] != null
-              ? (json['option_ids'] as List).map((e) => e as String).toList()
-              : null,
-      optionNames:
-          json['option_names'] != null
-              ? (json['option_names'] as List).map((e) => e as String).toList()
-              : null,
-      optionPrice:
-          json['option_price'] != null
-              ? (json['option_price'] as num).toDouble()
-              : null,
+  factory OrderUpdate.fromJson(Map<String, dynamic> json) {
+    return OrderUpdate(
+      status: json['status'] as String?,
+      paymentStatus: json['payment_status'] as String?,
+      deliveryType: json['delivery_type'] as String?,
+      driverId: json['driver_id'] as String?,
       notes: json['notes'] as String?,
-      totalPrice: (json['total_price'] as num).toDouble(),
+      deliveryFee:
+          json['delivery_fee'] != null
+              ? (json['delivery_fee'] as num).toDouble()
+              : null,
+      taxAmount:
+          json['tax_amount'] != null
+              ? (json['tax_amount'] as num).toDouble()
+              : null,
+      totalAmount:
+          json['total_amount'] != null
+              ? (json['total_amount'] as num).toDouble()
+              : null,
     );
   }
 
-  /// Convert to JSON
   Map<String, dynamic> toJson() {
     return {
-      'id': id,
-      'menu_item_id': menuItemId,
-      'menu_item_name': menuItemName,
-      'menu_item_image_url': menuItemImageUrl,
-      'menu_item_price': menuItemPrice,
-      'quantity': quantity,
-      'variant_id': variantId,
-      'variant_name': variantName,
-      'variant_price': variantPrice,
-      'option_ids': optionIds,
-      'option_names': optionNames,
-      'option_price': optionPrice,
+      'status': status,
+      'payment_status': paymentStatus,
+      'delivery_type': deliveryType,
+      'driver_id': driverId,
       'notes': notes,
-      'total_price': totalPrice,
+      'delivery_fee': deliveryFee,
+      'tax_amount': taxAmount,
+      'total_amount': totalAmount,
     };
   }
 }

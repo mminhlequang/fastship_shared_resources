@@ -233,7 +233,8 @@ class MenuRepo {
     double? lng,
     MenuItemSortBy? sortBy,
     int? restaurantId,
-    String? cuisineType,
+    List<int>? cuisineTypeIds, // Danh sách ID loại ẩm thực (có thể null)
+    List<String>? cuisineTypeStrings, // Danh sách tên loại ẩm thực để tìm kiếm (có thể null)
     bool? isAvailable,
     double? minRating,
     double? maxDistance,
@@ -245,7 +246,8 @@ class MenuRepo {
     lng: lng,
     sortBy: sortBy,
     restaurantId: restaurantId,
-    cuisineType: cuisineType,
+    cuisineTypeIds: cuisineTypeIds,
+    cuisineTypeStrings: cuisineTypeStrings,
     isAvailable: isAvailable,
     minRating: minRating,
     maxDistance: maxDistance,

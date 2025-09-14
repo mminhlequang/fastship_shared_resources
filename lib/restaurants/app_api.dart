@@ -51,7 +51,9 @@ abstract class RestaurantsApi {
     double? lat,
     double? lng,
     RestaurantSortBy? sortBy,
-    String? cuisineType,
+    List<int>? cuisineTypeIds, // Danh sách ID loại ẩm thực (có thể null)
+    List<String>?
+    cuisineTypeStrings, // Danh sách tên loại ẩm thực để tìm kiếm (có thể null)
     bool? isOpen,
     bool? isFeatured,
     bool? isVerified,
@@ -181,7 +183,9 @@ class RestaurantsApiImpl extends RestaurantsApi {
     double? lat,
     double? lng,
     RestaurantSortBy? sortBy,
-    String? cuisineType,
+    List<int>? cuisineTypeIds, // Danh sách ID loại ẩm thực (có thể null)
+    List<String>?
+    cuisineTypeStrings, // Danh sách tên loại ẩm thực để tìm kiếm (có thể null)
     bool? isOpen,
     bool? isFeatured,
     bool? isVerified,
@@ -196,7 +200,10 @@ class RestaurantsApiImpl extends RestaurantsApi {
         if (lat != null) params['lat'] = lat;
         if (lng != null) params['lng'] = lng;
         if (sortBy != null) params['sort_by'] = sortBy.name;
-        if (cuisineType != null) params['cuisine_type'] = cuisineType;
+        if (cuisineTypeIds != null) params['cuisine_type_ids'] = cuisineTypeIds;
+        if (cuisineTypeStrings != null) {
+          params['cuisine_type_strings'] = cuisineTypeStrings;
+        }
         if (isOpen != null) params['is_open'] = isOpen;
         if (isFeatured != null) params['is_featured'] = isFeatured;
         if (isVerified != null) params['is_verified'] = isVerified;

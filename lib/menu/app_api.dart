@@ -207,7 +207,8 @@ abstract class MenuApi {
     double? lng,
     MenuItemSortBy? sortBy,
     int? restaurantId,
-    String? cuisineType,
+    List<int>? cuisineTypeIds, // Danh sách ID loại ẩm thực (có thể null)
+    List<String>? cuisineTypeStrings, // Danh sách tên loại ẩm thực để tìm kiếm (có thể null)
     bool? isAvailable,
     double? minRating,
     double? maxDistance,
@@ -1054,7 +1055,8 @@ class MenuApiImpl extends MenuApi {
     double? lng,
     MenuItemSortBy? sortBy,
     int? restaurantId,
-    String? cuisineType,
+    List<int>? cuisineTypeIds, // Danh sách ID loại ẩm thực (có thể null)
+    List<String>? cuisineTypeStrings, // Danh sách tên loại ẩm thực để tìm kiếm (có thể null)
     bool? isAvailable,
     double? minRating,
     double? maxDistance,
@@ -1069,7 +1071,10 @@ class MenuApiImpl extends MenuApi {
         if (lng != null) params['lng'] = lng;
         if (sortBy != null) params['sort_by'] = sortBy.name;
         if (restaurantId != null) params['restaurant_id'] = restaurantId;
-        if (cuisineType != null) params['cuisine_type'] = cuisineType;
+        if (cuisineTypeIds != null) params['cuisine_type_ids'] = cuisineTypeIds;
+        if (cuisineTypeStrings != null) {
+          params['cuisine_type_strings'] = cuisineTypeStrings;
+        }
         if (isAvailable != null) params['is_available'] = isAvailable;
         if (minRating != null) params['min_rating'] = minRating;
         if (maxDistance != null) params['max_distance'] = maxDistance;

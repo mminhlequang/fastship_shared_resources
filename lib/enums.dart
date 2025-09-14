@@ -11,13 +11,8 @@ part of 'shared_resources.dart';
 
 const String stripePublishableKey =
     kDebugMode || kProfileMode
-        ? "pk_test_51QSzj8G67xsdbExOLHTKXtPDWDdH7DwAfdpQjQS2b0UEL47RkQJ3IAw6O4SIBRLX8P19isjt3JdTAUIhVEDuZbwx00DVBSbC9H"
+        ? "pk_test_51S60pd4zut6r6rN5APa2tSLo0alGOPaUOzoMQoGrgQkw1lmK7Fzc3FoN5kJpHl9J5hfyxJytM2P6yqho6MsPy43W00uLdIJxn2"
         : "pk_live_51QSzj8G67xsdbExOREzmoWHdDCxGDlylVrXX1nwpiKW8ylSoBH0fqUMPErlQUmmDClzJc6N5aebfKTN4ujUEbYS600YEC6swxf";
-const String stripeMerchantIdentifier =
-    kDebugMode || kProfileMode
-        ? "merchant.flutter.stripe.test"
-        : "merchant.flutter.stripe";
-const String stripeUrlScheme = "flutterstripe";
 
 const String appMessengerUrl = "https://m.me/fastship.vn";
 const String appWhatsappUrl = "https://wa.me/84909090909";
@@ -44,12 +39,12 @@ String get appMapUrlTemplateHERE =>
 const String appMapUrlTemplateGg =
     "https://mt.google.com/vt/lyrs=m&hl=en&x={x}&y={y}&z={z}";
 
-String _urlDebug = 'http://192.168.1.5:8002';
+String _urlDebug = 'http://192.168.1.30:8002';
 String _urlProd = 'https://api.fastshiphu.com';
 String _urlAsset = 'https://fastship.sgp1.digitaloceanspaces.com';
 
 String get apiBaseUrl => kDebugMode ? _urlDebug : _urlProd;
-String get socketIOUrl => "$apiBaseUrl/socket.io";
+String get socketIOBaseUrl => "$apiBaseUrl";
 
 String correctAssetUrl(String url) {
   if (url.startsWith('http')) {
@@ -231,58 +226,58 @@ enum Gender {
   }
 }
 
-const List<Map> euroCounries = [
-  {"name": "Vietnam", "code": "VN"},
+const List<Map> euroCountries = [
+  {"name": "Vietnam", "code": "VN", "alpha3": "VNM"},
 
-  {"name": "Andorra", "code": "AD"},
-  {"name": "Albania", "code": "AL"},
-  {"name": "Austria", "code": "AT"},
-  {"name": "Åland Islands", "code": "AX"},
-  {"name": "Bosnia and Herzegovina", "code": "BA"},
-  {"name": "Belgium", "code": "BE"},
-  {"name": "Bulgaria", "code": "BG"},
-  {"name": "Belarus", "code": "BY"},
-  {"name": "Switzerland", "code": "CH"},
-  {"name": "Cyprus", "code": "CY"},
-  {"name": "Czech Republic", "code": "CZ"},
-  {"name": "Germany", "code": "DE"},
-  {"name": "Denmark", "code": "DK"},
-  {"name": "Estonia", "code": "EE"},
-  {"name": "Spain", "code": "ES"},
-  {"name": "Finland", "code": "FI"},
-  {"name": "Faroe Islands", "code": "FO"},
-  {"name": "France", "code": "FR"},
-  {"name": "United Kingdom", "code": "GB"},
-  {"name": "Guernsey", "code": "GG"},
-  {"name": "Greece", "code": "GR"},
-  {"name": "Croatia", "code": "HR"},
-  {"name": "Hungary", "code": "HU"},
-  {"name": "Ireland", "code": "IE"},
-  {"name": "Isle of Man", "code": "IM"},
-  {"name": "Iceland", "code": "IC"},
-  {"name": "Italy", "code": "IT"},
-  {"name": "Jersey", "code": "JE"},
-  {"name": "Liechtenstein", "code": "LI"},
-  {"name": "Lithuania", "code": "LT"},
-  {"name": "Luxembourg", "code": "LU"},
-  {"name": "Latvia", "code": "LV"},
-  {"name": "Monaco", "code": "MC"},
-  {"name": "Moldova, Republic of", "code": "MD"},
-  {"name": "Macedonia, The Former Yugoslav Republic of", "code": "MK"},
-  {"name": "Malta", "code": "MT"},
-  {"name": "Netherlands", "code": "NL"},
-  {"name": "Norway", "code": "NO"},
-  {"name": "Poland", "code": "PL"},
-  {"name": "Portugal", "code": "PT"},
-  {"name": "Romania", "code": "RO"},
-  {"name": "Russian Federation", "code": "RU"},
-  {"name": "Sweden", "code": "SE"},
-  {"name": "Slovenia", "code": "SI"},
-  {"name": "Svalbard and Jan Mayen", "code": "SJ"},
-  {"name": "Slovakia", "code": "SK"},
-  {"name": "San Marino", "code": "SM"},
-  {"name": "Ukraine", "code": "UA"},
-  {"name": "Holy See (Vatican City State)", "code": "VA"},
+  {"name": "Andorra", "code": "AD", "alpha3": "AND"},
+  {"name": "Albania", "code": "AL", "alpha3": "ALB"},
+  {"name": "Austria", "code": "AT", "alpha3": "AUT"},
+  {"name": "Åland Islands", "code": "AX", "alpha3": "ALA"},
+  {"name": "Bosnia and Herzegovina", "code": "BA", "alpha3": "BIH"},
+  {"name": "Belgium", "code": "BE", "alpha3": "BEL"},
+  {"name": "Bulgaria", "code": "BG", "alpha3": "BGR"},
+  {"name": "Belarus", "code": "BY", "alpha3": "BLR"},
+  {"name": "Switzerland", "code": "CH", "alpha3": "CHE"},
+  {"name": "Cyprus", "code": "CY", "alpha3": "CYP"},
+  {"name": "Czech Republic", "code": "CZ", "alpha3": "CZE"},
+  {"name": "Germany", "code": "DE", "alpha3": "DEU"},
+  {"name": "Denmark", "code": "DK", "alpha3": "DNK"},
+  {"name": "Estonia", "code": "EE", "alpha3": "EST"},
+  {"name": "Spain", "code": "ES", "alpha3": "ESP"},
+  {"name": "Finland", "code": "FI", "alpha3": "FIN"},
+  {"name": "Faroe Islands", "code": "FO", "alpha3": "FRO"},
+  {"name": "France", "code": "FR", "alpha3": "FRA"},
+  {"name": "United Kingdom", "code": "GB", "alpha3": "GBR"},
+  {"name": "Guernsey", "code": "GG", "alpha3": "GGY"},
+  {"name": "Greece", "code": "GR", "alpha3": "GRC"},
+  {"name": "Croatia", "code": "HR", "alpha3": "HRV"},
+  {"name": "Hungary", "code": "HU", "alpha3": "HUN"},
+  {"name": "Ireland", "code": "IE", "alpha3": "IRL"},
+  {"name": "Isle of Man", "code": "IM", "alpha3": "IMN"},
+  {"name": "Iceland", "code": "IC", "alpha3": "ISL"}, // IC is not official ISO, but used in some APIs
+  {"name": "Italy", "code": "IT", "alpha3": "ITA"},
+  {"name": "Jersey", "code": "JE", "alpha3": "JEY"},
+  {"name": "Liechtenstein", "code": "LI", "alpha3": "LIE"},
+  {"name": "Lithuania", "code": "LT", "alpha3": "LTU"},
+  {"name": "Luxembourg", "code": "LU", "alpha3": "LUX"},
+  {"name": "Latvia", "code": "LV", "alpha3": "LVA"},
+  {"name": "Monaco", "code": "MC", "alpha3": "MCO"},
+  {"name": "Moldova, Republic of", "code": "MD", "alpha3": "MDA"},
+  {"name": "Macedonia, The Former Yugoslav Republic of", "code": "MK", "alpha3": "MKD"},
+  {"name": "Malta", "code": "MT", "alpha3": "MLT"},
+  {"name": "Netherlands", "code": "NL", "alpha3": "NLD"},
+  {"name": "Norway", "code": "NO", "alpha3": "NOR"},
+  {"name": "Poland", "code": "PL", "alpha3": "POL"},
+  {"name": "Portugal", "code": "PT", "alpha3": "PRT"},
+  {"name": "Romania", "code": "RO", "alpha3": "ROU"},
+  {"name": "Russian Federation", "code": "RU", "alpha3": "RUS"},
+  {"name": "Sweden", "code": "SE", "alpha3": "SWE"},
+  {"name": "Slovenia", "code": "SI", "alpha3": "SVN"},
+  {"name": "Svalbard and Jan Mayen", "code": "SJ", "alpha3": "SJM"},
+  {"name": "Slovakia", "code": "SK", "alpha3": "SVK"},
+  {"name": "San Marino", "code": "SM", "alpha3": "SMR"},
+  {"name": "Ukraine", "code": "UA", "alpha3": "UKR"},
+  {"name": "Holy See (Vatican City State)", "code": "VA", "alpha3": "VAT"},
 ];
 
 /// Enum cho loại client (ứng dụng)

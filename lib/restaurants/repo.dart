@@ -63,7 +63,8 @@ class RestaurantsRepo {
     double? lat,
     double? lng,
     RestaurantSortBy? sortBy,
-    String? cuisineType,
+    List<int>? cuisineTypeIds, // Danh sách ID loại ẩm thực (có thể null)
+    List<String>? cuisineTypeStrings, // Danh sách tên loại ẩm thực để tìm kiếm (có thể null)
     bool? isOpen,
     bool? isFeatured,
     bool? isVerified,
@@ -75,7 +76,8 @@ class RestaurantsRepo {
     lat: lat,
     lng: lng,
     sortBy: sortBy,
-    cuisineType: cuisineType,
+    cuisineTypeIds: cuisineTypeIds,
+    cuisineTypeStrings: cuisineTypeStrings,
     isOpen: isOpen,
     isFeatured: isFeatured,
     isVerified: isVerified,
