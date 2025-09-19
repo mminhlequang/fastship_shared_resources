@@ -1,7 +1,9 @@
  
 import 'package:currency_text_input_formatter/currency_text_input_formatter.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter/material.dart';
 import 'package:internal_core/internal_core.dart';
 import 'package:intl/intl.dart';
 import 'package:tuple/tuple.dart';

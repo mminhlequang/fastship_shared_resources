@@ -1,3 +1,5 @@
+import 'package:flutter/material.dart';
+
 /// Model cho địa chỉ giao hàng trong request thanh toán
 class CheckoutRequestDeliveryAddress {
   final String? address;
@@ -243,7 +245,6 @@ class RestaurantBreakdown {
     return _data;
   }
 }
- 
 
 /// Model for checkout response
 /// Model cho PaymentIntent (Stripe hoặc các cổng thanh toán khác)
@@ -294,10 +295,7 @@ class CheckoutSession {
   final String id;
   final String url;
 
-  CheckoutSession({
-    required this.id,
-    required this.url,
-  });
+  CheckoutSession({required this.id, required this.url});
 
   /// Parse từ JSON
   factory CheckoutSession.fromJson(Map<String, dynamic> json) {
@@ -309,14 +307,9 @@ class CheckoutSession {
 
   /// Convert sang JSON
   Map<String, dynamic> toJson() {
-    return {
-      'id': id,
-      'url': url,
-    };
+    return {'id': id, 'url': url};
   }
 }
-
-
 
 /// Model cho checkout response
 class CheckoutResponse {
@@ -334,18 +327,24 @@ class CheckoutResponse {
   /// Parse từ JSON
   factory CheckoutResponse.fromJson(Map<String, dynamic> json) {
     return CheckoutResponse(
-      orders: (json['orders'] as List)
-          .map((e) => OrderResponse.fromJson(e))
-          .toList(),
-      checkoutCalculation: json['checkout_calculation'] != null
-          ? CheckoutCalculationResponse.fromJson(json['checkout_calculation'])
-          : null,
-      paymentIntent: json['payment_intent'] != null
-          ? PaymentIntent.fromJson(json['payment_intent'])
-          : null,
-      checkoutSession: json['checkout_session'] != null
-          ? CheckoutSession.fromJson(json['checkout_session'])
-          : null,
+      orders:
+          (json['orders'] as List)
+              .map((e) => OrderResponse.fromJson(e))
+              .toList(),
+      checkoutCalculation:
+          json['checkout_calculation'] != null
+              ? CheckoutCalculationResponse.fromJson(
+                json['checkout_calculation'],
+              )
+              : null,
+      paymentIntent:
+          json['payment_intent'] != null
+              ? PaymentIntent.fromJson(json['payment_intent'])
+              : null,
+      checkoutSession:
+          json['checkout_session'] != null
+              ? CheckoutSession.fromJson(json['checkout_session'])
+              : null,
     );
   }
 
@@ -356,6 +355,57 @@ class CheckoutResponse {
       'checkout_calculation': checkoutCalculation?.toJson(),
       'payment_intent': paymentIntent?.toJson(),
       'checkout_session': checkoutSession?.toJson(),
+    };
+  }
+}
+
+/// Model thông tin tài xế (driver_info)
+class DriverInfo {
+  final String? id;
+  final String? fullName;
+  final String? phone;
+  final String? avatarUrl;
+  final bool? isOnline;
+  final bool? isAvailable;
+  final double? ratingAverage;
+  final int? ratingCount;
+
+  DriverInfo({
+    this.id,
+    this.fullName,
+    this.phone,
+    this.avatarUrl,
+    this.isOnline,
+    this.isAvailable,
+    this.ratingAverage,
+    this.ratingCount,
+  });
+
+  factory DriverInfo.fromJson(Map<String, dynamic> json) {
+    return DriverInfo(
+      id: json['id'] as String?,
+      fullName: json['full_name'] as String?,
+      phone: json['phone'] as String?,
+      avatarUrl: json['avatar_url'] as String?,
+      isOnline: json['is_online'] as bool?,
+      isAvailable: json['is_available'] as bool?,
+      ratingAverage: json['rating_average'] != null
+          ? (json['rating_average'] as num?)?.toDouble()
+          : null,
+      ratingCount: json['rating_count'] as int? ?? 0,
+    );
+  }
+
+  Map<String, dynamic> toJson() {
+    return {
+      'id': id,
+      'full_name': fullName,
+      'phone': phone,
+      'avatar_url': avatarUrl,
+      'is_online': isOnline,
+      'is_available': isAvailable,
+      'rating_average': ratingAverage,
+      'rating_count': ratingCount,
     };
   }
 }
@@ -382,6 +432,7 @@ class OrderResponse {
   List<dynamic>? orderItems;
   String? currencyCode;
   String? currencySymbol;
+  DriverInfo? driverInfo; // Thông tin tài xế
 
   OrderResponse({
     this.createdAt,
@@ -405,6 +456,7 @@ class OrderResponse {
     this.orderItems,
     this.currencyCode,
     this.currencySymbol,
+    this.driverInfo,
   });
 
   OrderResponse.fromJson(Map<String, dynamic> json) {
@@ -432,6 +484,9 @@ class OrderResponse {
     orderItems = json["order_items"] ?? [];
     currencyCode = json["currency_code"];
     currencySymbol = json["currency_symbol"];
+    driverInfo = json["driver_info"] != null
+        ? DriverInfo.fromJson(json["driver_info"])
+        : null;
   }
 
   static List<OrderResponse> fromList(List<Map<String, dynamic>> list) {
@@ -465,7 +520,115 @@ class OrderResponse {
     }
     _data["currency_code"] = currencyCode;
     _data["currency_symbol"] = currencySymbol;
+    if (driverInfo != null) {
+      _data["driver_info"] = driverInfo!.toJson();
+    }
     return _data;
+  }
+
+  // Getters để lấy thông tin từ cartSnapshot một cách đồng bộ
+  String get customerName {
+    return cartSnapshot?['customer']?['full_name']?.toString() ?? 'Khách hàng';
+  }
+
+  String get customerPhone {
+    return cartSnapshot?['customer']?['phone']?.toString() ?? 'N/A';
+  }
+
+  String get customerEmail {
+    return cartSnapshot?['customer']?['email']?.toString() ?? 'N/A';
+  }
+
+  String get deliveryAddress {
+    return cartSnapshot?['delivery_address']?['address']?.toString() ?? 'N/A';
+  }
+
+  String get deliveryInstructions {
+    return cartSnapshot?['delivery_instructions']?.toString() ?? 'N/A';
+  }
+
+  String get restaurantName {
+    return cartSnapshot?['restaurant']?['name']?.toString() ?? 'N/A';
+  }
+
+  String get restaurantPhone {
+    return cartSnapshot?['restaurant']?['contact_phone']?.toString() ?? 'N/A';
+  }
+
+  String get restaurantEmail {
+    return cartSnapshot?['restaurant']?['contact_email']?.toString() ?? 'N/A';
+  }
+
+  int get itemsCount {
+    return (cartSnapshot?['items'] as List?)?.length ?? 0;
+  }
+
+  List<dynamic> get items {
+    return (cartSnapshot?['items'] as List?) ?? [];
+  }
+
+  String get shortId {
+    return id?.substring(0, 8) ?? 'N/A';
+  }
+
+  String get formattedCreatedAt {
+    if (createdAt == null) return 'N/A';
+    try {
+      final date = DateTime.parse(createdAt!);
+      return '${date.day.toString().padLeft(2, '0')}/${date.month.toString().padLeft(2, '0')} ${date.hour.toString().padLeft(2, '0')}:${date.minute.toString().padLeft(2, '0')}';
+    } catch (e) {
+      return createdAt!;
+    }
+  }
+
+  String get statusText {
+    switch (status) {
+      case 'pending':
+        return 'Chờ xác nhận';
+      case 'confirmed':
+        return 'Đã xác nhận';
+      case 'preparing':
+        return 'Đang chuẩn bị';
+      case 'ready_for_pickup':
+        return 'Sẵn sàng';
+      case 'picked_up':
+        return 'Đang giao';
+      case 'delivered':
+        return 'Hoàn thành';
+      case 'cancelled':
+        return 'Đã hủy';
+      case 'rejected_by_restaurant':
+        return 'Từ chối';
+      case 'timeout':
+        return 'Hết hạn';
+      default:
+        return 'Không xác định';
+    }
+  }
+
+  Color get statusColor {
+    switch (status) {
+      case 'pending':
+        return Colors.orange;
+      case 'confirmed':
+        return Colors.blue;
+      case 'preparing':
+        return Colors.purple;
+      case 'ready_for_pickup':
+        return Colors.green;
+      case 'picked_up':
+        return Colors.teal;
+      case 'delivered':
+        return Colors.green.shade700;
+      case 'cancelled':
+        return Colors.red;
+      case 'rejected_by_restaurant':
+        return Colors.red.shade700;
+      case 'timeout':
+        return Colors.grey;
+      default:
+        return Colors.grey;
+    }
   }
 }
 

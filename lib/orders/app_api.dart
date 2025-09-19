@@ -25,6 +25,9 @@ class _OrdersEndpoint {
   // Status Update API
   static String updateOrderStatus(String orderId) =>
       "/api/v1/customer/orders/$orderId/status";
+
+  // Get Order by ID
+  static String getOrderById(dynamic orderId) => "/api/v1/orders/$orderId";
 }
 
 abstract class OrdersApi {
@@ -47,6 +50,9 @@ abstract class OrdersApi {
     String? paymentStatus,
     String? deliveryType,
   });
+
+  Future<NetworkResponse<OrderResponse>> getOrderById({dynamic? id});
+
   Future<NetworkResponse<OrderResponse>> updateOrder(
     String orderId,
     OrderUpdate request,
@@ -263,6 +269,21 @@ class OrdersApiImpl extends OrdersApi {
         ).put(
           _OrdersEndpoint.updateOrderStatus(orderId),
           queryParameters: queryParams,
+        );
+        return NetworkResponse.fromResponse(
+          response,
+          converter: (json) => OrderResponse.fromJson(json),
+        );
+      },
+    );
+  }
+
+  @override
+  Future<NetworkResponse<OrderResponse>> getOrderById({dynamic? id}) async {
+    return await handleNetworkError(
+      proccess: () async {
+        final response = await AppClient().get(
+          _OrdersEndpoint.getOrderById(id),
         );
         return NetworkResponse.fromResponse(
           response,

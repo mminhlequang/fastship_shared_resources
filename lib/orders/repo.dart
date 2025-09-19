@@ -46,6 +46,10 @@ class OrdersRepo {
     deliveryType: deliveryType,
   );
 
+  // Admin APIs (yêu cầu authentication)
+  Future<NetworkResponse<OrderResponse>> getOrderById({dynamic? id}) =>
+      _api.getOrderById(id: id);
+
   Future<NetworkResponse<OrderResponse>> updateOrder(
     String orderId,
     OrderUpdate request,

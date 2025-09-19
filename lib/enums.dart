@@ -1,5 +1,8 @@
 part of 'shared_resources.dart';
 
+const String foodPlaceholderAsset = 'assets/images/food_placeholder.png';
+const String restaurantPlaceholderAsset = 'assets/images/restaurant_placeholder.png';
+
 // Fastship Stripe key:
 // Demo
 // pk_test_51QSzj8G67xsdbExOLHTKXtPDWDdH7DwAfdpQjQS2b0UEL47RkQJ3IAw6O4SIBRLX8P19isjt3JdTAUIhVEDuZbwx00DVBSbC9H
@@ -39,7 +42,7 @@ String get appMapUrlTemplateHERE =>
 const String appMapUrlTemplateGg =
     "https://mt.google.com/vt/lyrs=m&hl=en&x={x}&y={y}&z={z}";
 
-String _urlDebug = 'http://192.168.1.30:8002';
+String _urlDebug = 'http://192.168.1.5:8002';
 String _urlProd = 'https://api.fastshiphu.com';
 String _urlAsset = 'https://fastship.sgp1.digitaloceanspaces.com';
 
@@ -55,6 +58,166 @@ String correctAssetUrl(String url) {
   }
   return '$_urlAsset/$url';
 }
+ 
+
+/// Enum mô tả trạng thái đơn hàng theo flow xử lý đơn
+enum OrderStatus {
+  /// Đơn hàng mới được tạo, chờ restaurant xác nhận
+  pending,
+
+  /// Restaurant đã xác nhận, đang tìm driver
+  confirmed,
+
+  /// Restaurant đang chuẩn bị món ăn
+  preparing,
+
+  /// Món ăn sẵn sàng, driver có thể đến lấy
+  readyForPickup,
+
+  /// Driver đã lấy món ăn, đang giao hàng
+  pickedUp,
+
+  /// Đơn hàng đã giao thành công
+  delivered,
+
+  /// Đơn hàng bị hủy (từ customer hoặc restaurant)
+  cancelled,
+
+  /// Restaurant từ chối đơn hàng
+  rejectedByRestaurant,
+
+  /// Restaurant không phản hồi trong 5 phút
+  timeout;
+
+  /// Trả về giá trị thực tế dạng string cho trạng thái đơn hàng
+  String get value {
+    switch (this) {
+      case OrderStatus.pending:
+        return "pending";
+      case OrderStatus.confirmed:
+        return "confirmed";
+      case OrderStatus.preparing:
+        return "preparing";
+      case OrderStatus.readyForPickup:
+        return "ready_for_pickup";
+      case OrderStatus.pickedUp:
+        return "picked_up";
+      case OrderStatus.delivered:
+        return "delivered";
+      case OrderStatus.cancelled:
+        return "cancelled";
+      case OrderStatus.rejectedByRestaurant:
+        return "rejected_by_restaurant";
+      case OrderStatus.timeout:
+        return "timeout";
+    }
+  }
+
+  /// Trả về màu sắc đại diện cho từng trạng thái đơn hàng
+  Color get color {
+    switch (this) {
+      case OrderStatus.pending:
+        return Colors.grey;
+      case OrderStatus.confirmed:
+        return Colors.blue;
+      case OrderStatus.preparing:
+        return Colors.orange;
+      case OrderStatus.readyForPickup:
+        return Colors.amber;
+      case OrderStatus.pickedUp:
+        return Colors.deepPurple;
+      case OrderStatus.delivered:
+        return Colors.green;
+      case OrderStatus.cancelled:
+        return Colors.red;
+      case OrderStatus.rejectedByRestaurant:
+        return Colors.redAccent;
+      case OrderStatus.timeout:
+        return Colors.brown;
+    }
+  }
+
+  /// Trả về icon đại diện cho từng trạng thái đơn hàng
+  IconData get icon {
+    switch (this) {
+      case OrderStatus.pending:
+        return FontAwesomeIcons.clock;
+      case OrderStatus.confirmed:
+        return FontAwesomeIcons.checkCircle;
+      case OrderStatus.preparing:
+        return FontAwesomeIcons.store;
+      case OrderStatus.readyForPickup:
+        return FontAwesomeIcons.box;
+      case OrderStatus.pickedUp:
+        return FontAwesomeIcons.truck;
+      case OrderStatus.delivered:
+        return FontAwesomeIcons.flagCheckered;
+      case OrderStatus.cancelled:
+        return FontAwesomeIcons.timesCircle;
+      case OrderStatus.rejectedByRestaurant:
+        return FontAwesomeIcons.exclamationTriangle;
+      case OrderStatus.timeout:
+        return FontAwesomeIcons.clock;
+    }
+  }
+}
+
+/// Enum mô tả trạng thái thanh toán
+enum PaymentStatus {
+  /// Chưa thanh toán
+  unpaid,
+
+  /// Đã thanh toán
+  paid,
+
+  /// Đã hoàn tiền
+  refunded,
+
+  /// Thanh toán thất bại
+  failed;
+
+  /// Trả về giá trị thực tế dạng string cho trạng thái thanh toán
+  String get value {
+    switch (this) {
+      case PaymentStatus.unpaid:
+        return "unpaid";
+      case PaymentStatus.paid:
+        return "paid";
+      case PaymentStatus.refunded:
+        return "refunded";
+      case PaymentStatus.failed:
+        return "failed";
+    }
+  }
+}
+
+/// Enum mô tả phương thức thanh toán
+enum PaymentMethod {
+  /// Thanh toán qua Stripe
+  stripe,
+
+  /// Thanh toán tiền mặt
+  cash,
+
+  /// Thanh toán qua ví FastShip
+  fastshipWallet;
+
+  /// Trả về giá trị thực tế dạng string cho phương thức thanh toán
+  String get value {
+    switch (this) {
+      case PaymentMethod.stripe:
+        return "stripe";
+      case PaymentMethod.cash:
+        return "cash";
+      case PaymentMethod.fastshipWallet:
+        return "fastship_wallet";
+    }
+  }
+}
+
+
+
+
 
 enum AppOrderDeliveryType {
   ship, // Giao hàng
@@ -98,70 +261,9 @@ enum AppPaymentMethod {
         return 'icon34';
     }
   }
-}
-
-enum AppOrderStoreStatus {
-  pending, // Đang chờ
-  // accepted, // Đã chấp nhận đơn
-  rejected, // Đã từ chối đơn
-  completed, // Đã hoàn thành đơn
-}
-
-enum AppOrderProcessStatus {
-  pending, // Đơn hàng mới
-  findDriver, // Đang tìm tài xế
-  driverAccepted, // Tài xế đã chấp nhận đơn
-  storeAccepted, // Cửa hàng đã chấp nhận đơn
-  driverArrivedStore, // Tài xế đã đến địa điểm giao hàng
-  driverPicked, // Tài xế đã lấy hàng
-  driverArrivedDestination, // Tài xế đã đến địa điểm giao hàng
-  completed, // Đơn hàng hoàn thành
-  cancelled,
-}
-
-extension AppOrderProcessStatusExtension on AppOrderProcessStatus {
-  String get friendlyName {
-    switch (this) {
-      case AppOrderProcessStatus.pending:
-        return 'Pending';
-      case AppOrderProcessStatus.findDriver:
-        return 'Finding driver';
-      case AppOrderProcessStatus.driverAccepted:
-        return 'Driver accepted';
-      case AppOrderProcessStatus.storeAccepted:
-        return 'Store accepted';
-      case AppOrderProcessStatus.driverArrivedStore:
-        return 'Driver arrived store';
-      case AppOrderProcessStatus.driverPicked:
-        return 'Driver picked';
-      case AppOrderProcessStatus.driverArrivedDestination:
-        return 'Driver arrived destination';
-      case AppOrderProcessStatus.completed:
-        return 'Completed';
-      case AppOrderProcessStatus.cancelled:
-        return 'Cancelled';
-    }
-  }
-}
-
-enum AppFindDriverStatus {
-  finding, // Đang tìm tài xế
-  availableDrivers, // Tài xế khả dụng
-  found, // Đã tìm thấy tài xế
-  noDriver, // Không tìm thấy tài xế
-  error, // Lỗi
-}
-
-enum AppPaymentOrderStatus {
-  pending, // Đang chờ thanh toán
-  paid, // Đã thanh toán
-  failed, // Thanh toán thất bại
-}
-
-enum AppOrderType {
-  delivery, // Giao hàng
-  pickup, // Món đặt lấy
-}
+} 
+ 
+ 
 
 String distanceFormatted(num metter) {
   if (metter < 1000) {

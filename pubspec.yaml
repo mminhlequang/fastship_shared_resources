@@ -24,6 +24,7 @@ dependencies:
   tuple: ^2.0.2
   easy_localization: ^3.0.7+1
   currency_text_input_formatter: ^2.3.0
+  font_awesome_flutter: ^10.9.0
 
 
 dev_dependencies:
