@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:shared_resources/restaurants/models/models.dart';
 
 /// Model cho địa chỉ giao hàng trong request thanh toán
 class CheckoutRequestDeliveryAddress {
@@ -432,7 +433,8 @@ class OrderResponse {
   List<dynamic>? orderItems;
   String? currencyCode;
   String? currencySymbol;
-  DriverInfo? driverInfo; // Thông tin tài xế
+  DriverInfo? driverInfo;
+  RestaurantResponse? restaurant;
 
   OrderResponse({
     this.createdAt,
@@ -457,6 +459,7 @@ class OrderResponse {
     this.currencyCode,
     this.currencySymbol,
     this.driverInfo,
+    this.restaurant,
   });
 
   OrderResponse.fromJson(Map<String, dynamic> json) {
@@ -486,6 +489,9 @@ class OrderResponse {
     currencySymbol = json["currency_symbol"];
     driverInfo = json["driver_info"] != null
         ? DriverInfo.fromJson(json["driver_info"])
+        : null;
+    restaurant = json["restaurant"] != null
+        ? RestaurantResponse.fromJson(json["restaurant"])
         : null;
   }
 
@@ -522,6 +528,9 @@ class OrderResponse {
     _data["currency_symbol"] = currencySymbol;
     if (driverInfo != null) {
       _data["driver_info"] = driverInfo!.toJson();
+    }
+    if (restaurant != null) {
+      _data["restaurant"] = restaurant!.toJson();
     }
     return _data;
   }

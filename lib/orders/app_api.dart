@@ -47,6 +47,7 @@ abstract class OrdersApi {
     int? restaurantId,
     String? driverId,
     String? status,
+    String? statusIn, //List of statuses separated by ,
     String? paymentStatus,
     String? deliveryType,
   });
@@ -66,6 +67,7 @@ abstract class OrdersApi {
     int? restaurantId,
     String? driverId,
     String? status,
+    String? statusIn, //List of statuses separated by ,
     String? paymentStatus,
     String? deliveryType,
   });
@@ -123,6 +125,7 @@ class OrdersApiImpl extends OrdersApi {
     int? restaurantId,
     String? driverId,
     String? status,
+    String? statusIn, //List of statuses separated by ,
     String? paymentStatus,
     String? deliveryType,
   }) async {
@@ -135,6 +138,7 @@ class OrdersApiImpl extends OrdersApi {
         if (restaurantId != null) queryParams['restaurant_id'] = restaurantId;
         if (driverId != null) queryParams['driver_id'] = driverId;
         if (status != null) queryParams['status'] = status;
+        if (statusIn != null) queryParams['status_in'] = statusIn;
         if (paymentStatus != null)
           queryParams['payment_status'] = paymentStatus;
         if (deliveryType != null) queryParams['delivery_type'] = deliveryType;
@@ -198,6 +202,7 @@ class OrdersApiImpl extends OrdersApi {
     int? restaurantId,
     String? driverId,
     String? status,
+    String? statusIn, //List of statuses separated by ,
     String? paymentStatus,
     String? deliveryType,
   }) async {
@@ -209,6 +214,7 @@ class OrdersApiImpl extends OrdersApi {
         if (restaurantId != null) queryParams['restaurant_id'] = restaurantId;
         if (driverId != null) queryParams['driver_id'] = driverId;
         if (status != null) queryParams['status'] = status;
+        if (statusIn != null) queryParams['status_in'] = statusIn;
         if (paymentStatus != null)
           queryParams['payment_status'] = paymentStatus;
         if (deliveryType != null) queryParams['delivery_type'] = deliveryType;

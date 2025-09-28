@@ -33,6 +33,7 @@ class OrdersRepo {
     int? restaurantId,
     String? driverId,
     String? status,
+    String? statusIn, //List of statuses separated by ,
     String? paymentStatus,
     String? deliveryType,
   }) => _api.getAllOrders(
@@ -42,6 +43,7 @@ class OrdersRepo {
     restaurantId: restaurantId,
     driverId: driverId,
     status: status,
+    statusIn: statusIn,
     paymentStatus: paymentStatus,
     deliveryType: deliveryType,
   );
@@ -65,6 +67,7 @@ class OrdersRepo {
     int? restaurantId,
     String? driverId,
     String? status,
+    String? statusIn, //List of statuses separated by ,
     String? paymentStatus,
     String? deliveryType,
   }) => _api.getMyOrders(
@@ -73,6 +76,7 @@ class OrdersRepo {
     restaurantId: restaurantId,
     driverId: driverId,
     status: status,
+    statusIn: statusIn,
     paymentStatus: paymentStatus,
     deliveryType: deliveryType,
   );
