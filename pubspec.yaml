@@ -15,22 +15,22 @@ dependencies:
     git:
       url: https://github.com/mminhlequang/internal_libs_flutter.git
       path: core/
-      ref: 9e620fc70afe0c8e0c14f37a2e2871e0a39269f0
+      ref: 709a7a600c5c18331784d58693cc2dafde120831
   internal_network:
     git:
       url: https://github.com/mminhlequang/internal_libs_flutter.git
       path: network/
-      ref: 9e620fc70afe0c8e0c14f37a2e2871e0a39269f0
+      ref: 709a7a600c5c18331784d58693cc2dafde120831
   tuple: ^2.0.2
-  easy_localization: ^3.0.7+1
+  easy_localization: ^3.0.8
   currency_text_input_formatter: ^2.3.0
-  font_awesome_flutter: ^10.9.0
+  font_awesome_flutter: ^10.10.0
 
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
-  flutter_lints: ^5.0.0
+  flutter_lints: ^6.0.0
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec

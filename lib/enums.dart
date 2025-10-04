@@ -1,7 +1,8 @@
 part of 'shared_resources.dart';
 
 const String foodPlaceholderAsset = 'assets/images/food_placeholder.png';
-const String restaurantPlaceholderAsset = 'assets/images/restaurant_placeholder.png';
+const String restaurantPlaceholderAsset =
+    'assets/images/restaurant_placeholder.png';
 
 // Fastship Stripe key:
 // Demo
@@ -47,8 +48,8 @@ String _urlProd = 'https://api.fastshiphu.com';
 String _urlAsset = 'https://fastship.sgp1.digitaloceanspaces.com';
 
 String get apiBaseUrl =>
- kDebugMode ? _urlDebug :
-  _urlProd;
+     kDebugMode ? _urlDebug :
+    _urlProd;
 String get socketIOBaseUrl => "$apiBaseUrl";
 
 String correctAssetUrl(String url) {
@@ -60,7 +61,6 @@ String correctAssetUrl(String url) {
   }
   return '$_urlAsset/$url';
 }
- 
 
 /// Enum mô tả trạng thái đơn hàng theo flow xử lý đơn
 enum OrderStatus {
@@ -162,6 +162,38 @@ enum OrderStatus {
         return FontAwesomeIcons.clock;
     }
   }
+
+  String get displayName {
+    switch (this) {
+      case OrderStatus.pending:
+        return 'Waiting confirmation';
+      case OrderStatus.confirmed:
+        return 'Confirmed';
+      case OrderStatus.preparing:
+        return 'Preparing';
+      case OrderStatus.readyForPickup:
+        return 'Ready for pickup';
+      case OrderStatus.pickedUp:
+        return 'Delivering';
+      case OrderStatus.delivered:
+        return 'Delivered';
+      case OrderStatus.cancelled:
+        return 'Cancelled';
+      case OrderStatus.rejectedByRestaurant:
+        return 'Rejected by restaurant';
+      case OrderStatus.timeout:
+        return 'Timeout';
+      default:
+        return 'Unknown';
+    }
+  }
+
+  OrderStatus get nextStatus {
+    if (this == OrderStatus.values.last) {
+      return OrderStatus.values.first;
+    }
+    return OrderStatus.values[OrderStatus.values.indexOf(this) + 1];
+  }
 }
 
 /// Enum mô tả trạng thái thanh toán
@@ -217,10 +249,6 @@ enum PaymentMethod {
   }
 }
 
-
-
-
-
 enum AppOrderDeliveryType {
   ship, // Giao hàng
   pickup, // Món đặt lấy
@@ -247,7 +275,7 @@ enum AppPaymentMethod {
       case AppPaymentMethod.stripe:
         return 'Stripe Payment';
       case AppPaymentMethod.faship_wallet:
-        return 'FastShip Wallet' ;
+        return 'FastShip Wallet';
       case AppPaymentMethod.cash:
         return 'Cash on Delivery';
     }
@@ -263,9 +291,7 @@ enum AppPaymentMethod {
         return 'icon34';
     }
   }
-} 
- 
- 
+}
 
 String distanceFormatted(num metter) {
   if (metter < 1000) {
@@ -358,7 +384,11 @@ const List<Map> euroCountries = [
   {"name": "Hungary", "code": "HU", "alpha3": "HUN"},
   {"name": "Ireland", "code": "IE", "alpha3": "IRL"},
   {"name": "Isle of Man", "code": "IM", "alpha3": "IMN"},
-  {"name": "Iceland", "code": "IC", "alpha3": "ISL"}, // IC is not official ISO, but used in some APIs
+  {
+    "name": "Iceland",
+    "code": "IC",
+    "alpha3": "ISL",
+  }, // IC is not official ISO, but used in some APIs
   {"name": "Italy", "code": "IT", "alpha3": "ITA"},
   {"name": "Jersey", "code": "JE", "alpha3": "JEY"},
   {"name": "Liechtenstein", "code": "LI", "alpha3": "LIE"},
@@ -367,7 +397,11 @@ const List<Map> euroCountries = [
   {"name": "Latvia", "code": "LV", "alpha3": "LVA"},
   {"name": "Monaco", "code": "MC", "alpha3": "MCO"},
   {"name": "Moldova, Republic of", "code": "MD", "alpha3": "MDA"},
-  {"name": "Macedonia, The Former Yugoslav Republic of", "code": "MK", "alpha3": "MKD"},
+  {
+    "name": "Macedonia, The Former Yugoslav Republic of",
+    "code": "MK",
+    "alpha3": "MKD",
+  },
   {"name": "Malta", "code": "MT", "alpha3": "MLT"},
   {"name": "Netherlands", "code": "NL", "alpha3": "NLD"},
   {"name": "Norway", "code": "NO", "alpha3": "NOR"},

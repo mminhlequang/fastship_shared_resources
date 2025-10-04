@@ -1,3 +1,4 @@
+import 'dart:typed_data';
 import 'package:internal_network/network_resources/resources.dart';
 import '../admin/admin.dart';
 import 'app_api.dart';
@@ -17,8 +18,10 @@ class MeRepo {
   late UsersApi _api;
 
   /// Get current user profile
-  Future<NetworkResponse<UnifiedUserResponse>> getUserMe() async {
-    return await _api.getUserMe();
+  Future<NetworkResponse<UnifiedUserResponse>> getUserMe([
+    String? clientType,
+  ]) async {
+    return await _api.getUserMe(clientType);
   }
 
   /// Update current user profile
@@ -34,6 +37,14 @@ class MeRepo {
     UpdatePassword updatePassword,
   ) async {
     return await _api.updatePasswordMe(updatePassword);
+  }
+
+  /// Update current user avatar (tối ưu cho cả web và mobile)
+  Future<NetworkResponse<Map<String, dynamic>>> updateAvatar(
+    Uint8List imageBytes,
+    String fileName,
+  ) async {
+    return await _api.updateAvatar(imageBytes, fileName);
   }
 
   /// Get user by ID

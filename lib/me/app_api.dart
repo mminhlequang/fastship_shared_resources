@@ -1,3 +1,4 @@
+import 'dart:typed_data';
 import 'package:internal_core/internal_core.dart';
 import 'package:internal_network/internal_network.dart';
 import 'package:internal_network/network_resources/resources.dart';
@@ -11,6 +12,7 @@ class _UsersEndpoint {
 
   static String userMe() => "/api/v1/me/";
   static String userMePassword() => "/api/v1/me/password";
+  static String updateAvatar() => "/api/v1/me/update_avatar";
   static String userById(String userId) => "/api/v1/$userId";
   static String linkSocialAccount() => "/api/v1/me/social/link";
   static String getMySocialAccounts() => "/api/v1/me/social/accounts";
@@ -20,7 +22,7 @@ class _UsersEndpoint {
 
 abstract class UsersApi {
   // Get current user
-  Future<NetworkResponse<UnifiedUserResponse>> getUserMe();
+  Future<NetworkResponse<UnifiedUserResponse>> getUserMe([String? clientType]);
 
   // Update current user
   Future<NetworkResponse<UnifiedUserResponse>> updateUserMe(
@@ -31,6 +33,12 @@ abstract class UsersApi {
   // Update password
   Future<NetworkResponse<Message>> updatePasswordMe(
     UpdatePassword updatePassword,
+  );
+
+  // Update avatar (tối ưu cho cả web và mobile)
+  Future<NetworkResponse<Map<String, dynamic>>> updateAvatar(
+    Uint8List imageBytes,
+    String fileName,
   );
 
   // Get user by ID
@@ -60,12 +68,17 @@ abstract class UsersApi {
 
 class UsersApiImpl extends UsersApi {
   @override
-  Future<NetworkResponse<UnifiedUserResponse>> getUserMe() async {
+  Future<NetworkResponse<UnifiedUserResponse>> getUserMe([
+    String? clientType,
+  ]) async {
     return await handleNetworkError(
       proccess: () async {
         Response response = await AppClient(
           token: await appPrefs.getNormalToken(),
-        ).get(_UsersEndpoint.userMe());
+        ).get(
+          _UsersEndpoint.userMe(),
+          queryParameters: {'client_type': clientType},
+        );
         return NetworkResponse.fromResponse(
           response,
           converter: (json) => UnifiedUserResponse.fromJson(json),
@@ -131,6 +144,28 @@ class UsersApiImpl extends UsersApi {
         return NetworkResponse.fromResponse(
           response,
           converter: (json) => Message.fromJson(json),
+        );
+      },
+    );
+  }
+
+  @override
+  Future<NetworkResponse<Map<String, dynamic>>> updateAvatar(
+    Uint8List imageBytes,
+    String fileName,
+  ) async {
+    return await handleNetworkError(
+      proccess: () async {
+        FormData formData = FormData.fromMap({
+          'avatar': MultipartFile.fromBytes(imageBytes, filename: fileName),
+        });
+
+        Response response = await AppClient(
+          token: await appPrefs.getNormalToken(),
+        ).patch(_UsersEndpoint.updateAvatar(), data: formData);
+        return NetworkResponse.fromResponse(
+          response,
+          converter: (json) => json as Map<String, dynamic>,
         );
       },
     );

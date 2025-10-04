@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:shared_resources/restaurants/models/models.dart';
+import 'package:shared_resources/shared_resources.dart';
+import 'package:easy_localization/easy_localization.dart';
 
 /// Model cho địa chỉ giao hàng trong request thanh toán
 class CheckoutRequestDeliveryAddress {
@@ -390,9 +393,10 @@ class DriverInfo {
       avatarUrl: json['avatar_url'] as String?,
       isOnline: json['is_online'] as bool?,
       isAvailable: json['is_available'] as bool?,
-      ratingAverage: json['rating_average'] != null
-          ? (json['rating_average'] as num?)?.toDouble()
-          : null,
+      ratingAverage:
+          json['rating_average'] != null
+              ? (json['rating_average'] as num?)?.toDouble()
+              : null,
       ratingCount: json['rating_count'] as int? ?? 0,
     );
   }
@@ -487,12 +491,14 @@ class OrderResponse {
     orderItems = json["order_items"] ?? [];
     currencyCode = json["currency_code"];
     currencySymbol = json["currency_symbol"];
-    driverInfo = json["driver_info"] != null
-        ? DriverInfo.fromJson(json["driver_info"])
-        : null;
-    restaurant = json["restaurant"] != null
-        ? RestaurantResponse.fromJson(json["restaurant"])
-        : null;
+    driverInfo =
+        json["driver_info"] != null
+            ? DriverInfo.fromJson(json["driver_info"])
+            : null;
+    restaurant =
+        json["restaurant_details"] != null
+            ? RestaurantResponse.fromJson(json["restaurant_details"])
+            : null;
   }
 
   static List<OrderResponse> fromList(List<Map<String, dynamic>> list) {
@@ -530,7 +536,7 @@ class OrderResponse {
       _data["driver_info"] = driverInfo!.toJson();
     }
     if (restaurant != null) {
-      _data["restaurant"] = restaurant!.toJson();
+      _data["restaurant_details"] = restaurant!.toJson();
     }
     return _data;
   }
@@ -550,6 +556,14 @@ class OrderResponse {
 
   String get deliveryAddress {
     return cartSnapshot?['delivery_address']?['address']?.toString() ?? 'N/A';
+  }
+
+  double get deliveryAddressLatitude {
+    return cartSnapshot?['delivery_address']?['lat']?.toDouble() ?? 0.0;
+  }
+
+  double get deliveryAddressLongitude {
+    return cartSnapshot?['delivery_address']?['lng']?.toDouble() ?? 0.0;
   }
 
   String get deliveryInstructions {
@@ -590,55 +604,13 @@ class OrderResponse {
     }
   }
 
-  String get statusText {
-    switch (status) {
-      case 'pending':
-        return 'Chờ xác nhận';
-      case 'confirmed':
-        return 'Đã xác nhận';
-      case 'preparing':
-        return 'Đang chuẩn bị';
-      case 'ready_for_pickup':
-        return 'Sẵn sàng';
-      case 'picked_up':
-        return 'Đang giao';
-      case 'delivered':
-        return 'Hoàn thành';
-      case 'cancelled':
-        return 'Đã hủy';
-      case 'rejected_by_restaurant':
-        return 'Từ chối';
-      case 'timeout':
-        return 'Hết hạn';
-      default:
-        return 'Không xác định';
-    }
+  OrderStatus get statusEnum {
+    return OrderStatus.values.firstWhere(
+      (e) => e.value == status,
+      orElse: () => OrderStatus.pending,
+    );
   }
 
-  Color get statusColor {
-    switch (status) {
-      case 'pending':
-        return Colors.orange;
-      case 'confirmed':
-        return Colors.blue;
-      case 'preparing':
-        return Colors.purple;
-      case 'ready_for_pickup':
-        return Colors.green;
-      case 'picked_up':
-        return Colors.teal;
-      case 'delivered':
-        return Colors.green.shade700;
-      case 'cancelled':
-        return Colors.red;
-      case 'rejected_by_restaurant':
-        return Colors.red.shade700;
-      case 'timeout':
-        return Colors.grey;
-      default:
-        return Colors.grey;
-    }
-  }
 }
 
 /// Model cho cập nhật order (Admin)
