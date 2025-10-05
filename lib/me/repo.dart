@@ -18,9 +18,7 @@ class MeRepo {
   late UsersApi _api;
 
   /// Get current user profile
-  Future<NetworkResponse<UnifiedUserResponse>> getUserMe([
-    String? clientType,
-  ]) async {
+  Future<NetworkResponse<UnifiedUserResponse>> getUserMe({required String clientType}) async {
     return await _api.getUserMe(clientType);
   }
 

@@ -44,13 +44,10 @@ const String appMapUrlTemplateGg =
     "https://mt.google.com/vt/lyrs=m&hl=en&x={x}&y={y}&z={z}";
 
 String _urlDebug = 'http://192.168.1.4:8002';
-String _urlNgrok = "https://bb2074f3f92a.ngrok-free.app";
 String _urlProd = 'https://api.fastshiphu.com';
 String _urlAsset = 'https://fastship.sgp1.digitaloceanspaces.com';
 
-String get apiBaseUrl =>
-true ? _urlNgrok :
- kDebugMode ? _urlDebug : _urlProd;
+String get apiBaseUrl => kDebugMode ? _urlDebug : _urlProd;
 String get socketIOBaseUrl => "$apiBaseUrl";
 
 String correctAssetUrl(String url) {
@@ -89,6 +86,9 @@ enum OrderStatus {
   /// Restaurant từ chối đơn hàng
   rejectedByRestaurant,
 
+  /// No drivers available
+  noDriversAvailable,
+
   /// Restaurant không phản hồi trong 5 phút
   timeout;
 
@@ -111,6 +111,8 @@ enum OrderStatus {
         return "cancelled";
       case OrderStatus.rejectedByRestaurant:
         return "rejected_by_restaurant";
+      case OrderStatus.noDriversAvailable:
+        return "no_drivers_available";
       case OrderStatus.timeout:
         return "timeout";
     }
@@ -134,6 +136,8 @@ enum OrderStatus {
       case OrderStatus.cancelled:
         return Colors.red;
       case OrderStatus.rejectedByRestaurant:
+        return Colors.redAccent;
+      case OrderStatus.noDriversAvailable:
         return Colors.redAccent;
       case OrderStatus.timeout:
         return Colors.brown;
@@ -159,6 +163,8 @@ enum OrderStatus {
         return FontAwesomeIcons.timesCircle;
       case OrderStatus.rejectedByRestaurant:
         return FontAwesomeIcons.exclamationTriangle;
+      case OrderStatus.noDriversAvailable:
+        return FontAwesomeIcons.exclamationTriangle;
       case OrderStatus.timeout:
         return FontAwesomeIcons.clock;
     }
@@ -182,6 +188,8 @@ enum OrderStatus {
         return 'Cancelled';
       case OrderStatus.rejectedByRestaurant:
         return 'Rejected by restaurant';
+      case OrderStatus.noDriversAvailable:
+        return 'No drivers available';
       case OrderStatus.timeout:
         return 'Timeout';
       default:
@@ -285,11 +293,11 @@ enum AppPaymentMethod {
   String get assetIcon {
     switch (this) {
       case AppPaymentMethod.stripe:
-        return 'icon35';
+        return 'iconx3';
       case AppPaymentMethod.faship_wallet:
-        return 'icon36';
+        return 'iconx2';
       case AppPaymentMethod.cash:
-        return 'icon34';
+        return 'iconx1';
     }
   }
 }
