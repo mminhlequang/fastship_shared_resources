@@ -98,24 +98,26 @@ class WalletBalanceResponse {
 class WalletTransactionResponse {
   String? id;
   String? walletId;
-  String? orderId;
-  String? transactionType;
+  String? type;
+  String? direction;
   double? amount;
   String? currency;
-  String? description;
-  String? status;
+  String? method;
+  String? refId;
+  Map<String, dynamic>? metaData;
   DateTime? createdAt;
   DateTime? updatedAt;
 
   WalletTransactionResponse({
     this.id,
     this.walletId,
-    this.orderId,
-    this.transactionType,
+    this.type,
+    this.direction,
     this.amount,
     this.currency,
-    this.description,
-    this.status,
+    this.method,
+    this.refId,
+    this.metaData,
     this.createdAt,
     this.updatedAt,
   });
@@ -124,13 +126,14 @@ class WalletTransactionResponse {
     return WalletTransactionResponse(
       id: json['id'] as String?,
       walletId: json['wallet_id'] as String?,
-      orderId: json['order_id'] as String?,
-      transactionType: json['transaction_type'] as String?,
+      type: json['type'] as String?,
+      direction: json['direction'] as String?,
       amount:
           json['amount'] != null ? (json['amount'] as num).toDouble() : null,
       currency: json['currency'] as String?,
-      description: json['description'] as String?,
-      status: json['status'] as String?,
+      method: json['method'] as String?,
+      refId: json['ref_id'] as String?,
+      metaData: json['meta_data'] as Map<String, dynamic>?,
       createdAt:
           json['created_at'] != null
               ? DateTime.parse(json['created_at'] as String)
@@ -146,16 +149,46 @@ class WalletTransactionResponse {
     return {
       'id': id,
       'wallet_id': walletId,
-      'order_id': orderId,
-      'transaction_type': transactionType,
+      'type': type,
+      'direction': direction,
       'amount': amount,
       'currency': currency,
-      'description': description,
-      'status': status,
+      'method': method,
+      'ref_id': refId,
+      'meta_data': metaData,
       'created_at': createdAt?.toIso8601String(),
       'updated_at': updatedAt?.toIso8601String(),
     };
   }
+
+  /// Lấy description từ meta_data hoặc tạo description mặc định
+  String get description {
+    if (metaData != null && metaData!['description'] != null) {
+      return metaData!['description'] as String;
+    }
+
+    // Tạo description mặc định dựa trên type và direction
+    final directionText = direction == 'in' ? 'Income' : 'Expense';
+    switch (type?.toLowerCase()) {
+      case 'topup':
+        return 'Wallet top-up via $method';
+      case 'withdrawal':
+        return 'Withdrawal via $method';
+      case 'order_payment':
+        return 'Order payment';
+      case 'bonus':
+        return 'Bonus payment';
+      case 'refund':
+        return 'Refund';
+      case 'fee':
+        return 'Service fee';
+      default:
+        return '$directionText transaction';
+    }
+  }
+
+  /// Lấy status mặc định (completed cho tất cả transactions)
+  String get status => 'completed';
 }
 
 /// Model cho wallet withdraw request response
@@ -217,8 +250,6 @@ class WalletWithdrawRequestResponse {
     };
   }
 }
-
-
 
 /// Payment Intent Data Model
 class RequestPaymentIntentResponse {
