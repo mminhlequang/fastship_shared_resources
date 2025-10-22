@@ -57,6 +57,9 @@ class OrdersRepo {
     OrderUpdate request,
   ) => _api.updateOrder(orderId, request);
 
+  Future<NetworkResponse<OrderResponse>> completeOrder(String orderId) =>
+      _api.completeOrder(orderId);
+
   Future<NetworkResponse<void>> deleteOrder(String orderId) =>
       _api.deleteOrder(orderId);
 

@@ -18,7 +18,9 @@ class MeRepo {
   late UsersApi _api;
 
   /// Get current user profile
-  Future<NetworkResponse<UnifiedUserResponse>> getUserMe({required String clientType}) async {
+  Future<NetworkResponse<UnifiedUserResponse>> getUserMe({
+    required String clientType,
+  }) async {
     return await _api.getUserMe(clientType);
   }
 
@@ -43,6 +45,13 @@ class MeRepo {
     String fileName,
   ) async {
     return await _api.updateAvatar(imageBytes, fileName);
+  }
+
+  /// Register FCM device token
+  Future<NetworkResponse<FCMTokenResponse>> registerDeviceToken(
+    FCMTokenRegisterRequest request,
+  ) async {
+    return await _api.registerDeviceToken(request);
   }
 
   /// Get user by ID

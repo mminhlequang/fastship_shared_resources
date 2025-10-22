@@ -13,6 +13,7 @@ class _UsersEndpoint {
   static String userMe() => "/api/v1/me/";
   static String userMePassword() => "/api/v1/me/password";
   static String updateAvatar() => "/api/v1/me/update_avatar";
+  static String registerDeviceToken() => "/api/v1/me/device-token/register";
   static String userById(String userId) => "/api/v1/$userId";
   static String linkSocialAccount() => "/api/v1/me/social/link";
   static String getMySocialAccounts() => "/api/v1/me/social/accounts";
@@ -39,6 +40,11 @@ abstract class UsersApi {
   Future<NetworkResponse<Map<String, dynamic>>> updateAvatar(
     Uint8List imageBytes,
     String fileName,
+  );
+
+  // Register FCM device token
+  Future<NetworkResponse<FCMTokenResponse>> registerDeviceToken(
+    FCMTokenRegisterRequest request,
   );
 
   // Get user by ID
@@ -166,6 +172,23 @@ class UsersApiImpl extends UsersApi {
         return NetworkResponse.fromResponse(
           response,
           converter: (json) => json as Map<String, dynamic>,
+        );
+      },
+    );
+  }
+
+  @override
+  Future<NetworkResponse<FCMTokenResponse>> registerDeviceToken(
+    FCMTokenRegisterRequest request,
+  ) async {
+    return await handleNetworkError(
+      proccess: () async {
+        Response response = await AppClient(
+          token: await appPrefs.getNormalToken(),
+        ).post(_UsersEndpoint.registerDeviceToken(), data: request.toJson());
+        return NetworkResponse.fromResponse(
+          response,
+          converter: (json) => FCMTokenResponse.fromJson(json),
         );
       },
     );

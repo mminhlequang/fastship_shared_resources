@@ -34,6 +34,7 @@ class RestaurantsRepo {
     bool? isHalal,
     bool? isVegetarianFriendly,
     String? search,
+    String? onboardingStatus,
   }) => _api.getRestaurantsAdmin(
     offset: offset,
     limit: limit,
@@ -46,6 +47,7 @@ class RestaurantsRepo {
     isHalal: isHalal,
     isVegetarianFriendly: isVegetarianFriendly,
     search: search,
+    onboardingStatus: onboardingStatus,
   );
 
   Future<NetworkResponse<RestaurantResponse>> getRestaurantAdmin(int id) =>
@@ -64,7 +66,8 @@ class RestaurantsRepo {
     double? lng,
     RestaurantSortBy? sortBy,
     List<int>? cuisineTypeIds, // Danh sách ID loại ẩm thực (có thể null)
-    List<String>? cuisineTypeStrings, // Danh sách tên loại ẩm thực để tìm kiếm (có thể null)
+    List<String>?
+    cuisineTypeStrings, // Danh sách tên loại ẩm thực để tìm kiếm (có thể null)
     bool? isOpen,
     bool? isFeatured,
     bool? isVerified,
@@ -90,4 +93,38 @@ class RestaurantsRepo {
   Future<NetworkResponse<RestaurantResponse>> getRestaurantCustomer(
     String restaurantId,
   ) => _api.getRestaurantCustomer(restaurantId);
+
+  // Admin Statistics
+  Future<NetworkResponse<RestaurantStatisticOverview>>
+  getRestaurantStatisticsOverview(
+    int restaurantId,
+    String startPeriod,
+    String endPeriod,
+  ) => _api.getRestaurantStatisticsOverview(
+    restaurantId,
+    startPeriod,
+    endPeriod,
+  );
+
+  Future<NetworkResponse<RestaurantStatisticOrderAnalytics>>
+  getRestaurantStatisticsOrderAnalytics(
+    int restaurantId,
+    String startPeriod,
+    String endPeriod,
+  ) => _api.getRestaurantStatisticsOrderAnalytics(
+    restaurantId,
+    startPeriod,
+    endPeriod,
+  );
+
+  Future<NetworkResponse<RestaurantStatisticEarnings>>
+  getRestaurantStatisticsEarnings(
+    int restaurantId,
+    String startPeriod,
+    String endPeriod,
+  ) => _api.getRestaurantStatisticsEarnings(
+    restaurantId,
+    startPeriod,
+    endPeriod,
+  );
 }

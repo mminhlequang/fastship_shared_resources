@@ -434,7 +434,7 @@ class OrderResponse {
   String? paymentIntentId;
   String? couponId;
   String? id;
-  List<dynamic>? orderItems;
+  // List<dynamic>? orderItems;
   String? currencyCode;
   String? currencySymbol;
   DriverInfo? driverInfo;
@@ -459,7 +459,7 @@ class OrderResponse {
     this.paymentIntentId,
     this.couponId,
     this.id,
-    this.orderItems,
+    // this.orderItems,
     this.currencyCode,
     this.currencySymbol,
     this.driverInfo,
@@ -488,7 +488,7 @@ class OrderResponse {
     paymentIntentId = json["payment_intent_id"];
     couponId = json["coupon_id"];
     id = json["id"];
-    orderItems = json["order_items"] ?? [];
+    // orderItems = json["order_items"] ?? [];
     currencyCode = json["currency_code"];
     currencySymbol = json["currency_symbol"];
     driverInfo =
@@ -527,9 +527,9 @@ class OrderResponse {
     _data["payment_intent_id"] = paymentIntentId;
     _data["coupon_id"] = couponId;
     _data["id"] = id;
-    if (orderItems != null) {
-      _data["order_items"] = orderItems;
-    }
+    // if (orderItems != null) {
+    //   _data["order_items"] = orderItems;
+    // }
     _data["currency_code"] = currencyCode;
     _data["currency_symbol"] = currencySymbol;
     if (driverInfo != null) {
@@ -552,6 +552,14 @@ class OrderResponse {
 
   String get customerEmail {
     return cartSnapshot?['customer']?['email']?.toString() ?? 'N/A';
+  }
+
+  bool get isDelivery {
+    return cartSnapshot?['delivery_address'] != null;
+  }
+
+  bool get isPickup {
+    return cartSnapshot?['delivery_address'] == null;
   }
 
   String get deliveryAddress {
@@ -586,7 +594,7 @@ class OrderResponse {
     return (cartSnapshot?['items'] as List?)?.length ?? 0;
   }
 
-  List<dynamic> get items {
+  List get items {
     return (cartSnapshot?['items'] as List?) ?? [];
   }
 
@@ -610,7 +618,6 @@ class OrderResponse {
       orElse: () => OrderStatus.pending,
     );
   }
-
 }
 
 /// Model cho cập nhật order (Admin)

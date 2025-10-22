@@ -12,6 +12,12 @@ class _RestaurantsEndpoint {
   static String adminRestaurants() => "/api/v1/admin/restaurants/";
   static String adminRestaurantDetail(int id) =>
       "/api/v1/admin/restaurants/$id";
+  static String adminRestaurantStatisticsOverview(int restaurantId) =>
+      "/api/v1/admin/restaurants/$restaurantId/statistics_overview";
+  static String adminRestaurantStatisticsOrderAnalytics(int restaurantId) =>
+      "/api/v1/admin/restaurants/$restaurantId/statistics_order_analytics";
+  static String adminRestaurantStatisticsEarnings(int restaurantId) =>
+      "/api/v1/admin/restaurants/$restaurantId/statistics_earnings";
 
   // Customer
   static String customerRestaurants() => "/api/v1/customer/restaurants/";
@@ -37,6 +43,7 @@ abstract class RestaurantsApi {
     bool? isHalal,
     bool? isVegetarianFriendly,
     String? search,
+    String? onboardingStatus,
   });
   Future<NetworkResponse<RestaurantResponse>> getRestaurantAdmin(int id);
   Future<NetworkResponse<RestaurantResponse>> updateRestaurantAdmin(
@@ -64,6 +71,26 @@ abstract class RestaurantsApi {
   });
   Future<NetworkResponse<RestaurantResponse>> getRestaurantCustomer(
     String restaurantId,
+  );
+
+  // Admin Statistics
+  Future<NetworkResponse<RestaurantStatisticOverview>>
+  getRestaurantStatisticsOverview(
+    int restaurantId,
+    String startPeriod,
+    String endPeriod,
+  );
+  Future<NetworkResponse<RestaurantStatisticOrderAnalytics>>
+  getRestaurantStatisticsOrderAnalytics(
+    int restaurantId,
+    String startPeriod,
+    String endPeriod,
+  );
+  Future<NetworkResponse<RestaurantStatisticEarnings>>
+  getRestaurantStatisticsEarnings(
+    int restaurantId,
+    String startPeriod,
+    String endPeriod,
   );
 }
 
@@ -99,6 +126,7 @@ class RestaurantsApiImpl extends RestaurantsApi {
     bool? isHalal,
     bool? isVegetarianFriendly,
     String? search,
+    String? onboardingStatus,
   }) async {
     return await handleNetworkError(
       proccess: () async {
@@ -114,7 +142,7 @@ class RestaurantsApiImpl extends RestaurantsApi {
         if (isVegetarianFriendly != null)
           params['is_vegetarian_friendly'] = isVegetarianFriendly;
         if (search != null) params['search'] = search;
-
+        if (onboardingStatus != null) params['onboarding_status'] = onboardingStatus;
         final response = await AppClient(
           token: await appPrefs.getNormalToken(),
         ).get(_RestaurantsEndpoint.adminRestaurants(), queryParameters: params);
@@ -242,6 +270,92 @@ class RestaurantsApiImpl extends RestaurantsApi {
         return NetworkResponse.fromResponse(
           response,
           converter: (json) => RestaurantResponse.fromJson(json),
+        );
+      },
+    );
+  }
+
+  @override
+  Future<NetworkResponse<RestaurantStatisticOverview>>
+  getRestaurantStatisticsOverview(
+    int restaurantId,
+    String startPeriod,
+    String endPeriod,
+  ) async {
+    return await handleNetworkError(
+      proccess: () async {
+        final params = <String, dynamic>{
+          'start_period': startPeriod,
+          'end_period': endPeriod,
+        };
+
+        final response = await AppClient(
+          token: await appPrefs.getNormalToken(),
+        ).get(
+          _RestaurantsEndpoint.adminRestaurantStatisticsOverview(restaurantId),
+          queryParameters: params,
+        );
+        return NetworkResponse.fromResponse(
+          response,
+          converter: (json) => RestaurantStatisticOverview.fromJson(json),
+        );
+      },
+    );
+  }
+
+  @override
+  Future<NetworkResponse<RestaurantStatisticOrderAnalytics>>
+  getRestaurantStatisticsOrderAnalytics(
+    int restaurantId,
+    String startPeriod,
+    String endPeriod,
+  ) async {
+    return await handleNetworkError(
+      proccess: () async {
+        final params = <String, dynamic>{
+          'start_period': startPeriod,
+          'end_period': endPeriod,
+        };
+
+        final response = await AppClient(
+          token: await appPrefs.getNormalToken(),
+        ).get(
+          _RestaurantsEndpoint.adminRestaurantStatisticsOrderAnalytics(
+            restaurantId,
+          ),
+          queryParameters: params,
+        );
+        return NetworkResponse.fromResponse(
+          response,
+          converter: (json) => RestaurantStatisticOrderAnalytics.fromJson(json),
+        );
+      },
+    );
+  }
+
+  @override
+  Future<NetworkResponse<RestaurantStatisticEarnings>>
+  getRestaurantStatisticsEarnings(
+    int restaurantId,
+    String startPeriod,
+    String endPeriod,
+  ) async {
+    return await handleNetworkError(
+      proccess: () async {
+        final params = <String, dynamic>{
+          'start_period': startPeriod,
+          'end_period': endPeriod,
+        };
+
+        final response = await AppClient(
+          token: await appPrefs.getNormalToken(),
+        ).get(
+          _RestaurantsEndpoint.adminRestaurantStatisticsEarnings(restaurantId),
+          queryParameters: params,
+        );
+        return NetworkResponse.fromResponse(
+          response,
+          converter: (json) => RestaurantStatisticEarnings.fromJson(json),
         );
       },
     );

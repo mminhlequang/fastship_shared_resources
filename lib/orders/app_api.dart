@@ -26,6 +26,9 @@ class _OrdersEndpoint {
   static String updateOrderStatus(String orderId) =>
       "/api/v1/customer/orders/$orderId/status";
 
+  static String completeOrder(String orderId) =>
+      "/api/v1/orders/$orderId/complete";
+
   // Get Order by ID
   static String getOrderById(dynamic orderId) => "/api/v1/orders/$orderId";
 }
@@ -59,6 +62,8 @@ abstract class OrdersApi {
     OrderUpdate request,
   );
   Future<NetworkResponse<void>> deleteOrder(String orderId);
+
+  Future<NetworkResponse<OrderResponse>> completeOrder(String orderId);
 
   // Customer APIs (yêu cầu authentication)
   Future<NetworkResponse<ListResponse<OrderResponse>>> getMyOrders({
@@ -170,6 +175,24 @@ class OrdersApiImpl extends OrdersApi {
         ).put(
           _OrdersEndpoint.adminOrderDetail(orderId),
           data: request.toJson(),
+        );
+        return NetworkResponse.fromResponse(
+          response,
+          converter: (json) => OrderResponse.fromJson(json),
+        );
+      },
+    );
+  }
+
+  @override
+  Future<NetworkResponse<OrderResponse>> completeOrder(String orderId) async {
+    return await handleNetworkError(
+      proccess: () async {
+        final response = await AppClient(
+          token: await appPrefs.getNormalToken(),
+        ).put(
+          _OrdersEndpoint.completeOrder(orderId),
+          queryParameters: {'order_id': orderId},
         );
         return NetworkResponse.fromResponse(
           response,

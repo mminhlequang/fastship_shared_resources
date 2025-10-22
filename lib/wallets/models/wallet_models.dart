@@ -1,21 +1,23 @@
-/// Model cho wallet response
+/// Model for wallet response matching new backend schema
 class WalletResponse {
   String? id;
-  String? userId;
-  String? userType;
+  String? customerId;
+  String? driverId;
+  String? restaurantId;
+  bool? isSystemWallet;
   double? balance;
   String? currency;
-  bool? isActive;
   DateTime? createdAt;
   DateTime? updatedAt;
 
   WalletResponse({
     this.id,
-    this.userId,
-    this.userType,
+    this.customerId,
+    this.driverId,
+    this.restaurantId,
+    this.isSystemWallet,
     this.balance,
     this.currency,
-    this.isActive,
     this.createdAt,
     this.updatedAt,
   });
@@ -23,78 +25,45 @@ class WalletResponse {
   factory WalletResponse.fromJson(Map<String, dynamic> json) {
     return WalletResponse(
       id: json['id'] as String?,
-      userId: json['user_id'] as String?,
-      userType: json['user_type'] as String?,
-      balance:
-          json['balance'] != null ? (json['balance'] as num).toDouble() : null,
+      customerId: json['customer_id']?.toString(),
+      driverId: json['driver_id']?.toString(),
+      restaurantId: json['restaurant_id']?.toString(),
+      isSystemWallet: json['is_system_wallet'] as bool?,
+      balance: json['balance'] != null
+          ? (json['balance'] is num
+              ? (json['balance'] as num).toDouble()
+              : double.tryParse(json['balance'].toString()))
+          : null,
       currency: json['currency'] as String?,
-      isActive: json['is_active'] as bool?,
-      createdAt:
-          json['created_at'] != null
-              ? DateTime.parse(json['created_at'] as String)
-              : null,
-      updatedAt:
-          json['updated_at'] != null
-              ? DateTime.parse(json['updated_at'] as String)
-              : null,
+      createdAt: json['created_at'] != null
+          ? (json['created_at'] is String
+              ? DateTime.tryParse(json['created_at'])
+              : null)
+          : null,
+      updatedAt: json['updated_at'] != null
+          ? (json['updated_at'] is String
+              ? DateTime.tryParse(json['updated_at'])
+              : null)
+          : null,
     );
   }
 
   Map<String, dynamic> toJson() {
     return {
       'id': id,
-      'user_id': userId,
-      'user_type': userType,
+      'customer_id': customerId,
+      'driver_id': driverId,
+      'restaurant_id': restaurantId,
+      'is_system_wallet': isSystemWallet,
       'balance': balance,
       'currency': currency,
-      'is_active': isActive,
       'created_at': createdAt?.toIso8601String(),
       'updated_at': updatedAt?.toIso8601String(),
     };
   }
 }
-
-/// Model cho wallet balance response
-class WalletBalanceResponse {
-  double? balance;
-  String? currency;
-  double? pendingBalance;
-  double? availableBalance;
-
-  WalletBalanceResponse({
-    this.balance,
-    this.currency,
-    this.pendingBalance,
-    this.availableBalance,
-  });
-
-  factory WalletBalanceResponse.fromJson(Map<String, dynamic> json) {
-    return WalletBalanceResponse(
-      balance:
-          json['balance'] != null ? (json['balance'] as num).toDouble() : null,
-      currency: json['currency'] as String?,
-      pendingBalance:
-          json['pending_balance'] != null
-              ? (json['pending_balance'] as num).toDouble()
-              : null,
-      availableBalance:
-          json['available_balance'] != null
-              ? (json['available_balance'] as num).toDouble()
-              : null,
-    );
-  }
-
-  Map<String, dynamic> toJson() {
-    return {
-      'balance': balance,
-      'currency': currency,
-      'pending_balance': pendingBalance,
-      'available_balance': availableBalance,
-    };
-  }
-}
-
-/// Model cho wallet transaction response
+ 
+/// Model for wallet transaction response (unchanged)
 class WalletTransactionResponse {
   String? id;
   String? walletId;
@@ -128,20 +97,17 @@ class WalletTransactionResponse {
       walletId: json['wallet_id'] as String?,
       type: json['type'] as String?,
       direction: json['direction'] as String?,
-      amount:
-          json['amount'] != null ? (json['amount'] as num).toDouble() : null,
+      amount: json['amount'] != null ? (json['amount'] as num).toDouble() : null,
       currency: json['currency'] as String?,
       method: json['method'] as String?,
       refId: json['ref_id'] as String?,
       metaData: json['meta_data'] as Map<String, dynamic>?,
-      createdAt:
-          json['created_at'] != null
-              ? DateTime.parse(json['created_at'] as String)
-              : null,
-      updatedAt:
-          json['updated_at'] != null
-              ? DateTime.parse(json['updated_at'] as String)
-              : null,
+      createdAt: json['created_at'] != null
+          ? DateTime.parse(json['created_at'] as String)
+          : null,
+      updatedAt: json['updated_at'] != null
+          ? DateTime.parse(json['updated_at'] as String)
+          : null,
     );
   }
 
@@ -161,13 +127,10 @@ class WalletTransactionResponse {
     };
   }
 
-  /// Lấy description từ meta_data hoặc tạo description mặc định
   String get description {
     if (metaData != null && metaData!['description'] != null) {
       return metaData!['description'] as String;
     }
-
-    // Tạo description mặc định dựa trên type và direction
     final directionText = direction == 'in' ? 'Income' : 'Expense';
     switch (type?.toLowerCase()) {
       case 'topup':
@@ -187,11 +150,10 @@ class WalletTransactionResponse {
     }
   }
 
-  /// Lấy status mặc định (completed cho tất cả transactions)
   String get status => 'completed';
 }
 
-/// Model cho wallet withdraw request response
+/// Model cho wallet withdraw request response (unchanged)
 class WalletWithdrawRequestResponse {
   String? id;
   String? walletId;
@@ -219,20 +181,17 @@ class WalletWithdrawRequestResponse {
     return WalletWithdrawRequestResponse(
       id: json['id'] as String?,
       walletId: json['wallet_id'] as String?,
-      amount:
-          json['amount'] != null ? (json['amount'] as num).toDouble() : null,
+      amount: json['amount'] != null ? (json['amount'] as num).toDouble() : null,
       currency: json['currency'] as String?,
       method: json['method'] as String?,
       status: json['status'] as String?,
       reason: json['reason'] as String?,
-      createdAt:
-          json['created_at'] != null
-              ? DateTime.parse(json['created_at'] as String)
-              : null,
-      updatedAt:
-          json['updated_at'] != null
-              ? DateTime.parse(json['updated_at'] as String)
-              : null,
+      createdAt: json['created_at'] != null
+          ? DateTime.parse(json['created_at'] as String)
+          : null,
+      updatedAt: json['updated_at'] != null
+          ? DateTime.parse(json['updated_at'] as String)
+          : null,
     );
   }
 
@@ -251,7 +210,7 @@ class WalletWithdrawRequestResponse {
   }
 }
 
-/// Payment Intent Data Model
+/// Payment Intent Data Model (unchanged)
 class RequestPaymentIntentResponse {
   final String clientSecret;
   final String paymentIntentId;
@@ -267,7 +226,6 @@ class RequestPaymentIntentResponse {
     required this.walletId,
   });
 
-  /// Factory constructor to create an instance from a response map
   factory RequestPaymentIntentResponse.fromJson(Map<String, dynamic> response) {
     return RequestPaymentIntentResponse(
       clientSecret: response['client_secret'] ?? '',
@@ -278,7 +236,6 @@ class RequestPaymentIntentResponse {
     );
   }
 
-  /// Convert the instance to JSON map
   Map<String, dynamic> toJson() {
     return {
       'client_secret': clientSecret,

@@ -43,11 +43,21 @@ String get appMapUrlTemplateHERE =>
 const String appMapUrlTemplateGg =
     "https://mt.google.com/vt/lyrs=m&hl=en&x={x}&y={y}&z={z}";
 
-String _urlDebug = 'http://192.168.1.4:8002';
+const String googlevapidKey =
+    "BC1YTu_3h-ZnaH8WL7h3SHLRaJ3EAntdHATxAKJQO_KqqCLnOeqMOOik10NzXQ5AHMLrR_QzKK3c7wQu3sMGx2k"; // Thay thế bằng VAPID key thực tế
+// String _urlDebug = 'http://192.168.1.6:8002'; // Nha
+String _urlDebug = 'http://192.168.1.6:8002'; // NguyenXu
+// String _urlDebug = 'http://192.168.100.110:8002'; // Coffee 1983
+// String _urlDebug = 'http://172.20.10.4:8002'; // Iphone
+// String _urlDebug = 'http://192.168.1.16:8002'; //Da coffee
+// String _urlDebug = 'http://192.168.2.42:8002'; //CHU coffee
+// String _urlDebug = 'http://192.168.2.149:8002'; //Anh Ngu
 String _urlProd = 'https://api.fastshiphu.com';
 String _urlAsset = 'https://fastship.sgp1.digitaloceanspaces.com';
 
-String get apiBaseUrl => kDebugMode ? _urlDebug : _urlProd;
+String get apiBaseUrl => 
+kDebugMode ? _urlDebug : 
+_urlProd;
 String get socketIOBaseUrl => "$apiBaseUrl";
 
 String correctAssetUrl(String url) {
