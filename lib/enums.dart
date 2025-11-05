@@ -21,11 +21,6 @@ const String stripePublishableKey =
 const String appMessengerUrl = "https://m.me/fastship.vn";
 const String appWhatsappUrl = "https://wa.me/84909090909";
 
-const String privacyPolicyUrl =
-    "https://mminhlequang-apps.web.app/legal/privacy-policy-fastship";
-const String termsOfServiceUrl =
-    "https://mminhlequang-apps.web.app/legal/terms-of-use-fastship";
-
 const String supportPhoneNumber = "+36 307859588";
 const String supportPhoneNumberRaw = "+36307859588";
 const String supportEmail = "support@fastshiphu.com";
@@ -45,19 +40,15 @@ const String appMapUrlTemplateGg =
 
 const String googlevapidKey =
     "BC1YTu_3h-ZnaH8WL7h3SHLRaJ3EAntdHATxAKJQO_KqqCLnOeqMOOik10NzXQ5AHMLrR_QzKK3c7wQu3sMGx2k"; // Thay thế bằng VAPID key thực tế
-// String _urlDebug = 'http://192.168.1.6:8002'; // Nha
-String _urlDebug = 'http://192.168.1.6:8002'; // NguyenXu
-// String _urlDebug = 'http://192.168.100.110:8002'; // Coffee 1983
-// String _urlDebug = 'http://172.20.10.4:8002'; // Iphone
-// String _urlDebug = 'http://192.168.1.16:8002'; //Da coffee
-// String _urlDebug = 'http://192.168.2.42:8002'; //CHU coffee
-// String _urlDebug = 'http://192.168.2.149:8002'; //Anh Ngu
+
+String _urlDebug = 'http://192.168.1.3:8002';
+
 String _urlProd = 'https://api.fastshiphu.com';
 String _urlAsset = 'https://fastship.sgp1.digitaloceanspaces.com';
 
 String get apiBaseUrl => 
-kDebugMode ? _urlDebug : 
-_urlProd;
+// kDebugMode ? _urlDebug :
+ _urlProd;
 String get socketIOBaseUrl => "$apiBaseUrl";
 
 String correctAssetUrl(String url) {
@@ -207,6 +198,23 @@ enum OrderStatus {
     }
   }
 
+  String get labelActionDriverApp {
+    switch (this) {
+      case OrderStatus.pending:
+      case OrderStatus.confirmed:
+      case OrderStatus.preparing:
+      case OrderStatus.readyForPickup:
+        return 'Waiting for restaurant';
+
+      case OrderStatus.pickedUp:
+        return 'Picked up, on the way';
+      case OrderStatus.delivered:
+        return 'Order delivered';
+      default:
+        return 'Unknown';
+    }
+  }
+
   OrderStatus get nextStatus {
     if (this == OrderStatus.values.last) {
       return OrderStatus.values.first;
@@ -242,6 +250,21 @@ enum PaymentStatus {
         return "failed";
     }
   }
+
+  String get displayName {
+    switch (this) {
+      case PaymentStatus.unpaid:
+        return 'Unpaid';
+      case PaymentStatus.paid:
+        return 'Paid';
+      case PaymentStatus.refunded:
+        return 'Refunded';
+      case PaymentStatus.failed:
+        return 'Failed';
+      default:
+        return 'Unknown';
+    }
+  }
 }
 
 /// Enum mô tả phương thức thanh toán
@@ -264,6 +287,17 @@ enum PaymentMethod {
         return "cash";
       case PaymentMethod.fastshipWallet:
         return "fastship_wallet";
+    }
+  }
+
+  String get displayName {
+    switch (this) {
+      case PaymentMethod.stripe:
+        return 'Stripe';
+      case PaymentMethod.cash:
+        return 'Cash';
+      case PaymentMethod.fastshipWallet:
+        return 'Wallet';
     }
   }
 }

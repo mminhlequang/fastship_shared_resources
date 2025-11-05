@@ -29,22 +29,25 @@ class WalletResponse {
       driverId: json['driver_id']?.toString(),
       restaurantId: json['restaurant_id']?.toString(),
       isSystemWallet: json['is_system_wallet'] as bool?,
-      balance: json['balance'] != null
-          ? (json['balance'] is num
-              ? (json['balance'] as num).toDouble()
-              : double.tryParse(json['balance'].toString()))
-          : null,
+      balance:
+          json['balance'] != null
+              ? (json['balance'] is num
+                  ? (json['balance'] as num).toDouble()
+                  : double.tryParse(json['balance'].toString()))
+              : null,
       currency: json['currency'] as String?,
-      createdAt: json['created_at'] != null
-          ? (json['created_at'] is String
-              ? DateTime.tryParse(json['created_at'])
-              : null)
-          : null,
-      updatedAt: json['updated_at'] != null
-          ? (json['updated_at'] is String
-              ? DateTime.tryParse(json['updated_at'])
-              : null)
-          : null,
+      createdAt:
+          json['created_at'] != null
+              ? (json['created_at'] is String
+                  ? DateTime.tryParse(json['created_at'])
+                  : null)
+              : null,
+      updatedAt:
+          json['updated_at'] != null
+              ? (json['updated_at'] is String
+                  ? DateTime.tryParse(json['updated_at'])
+                  : null)
+              : null,
     );
   }
 
@@ -62,7 +65,7 @@ class WalletResponse {
     };
   }
 }
- 
+
 /// Model for wallet transaction response (unchanged)
 class WalletTransactionResponse {
   String? id;
@@ -97,17 +100,20 @@ class WalletTransactionResponse {
       walletId: json['wallet_id'] as String?,
       type: json['type'] as String?,
       direction: json['direction'] as String?,
-      amount: json['amount'] != null ? (json['amount'] as num).toDouble() : null,
+      amount:
+          json['amount'] != null ? (json['amount'] as num).toDouble() : null,
       currency: json['currency'] as String?,
       method: json['method'] as String?,
       refId: json['ref_id'] as String?,
       metaData: json['meta_data'] as Map<String, dynamic>?,
-      createdAt: json['created_at'] != null
-          ? DateTime.parse(json['created_at'] as String)
-          : null,
-      updatedAt: json['updated_at'] != null
-          ? DateTime.parse(json['updated_at'] as String)
-          : null,
+      createdAt:
+          json['created_at'] != null
+              ? DateTime.parse(json['created_at'] as String)
+              : null,
+      updatedAt:
+          json['updated_at'] != null
+              ? DateTime.parse(json['updated_at'] as String)
+              : null,
     );
   }
 
@@ -181,17 +187,20 @@ class WalletWithdrawRequestResponse {
     return WalletWithdrawRequestResponse(
       id: json['id'] as String?,
       walletId: json['wallet_id'] as String?,
-      amount: json['amount'] != null ? (json['amount'] as num).toDouble() : null,
+      amount:
+          json['amount'] != null ? (json['amount'] as num).toDouble() : null,
       currency: json['currency'] as String?,
       method: json['method'] as String?,
       status: json['status'] as String?,
       reason: json['reason'] as String?,
-      createdAt: json['created_at'] != null
-          ? DateTime.parse(json['created_at'] as String)
-          : null,
-      updatedAt: json['updated_at'] != null
-          ? DateTime.parse(json['updated_at'] as String)
-          : null,
+      createdAt:
+          json['created_at'] != null
+              ? DateTime.parse(json['created_at'] as String)
+              : null,
+      updatedAt:
+          json['updated_at'] != null
+              ? DateTime.parse(json['updated_at'] as String)
+              : null,
     );
   }
 
@@ -210,26 +219,28 @@ class WalletWithdrawRequestResponse {
   }
 }
 
-/// Payment Intent Data Model (unchanged)
-class RequestPaymentIntentResponse {
-  final String clientSecret;
-  final String paymentIntentId;
+/// Checkout Session Data Model
+class WalletTopupCheckoutSessionResponse {
+  final String checkoutUrl;
+  final String sessionId;
   final int amount;
   final String currency;
   final String walletId;
 
-  RequestPaymentIntentResponse({
-    required this.clientSecret,
-    required this.paymentIntentId,
+  WalletTopupCheckoutSessionResponse({
+    required this.checkoutUrl,
+    required this.sessionId,
     required this.amount,
     required this.currency,
     required this.walletId,
   });
 
-  factory RequestPaymentIntentResponse.fromJson(Map<String, dynamic> response) {
-    return RequestPaymentIntentResponse(
-      clientSecret: response['client_secret'] ?? '',
-      paymentIntentId: response['payment_intent_id'] ?? '',
+  factory WalletTopupCheckoutSessionResponse.fromJson(
+    Map<String, dynamic> response,
+  ) {
+    return WalletTopupCheckoutSessionResponse(
+      checkoutUrl: response['checkout_url'] ?? '',
+      sessionId: response['session_id'] ?? '',
       amount: response['amount'] ?? 0,
       currency: response['currency'] ?? 'HUF',
       walletId: response['wallet_id'] ?? '',
@@ -238,8 +249,8 @@ class RequestPaymentIntentResponse {
 
   Map<String, dynamic> toJson() {
     return {
-      'client_secret': clientSecret,
-      'payment_intent_id': paymentIntentId,
+      'checkout_url': checkoutUrl,
+      'session_id': sessionId,
       'amount': amount,
       'currency': currency,
       'wallet_id': walletId,

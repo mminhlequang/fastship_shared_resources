@@ -11,8 +11,8 @@ class _WalletsEndpoint {
   // User APIs
   static String getWallet() => "/api/v1/wallets/get";
   static String getTransactions() => "/api/v1/wallets/transactions";
-  static String createTopupPaymentIntent() =>
-      "/api/v1/wallets/topup/stripe/create-payment-intent";
+  static String createTopupCheckoutSession() =>
+      "/api/v1/wallets/topup/create-checkout-session";
   static String createWithdrawRequest() => "/api/v1/wallets/withdrawals";
   static String getWithdrawals() => "/api/v1/wallets/withdrawals";
 
@@ -45,8 +45,9 @@ abstract class WalletsApi {
     String? orderId,
     int? offset,
     int? limit,
-  }); 
-  Future<NetworkResponse<RequestPaymentIntentResponse>> createTopupPaymentIntent({
+  });
+  Future<NetworkResponse<WalletTopupCheckoutSessionResponse>>
+  createTopupCheckoutSession({
     String? customerId,
     String? driverId,
     int? amount,
@@ -163,10 +164,10 @@ class WalletsApiImpl extends WalletsApi {
       },
     );
   }
- 
 
   @override
-  Future<NetworkResponse<RequestPaymentIntentResponse>> createTopupPaymentIntent({
+  Future<NetworkResponse<WalletTopupCheckoutSessionResponse>>
+  createTopupCheckoutSession({
     String? customerId,
     String? driverId,
     int? amount,
@@ -181,12 +182,13 @@ class WalletsApiImpl extends WalletsApi {
         final response = await AppClient(
           token: await appPrefs.getNormalToken(),
         ).post(
-          _WalletsEndpoint.createTopupPaymentIntent(),
+          _WalletsEndpoint.createTopupCheckoutSession(),
           queryParameters: queryParams,
         );
         return NetworkResponse.fromResponse(
           response,
-          converter: (json) => RequestPaymentIntentResponse.fromJson(json),
+          converter:
+              (json) => WalletTopupCheckoutSessionResponse.fromJson(json),
         );
       },
     );
@@ -407,4 +409,3 @@ class WalletsApiImpl extends WalletsApi {
     );
   }
 }
-

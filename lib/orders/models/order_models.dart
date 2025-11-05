@@ -582,6 +582,10 @@ class OrderResponse {
     return cartSnapshot?['restaurant']?['name']?.toString() ?? 'N/A';
   }
 
+  String get restaurantAddress {
+    return cartSnapshot?['restaurant']?['formatted_address']?.toString() ?? 'N/A';
+  }
+
   String get restaurantPhone {
     return cartSnapshot?['restaurant']?['contact_phone']?.toString() ?? 'N/A';
   }
@@ -616,6 +620,20 @@ class OrderResponse {
     return OrderStatus.values.firstWhere(
       (e) => e.value == status,
       orElse: () => OrderStatus.pending,
+    );
+  }
+
+  PaymentMethod get paymentMethodEnum {
+    return PaymentMethod.values.firstWhere(
+      (e) => e.value == paymentMethod,
+      orElse: () => PaymentMethod.cash,
+    );
+  }
+
+  PaymentStatus get paymentStatusEnum {
+    return PaymentStatus.values.firstWhere(
+      (e) => e.value == paymentStatus,
+      orElse: () => PaymentStatus.unpaid,
     );
   }
 }

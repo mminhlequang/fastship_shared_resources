@@ -45,12 +45,13 @@ class WalletsRepo {
     offset: offset,
     limit: limit,
   );
- 
-  Future<NetworkResponse<RequestPaymentIntentResponse>> createTopupPaymentIntent({
+
+  Future<NetworkResponse<WalletTopupCheckoutSessionResponse>>
+  createTopupCheckoutSession({
     String? customerId,
     String? driverId,
     int? amount,
-  }) => _api.createTopupPaymentIntent(
+  }) => _api.createTopupCheckoutSession(
     customerId: customerId,
     driverId: driverId,
     amount: amount,
@@ -140,4 +141,3 @@ class WalletsRepo {
     String withdrawId,
   ) => _api.markWithdrawalPaid(withdrawId);
 }
-
