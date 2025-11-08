@@ -241,6 +241,7 @@ class MenuRepo {
     String? search,
     int? limit,
     int? offset,
+    String? keyword,
   }) => _api.getMenuItemsCustomer(
     lat: lat,
     lng: lng,
@@ -254,6 +255,7 @@ class MenuRepo {
     search: search,
     limit: limit,
     offset: offset,
+    keyword: keyword,
   );
 
 

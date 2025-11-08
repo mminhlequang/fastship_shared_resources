@@ -75,6 +75,7 @@ class RestaurantsRepo {
     double? maxDistance,
     int? limit,
     int? offset,
+    String? keyword,
   }) => _api.getRestaurantsCustomer(
     lat: lat,
     lng: lng,
@@ -88,6 +89,7 @@ class RestaurantsRepo {
     maxDistance: maxDistance,
     limit: limit,
     offset: offset,
+    keyword: keyword,
   );
 
   Future<NetworkResponse<RestaurantResponse>> getRestaurantCustomer(

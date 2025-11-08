@@ -68,6 +68,7 @@ abstract class RestaurantsApi {
     double? maxDistance,
     int? limit,
     int? offset,
+    String? keyword,
   });
   Future<NetworkResponse<RestaurantResponse>> getRestaurantCustomer(
     String restaurantId,
@@ -221,6 +222,7 @@ class RestaurantsApiImpl extends RestaurantsApi {
     double? maxDistance,
     int? limit,
     int? offset,
+    String? keyword,
   }) async {
     return await handleNetworkError(
       proccess: () async {
@@ -239,7 +241,7 @@ class RestaurantsApiImpl extends RestaurantsApi {
         if (maxDistance != null) params['max_distance'] = maxDistance;
         if (limit != null) params['limit'] = limit;
         if (offset != null) params['offset'] = offset;
-
+        if (keyword != null) params['keyword'] = keyword;
         final response = await AppClient(
           token: await appPrefs.getNormalToken(),
         ).get(
