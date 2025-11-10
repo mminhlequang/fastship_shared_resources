@@ -68,7 +68,7 @@ abstract class RestaurantsApi {
     double? maxDistance,
     int? limit,
     int? offset,
-    String? keyword,
+    String? search,
   });
   Future<NetworkResponse<RestaurantResponse>> getRestaurantCustomer(
     String restaurantId,
@@ -143,7 +143,8 @@ class RestaurantsApiImpl extends RestaurantsApi {
         if (isVegetarianFriendly != null)
           params['is_vegetarian_friendly'] = isVegetarianFriendly;
         if (search != null) params['search'] = search;
-        if (onboardingStatus != null) params['onboarding_status'] = onboardingStatus;
+        if (onboardingStatus != null)
+          params['onboarding_status'] = onboardingStatus;
         final response = await AppClient(
           token: await appPrefs.getNormalToken(),
         ).get(_RestaurantsEndpoint.adminRestaurants(), queryParameters: params);
@@ -222,7 +223,7 @@ class RestaurantsApiImpl extends RestaurantsApi {
     double? maxDistance,
     int? limit,
     int? offset,
-    String? keyword,
+    String? search,
   }) async {
     return await handleNetworkError(
       proccess: () async {
@@ -241,7 +242,7 @@ class RestaurantsApiImpl extends RestaurantsApi {
         if (maxDistance != null) params['max_distance'] = maxDistance;
         if (limit != null) params['limit'] = limit;
         if (offset != null) params['offset'] = offset;
-        if (keyword != null) params['keyword'] = keyword;
+        if (search != null) params['search'] = search;
         final response = await AppClient(
           token: await appPrefs.getNormalToken(),
         ).get(

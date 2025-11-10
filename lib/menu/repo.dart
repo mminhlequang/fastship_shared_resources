@@ -234,14 +234,14 @@ class MenuRepo {
     MenuItemSortBy? sortBy,
     int? restaurantId,
     List<int>? cuisineTypeIds, // Danh sách ID loại ẩm thực (có thể null)
-    List<String>? cuisineTypeStrings, // Danh sách tên loại ẩm thực để tìm kiếm (có thể null)
+    List<String>?
+    cuisineTypeStrings, // Danh sách tên loại ẩm thực để tìm kiếm (có thể null)
     bool? isAvailable,
     double? minRating,
     double? maxDistance,
     String? search,
     int? limit,
     int? offset,
-    String? keyword,
   }) => _api.getMenuItemsCustomer(
     lat: lat,
     lng: lng,
@@ -255,14 +255,16 @@ class MenuRepo {
     search: search,
     limit: limit,
     offset: offset,
-    keyword: keyword,
   );
 
-
-  Future<NetworkResponse<ListResponse<MenuCategoryResponse>>> getMenuRestaurantCategories(
+  Future<NetworkResponse<ListResponse<MenuCategoryResponse>>>
+  getMenuRestaurantCategories(
     dynamic restaurantId, {
     int offset = 0,
     int limit = 100,
-  }) async => _api.getMenuRestaurantCategories(restaurantId, offset: offset, limit: limit);
-
+  }) async => _api.getMenuRestaurantCategories(
+    restaurantId,
+    offset: offset,
+    limit: limit,
+  );
 }
