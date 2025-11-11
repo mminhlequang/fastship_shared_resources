@@ -106,6 +106,8 @@ class CartItemUpdateRequest {
 class CartModel {
   String? cartId;
   int? restaurantId;
+  bool? restaurantIsActive;
+  bool? restaurantIsOpen;
   String? restaurantName;
   CommonAssetResponse? restaurantLogo;
   List<CartItemModel>? items;
@@ -117,6 +119,8 @@ class CartModel {
   CartModel({
     this.cartId,
     this.restaurantId,
+    this.restaurantIsActive,
+    this.restaurantIsOpen,
     this.restaurantName,
     this.restaurantLogo,
     this.items,
@@ -129,10 +133,13 @@ class CartModel {
   CartModel.fromJson(Map<String, dynamic> json) {
     cartId = json["cart_id"];
     restaurantId = json["restaurant_id"];
+    restaurantIsActive = json["restaurant_is_active"];
+    restaurantIsOpen = json["restaurant_is_open"];
     restaurantName = json["restaurant_name"];
-    restaurantLogo = json["restaurant_logo"] != null
-        ? CommonAssetResponse.fromJson(json["restaurant_logo"])
-        : null;
+    restaurantLogo =
+        json["restaurant_logo"] != null
+            ? CommonAssetResponse.fromJson(json["restaurant_logo"])
+            : null;
     items =
         json["items"] == null
             ? null
@@ -153,6 +160,8 @@ class CartModel {
     final Map<String, dynamic> _data = <String, dynamic>{};
     _data["cart_id"] = cartId;
     _data["restaurant_id"] = restaurantId;
+    _data["restaurant_is_active"] = restaurantIsActive;
+    _data["restaurant_is_open"] = restaurantIsOpen;
     _data["restaurant_name"] = restaurantName;
     _data["restaurant_logo"] = restaurantLogo?.toJson();
     if (items != null) {
@@ -244,10 +253,6 @@ class CartItemModel {
   }
 }
 
-
-
-
-
 class CartItemVariant {
   String? variantGroupId;
   String? variantGroupName;
@@ -317,8 +322,6 @@ class CartItemVariant {
     return _data;
   }
 }
-
-
 
 class CartItemOption {
   String? optionGroupId;

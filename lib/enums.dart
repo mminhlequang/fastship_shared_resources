@@ -47,7 +47,7 @@ String _urlProd = 'https://api.fastshiphu.com';
 String _urlAsset = 'https://fastship.sgp1.digitaloceanspaces.com';
 
 String get apiBaseUrl => 
-kDebugMode ? _urlDebug :
+// kDebugMode ? _urlDebug :
  _urlProd;
 String get socketIOBaseUrl => "$apiBaseUrl";
 
