@@ -79,12 +79,6 @@ class MenuRepo {
     MenuItemInput create,
   ) async => _api.createMenuItem(categoryId, create);
 
-  Future<NetworkResponse<ListResponse<MenuItemResponse>>> getMenuItems(
-    String categoryId, {
-    int offset = 0,
-    int limit = 100,
-  }) async => _api.getMenuItems(categoryId, offset: offset, limit: limit);
-
   Future<NetworkResponse<MenuItemResponse>> getMenuItem(String itemId) async =>
       _api.getMenuItem(itemId);
 

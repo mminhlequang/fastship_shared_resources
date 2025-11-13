@@ -115,11 +115,6 @@ abstract class MenuApi {
     String categoryId,
     MenuItemInput create,
   );
-  Future<NetworkResponse<ListResponse<MenuItemResponse>>> getMenuItems(
-    String categoryId, {
-    int offset,
-    int limit,
-  });
   Future<NetworkResponse<MenuItemResponse>> getMenuItem(String itemId);
   Future<NetworkResponse<MenuItemResponse>> updateMenuItem(
     String itemId,
@@ -466,31 +461,6 @@ class MenuApiImpl extends MenuApi {
         return NetworkResponse.fromResponse(
           response,
           converter: (json) => MenuItemResponse.fromJson(json),
-        );
-      },
-    );
-  }
-
-  @override
-  Future<NetworkResponse<ListResponse<MenuItemResponse>>> getMenuItems(
-    String categoryId, {
-    int offset = 0,
-    int limit = 100,
-  }) async {
-    return await handleNetworkError(
-      proccess: () async {
-        final params = <String, dynamic>{'offset': offset, 'limit': limit};
-
-        Response response = await AppClient(
-          token: await appPrefs.getNormalToken(),
-        ).get(_MenuEndpoint.menuItems(categoryId), queryParameters: params);
-        return NetworkResponse.fromResponse(
-          response,
-          converter:
-              (json) => ListResponse.fromJson(
-                json,
-                (item) => MenuItemResponse.fromJson(item),
-              ),
         );
       },
     );

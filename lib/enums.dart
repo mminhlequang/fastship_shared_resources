@@ -41,13 +41,13 @@ const String appMapUrlTemplateGg =
 const String googlevapidKey =
     "BC1YTu_3h-ZnaH8WL7h3SHLRaJ3EAntdHATxAKJQO_KqqCLnOeqMOOik10NzXQ5AHMLrR_QzKK3c7wQu3sMGx2k"; // Thay thế bằng VAPID key thực tế
 
-String _urlDebug = 'http://172.20.10.4:8002';
+String _urlDebug = 'http://192.168.1.9:8002';
 
 String _urlProd = 'https://api.fastshiphu.com';
 String _urlAsset = 'https://fastship.sgp1.digitaloceanspaces.com';
 
 String get apiBaseUrl => 
-// kDebugMode ? _urlDebug :
+kDebugMode ? _urlDebug :
  _urlProd;
 String get socketIOBaseUrl => "$apiBaseUrl";
 

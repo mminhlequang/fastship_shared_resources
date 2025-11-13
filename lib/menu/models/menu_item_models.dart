@@ -1,5 +1,6 @@
 import 'package:dio/dio.dart';
 import 'package:flutter/services.dart';
+import 'package:shared_resources/common_assets/common_assets.dart';
 
 import '../../restaurants/restaurants.dart';
 import '../menu.dart';
@@ -66,7 +67,6 @@ class MenuItemResponse {
   String? description;
   bool? isActive;
   double? price;
-  String? imageUrl;
   int? sortOrder;
   DateTime? createdAt;
   DateTime? updatedAt;
@@ -78,13 +78,18 @@ class MenuItemResponse {
   RestaurantResponse? restaurant;
   double? distance_km;
 
+  CommonAssetResponse? image;
+  String? _imageUrl;
+
+  String? get imageUrl =>
+      _imageUrl ?? image?.fileCompressedUrl ?? image?.fileUrl;
+
   MenuItemResponse({
     this.id,
     this.name,
     this.description,
     this.isActive,
     this.price,
-    this.imageUrl,
     this.sortOrder,
     this.variants,
     this.options,
@@ -93,6 +98,7 @@ class MenuItemResponse {
     this.categoryId,
     this.restaurant,
     this.distance_km,
+    this.image,
   });
 
   factory MenuItemResponse.fromJson(Map<String, dynamic> json) {
@@ -102,7 +108,11 @@ class MenuItemResponse {
       description: json['description'],
       isActive: json['is_active'],
       price: (json['price'] as num?)?.toDouble(),
-      imageUrl: json['image_url'],
+      image:
+          json['image'] != null
+              ? CommonAssetResponse.fromJson(json['image'])
+              : null,
+
       sortOrder: json['sort_order'],
       variants:
           json['variants'] != null
@@ -125,9 +135,10 @@ class MenuItemResponse {
               ? DateTime.parse(json['updated_at'])
               : null,
       categoryId: json['category_id'],
-      restaurant: json['restaurant'] != null
-          ? RestaurantResponse.fromJson(json['restaurant'])
-          : null,
+      restaurant:
+          json['restaurant'] != null
+              ? RestaurantResponse.fromJson(json['restaurant'])
+              : null,
       distance_km: (json['distance_km'] as num?)?.toDouble(),
     );
   }
@@ -139,7 +150,7 @@ class MenuItemResponse {
     data['description'] = description;
     data['is_active'] = isActive;
     data['price'] = price;
-    data['image_url'] = imageUrl;
+    data['image'] = image?.toJson();
     data['sort_order'] = sortOrder;
     data['variants'] = variants?.map((v) => v.toJson()).toList();
     data['options'] = options?.map((o) => o.toJson()).toList();
