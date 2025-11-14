@@ -76,6 +76,7 @@ class RestaurantsRepo {
     int? limit,
     int? offset,
     String? search,
+    RestaurantResponseOptions? responseOptions,
   }) => _api.getRestaurantsCustomer(
     lat: lat,
     lng: lng,
@@ -90,6 +91,7 @@ class RestaurantsRepo {
     limit: limit,
     offset: offset,
     search: search,
+    responseOptions: responseOptions,
   );
 
   Future<NetworkResponse<RestaurantResponse>> getRestaurantCustomer(

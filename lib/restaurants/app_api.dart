@@ -69,6 +69,7 @@ abstract class RestaurantsApi {
     int? limit,
     int? offset,
     String? search,
+    RestaurantResponseOptions? responseOptions,
   });
   Future<NetworkResponse<RestaurantResponse>> getRestaurantCustomer(
     String restaurantId,
@@ -224,6 +225,7 @@ class RestaurantsApiImpl extends RestaurantsApi {
     int? limit,
     int? offset,
     String? search,
+    RestaurantResponseOptions? responseOptions,
   }) async {
     return await handleNetworkError(
       proccess: () async {
@@ -243,6 +245,14 @@ class RestaurantsApiImpl extends RestaurantsApi {
         if (limit != null) params['limit'] = limit;
         if (offset != null) params['offset'] = offset;
         if (search != null) params['search'] = search;
+        if (responseOptions != null) {
+          params['response_availability_rules'] =
+              responseOptions.availabilityRules;
+          params['response_restaurant_logo'] = responseOptions.restaurantLogo;
+          params['response_restaurant_banners'] =
+              responseOptions.restaurantBanners;
+          params['response_cuisine_types'] = responseOptions.cuisineTypes;
+        }
         final response = await AppClient(
           token: await appPrefs.getNormalToken(),
         ).get(
