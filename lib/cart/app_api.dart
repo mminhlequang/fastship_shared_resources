@@ -36,9 +36,7 @@ class CartApiImpl extends CartApi {
           response,
           converter:
               (json) =>
-                  (json['carts'] as List)
-                      .map((e) => CartModel.fromJson(e))
-                      .toList(),
+                  (json as List).map((e) => CartModel.fromJson(e)).toList(),
         );
       },
     );
