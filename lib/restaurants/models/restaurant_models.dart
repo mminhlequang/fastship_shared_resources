@@ -53,7 +53,6 @@ class RestaurantInput {
   List<String>? amenities;
   int? minimumAge;
 
-
   RestaurantInput({
     this.name,
     this.restaurantOrgId,
@@ -218,6 +217,8 @@ class RestaurantResponse {
   List<int>? cuisineTypeIds;
   int? minimumAge;
   String? availabilityRuleId;
+
+  bool get isAvailiableToOrder => isActive == true && isOpen == true;
 
   AddressResponse? addressDetails;
   List<AvailabilityRuleResponse>? availabilityRules;
