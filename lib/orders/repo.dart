@@ -86,6 +86,8 @@ class OrdersRepo {
 
   Future<NetworkResponse<void>> cancelOrder(String orderId, {String? note}) =>
       _api.cancelOrder(orderId, note: note);
+  Future<NetworkResponse<void>> cancelOrderv2(String orderId, {String? note}) =>
+      _api.cancelOrderv2(orderId, note: note);
 
   // Status Update API (yêu cầu authentication - driver/restaurant)
   Future<NetworkResponse<OrderResponse>> updateOrderStatus(

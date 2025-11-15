@@ -19,8 +19,11 @@ class _OrdersEndpoint {
 
   // Customer APIs
   static String customerOrders() => "/api/v1/customer/orders/my";
-  static String customerCancelOrder(String orderId) =>
-      "/api/v1/customer/orders/my/$orderId/cancel";
+
+  // Unified Cancel Order APIs
+  static String cancelOrder(String orderId) => "/api/v1/orders/$orderId/cancel";
+  static String cancelOrderv2(String orderId) =>
+      "/api/v1/orders/$orderId/cancelv2";
 
   // Status Update API
   static String updateOrderStatus(String orderId) =>
@@ -76,7 +79,10 @@ abstract class OrdersApi {
     String? paymentStatus,
     String? deliveryType,
   });
+
+  // Unified Cancel Order APIs
   Future<NetworkResponse<void>> cancelOrder(String orderId, {String? note});
+  Future<NetworkResponse<void>> cancelOrderv2(String orderId, {String? note});
 
   // Status Update API (yêu cầu authentication - driver/restaurant)
   Future<NetworkResponse<OrderResponse>> updateOrderStatus(
@@ -270,7 +276,31 @@ class OrdersApiImpl extends OrdersApi {
         final response = await AppClient(
           token: await appPrefs.getNormalToken(),
         ).put(
-          _OrdersEndpoint.customerCancelOrder(orderId),
+          _OrdersEndpoint.cancelOrder(orderId),
+          queryParameters: queryParams,
+        );
+        return NetworkResponse.fromResponse(
+          response,
+          converter: (json) => null,
+        );
+      },
+    );
+  }
+
+  @override
+  Future<NetworkResponse<void>> cancelOrderv2(
+    String orderId, {
+    String? note,
+  }) async {
+    return await handleNetworkError(
+      proccess: () async {
+        final queryParams = <String, dynamic>{};
+        if (note != null) queryParams['note'] = note;
+
+        final response = await AppClient(
+          token: await appPrefs.getNormalToken(),
+        ).put(
+          _OrdersEndpoint.cancelOrderv2(orderId),
           queryParameters: queryParams,
         );
         return NetworkResponse.fromResponse(
