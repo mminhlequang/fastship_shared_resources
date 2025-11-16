@@ -79,10 +79,8 @@ class MenuItemResponse {
   double? distance_km;
 
   CommonAssetResponse? image;
-  String? _imageUrl;
 
-  String? get imageUrl =>
-      _imageUrl ?? image?.fileCompressedUrl ?? image?.fileUrl;
+  String? get imageUrl => image?.fileCompressedUrl ?? image?.fileUrl;
 
   MenuItemResponse({
     this.id,
@@ -111,6 +109,8 @@ class MenuItemResponse {
       image:
           json['image'] != null
               ? CommonAssetResponse.fromJson(json['image'])
+              : json['image_url'] != null
+              ? CommonAssetResponse(id: "", fileUrl: json['image_url'])
               : null,
 
       sortOrder: json['sort_order'],
