@@ -100,6 +100,9 @@ class MenuItemResponse {
   });
 
   factory MenuItemResponse.fromJson(Map<String, dynamic> json) {
+    if(json['name'] == 'test01'){
+      print('Debug MenuItemResponse: $json');
+    }
     return MenuItemResponse(
       id: json['id'],
       name: json['name'],

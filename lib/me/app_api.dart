@@ -27,9 +27,8 @@ abstract class UsersApi {
 
   // Update current user
   Future<NetworkResponse<UnifiedUserResponse>> updateUserMe(
-    UserUpdate userUpdate, {
-    String? avatarPath,
-  });
+    UserUpdate userUpdate,
+  );
 
   // Update password
   Future<NetworkResponse<Message>> updatePasswordMe(
@@ -95,40 +94,15 @@ class UsersApiImpl extends UsersApi {
 
   @override
   Future<NetworkResponse<UnifiedUserResponse>> updateUserMe(
-    UserUpdate userUpdate, {
-    String? avatarPath,
-  }) async {
+    UserUpdate userUpdate,
+  ) async {
     return await handleNetworkError(
       proccess: () async {
-        Response response;
-
-        if (avatarPath != null) {
-          // Use FormData for file upload
-          FormData formData = FormData();
-
-          // Add user data fields
-          if (userUpdate.fullName != null) {
-            formData.fields.add(MapEntry('full_name', userUpdate.fullName!));
-          }
-          if (userUpdate.phoneNumber != null) {
-            formData.fields.add(
-              MapEntry('phone_number', userUpdate.phoneNumber!),
-            );
-          }
-
-          // Add avatar file
-          formData.files.add(
-            MapEntry('avatar', await MultipartFile.fromFile(avatarPath)),
-          );
-
-          response = await AppClient(
-            token: await appPrefs.getNormalToken(),
-          ).patch(_UsersEndpoint.userMe(), data: formData);
-        } else {
-          response = await AppClient(
-            token: await appPrefs.getNormalToken(),
-          ).patch(_UsersEndpoint.userMe(), data: userUpdate.toJson());
-        }
+        Map data = userUpdate.toJson();
+        data.removeWhere((k, v) => v == null); // Remove null values
+        Response response = await AppClient(
+          token: await appPrefs.getNormalToken(),
+        ).patch(_UsersEndpoint.userMe(), data: data);
 
         return NetworkResponse.fromResponse(
           response,

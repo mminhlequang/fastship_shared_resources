@@ -26,10 +26,9 @@ class MeRepo {
 
   /// Update current user profile
   Future<NetworkResponse<UnifiedUserResponse>> updateUserMe(
-    UserUpdate userUpdate, {
-    String? avatarPath,
-  }) async {
-    return await _api.updateUserMe(userUpdate, avatarPath: avatarPath);
+    UserUpdate userUpdate,
+  ) async {
+    return await _api.updateUserMe(userUpdate);
   }
 
   /// Update current user password
