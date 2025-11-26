@@ -72,8 +72,10 @@ abstract class RestaurantsApi {
     RestaurantResponseOptions? responseOptions,
   });
   Future<NetworkResponse<RestaurantResponse>> getRestaurantCustomer(
-    String restaurantId,
-  );
+    String restaurantId, {
+    double? lat,
+    double? lng,
+  });
 
   // Admin Statistics
   Future<NetworkResponse<RestaurantStatisticOverview>>
@@ -273,13 +275,21 @@ class RestaurantsApiImpl extends RestaurantsApi {
 
   @override
   Future<NetworkResponse<RestaurantResponse>> getRestaurantCustomer(
-    String restaurantId,
-  ) async {
+    String restaurantId, {
+    double? lat,
+    double? lng,
+  }) async {
     return await handleNetworkError(
       proccess: () async {
+        final params = <String, dynamic>{};
+        if (lat != null) params['lat'] = lat;
+        if (lng != null) params['lng'] = lng;
         final response = await AppClient(
           token: await appPrefs.getNormalToken(),
-        ).get(_RestaurantsEndpoint.customerRestaurantDetail(restaurantId));
+        ).get(
+          _RestaurantsEndpoint.customerRestaurantDetail(restaurantId),
+          queryParameters: params,
+        );
         return NetworkResponse.fromResponse(
           response,
           converter: (json) => RestaurantResponse.fromJson(json),

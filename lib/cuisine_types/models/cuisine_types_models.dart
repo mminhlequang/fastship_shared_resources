@@ -8,11 +8,13 @@ class CuisineTypeResponse {
   bool? isActive;
   int? id;
   List<CuisineTypeResponseTranslation>? translations;
+  int? restaurantCount;
+  int? menuItemCount;
 
   String getName(String languageCode) {
     return translations
             ?.firstWhere(
-              (e) => e.languageCode == languageCode,
+              (e) => e.languageCode?.toLowerCase() == languageCode.toLowerCase(),
               orElse:
                   () => translations?.first ?? CuisineTypeResponseTranslation(),
             )
@@ -37,6 +39,8 @@ class CuisineTypeResponse {
     this.isActive,
     this.id,
     this.translations,
+    this.restaurantCount,
+    this.menuItemCount,
   });
 
   CuisineTypeResponse.fromJson(Map<String, dynamic> json) {
@@ -50,6 +54,9 @@ class CuisineTypeResponse {
             : (json["translations"] as List)
                 .map((e) => CuisineTypeResponseTranslation.fromJson(e))
                 .toList();
+
+    restaurantCount = json["restaurant_count"];
+    menuItemCount = json["menu_item_count"];
   }
 
   static List<CuisineTypeResponse> fromList(List<Map<String, dynamic>> list) {
@@ -65,6 +72,8 @@ class CuisineTypeResponse {
     if (translations != null) {
       _data["translations"] = translations?.map((e) => e.toJson()).toList();
     }
+    _data["restaurant_count"] = restaurantCount;
+    _data["menu_item_count"] = menuItemCount;
     return _data;
   }
 }

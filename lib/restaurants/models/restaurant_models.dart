@@ -230,6 +230,8 @@ class RestaurantResponse {
   DateTime? createdAt;
   DateTime? updatedAt;
 
+  double? distanceKm;
+
   RestaurantResponse({
     this.id,
     this.name,
@@ -270,6 +272,7 @@ class RestaurantResponse {
     this.createdAt,
     this.updatedAt,
     this.cuisineTypes,
+    this.distanceKm, 
   });
 
   RestaurantResponse.fromJson(Map<String, dynamic> json) {
@@ -350,6 +353,8 @@ class RestaurantResponse {
                 .map((e) => CuisineTypeResponse.fromJson(e))
                 .toList()
             : null;
+
+    distanceKm = (json['distance_km'] as num?)?.toDouble();
   }
 
   Map<String, dynamic> toJson() {
@@ -399,6 +404,7 @@ class RestaurantResponse {
     data['created_at'] = createdAt?.toIso8601String();
     data['updated_at'] = updatedAt?.toIso8601String();
     data['cuisine_types'] = cuisineTypes?.map((e) => e.toJson()).toList();
+    data['distance_km'] = distanceKm;
     return data;
   }
 }

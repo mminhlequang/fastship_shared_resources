@@ -66,7 +66,13 @@ class CuisineTypesRepo {
   // Public API
   Future<NetworkResponse<ListResponse<CuisineTypeResponse>>> getCuisineTypes({
     required String languageCode,
-   bool? isHomePage, 
-
-  }) => _api.getCuisineTypes(languageCode: languageCode, isHomePage: isHomePage);
+    bool? isHomePage,
+    bool? countRestaurants,
+    bool? countMenuItems,
+  }) => _api.getCuisineTypes(
+    languageCode: languageCode,
+    isHomePage: isHomePage,
+    countRestaurants: countRestaurants,
+    countMenuItems: countMenuItems,
+  );
 }

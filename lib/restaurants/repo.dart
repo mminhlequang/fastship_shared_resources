@@ -95,8 +95,10 @@ class RestaurantsRepo {
   );
 
   Future<NetworkResponse<RestaurantResponse>> getRestaurantCustomer(
-    String restaurantId,
-  ) => _api.getRestaurantCustomer(restaurantId);
+    String restaurantId, {
+    double? lat,
+    double? lng,
+  }) => _api.getRestaurantCustomer(restaurantId, lat: lat, lng: lng);
 
   // Admin Statistics
   Future<NetworkResponse<RestaurantStatisticOverview>>

@@ -65,6 +65,8 @@ abstract class CuisineTypesApi {
   Future<NetworkResponse<ListResponse<CuisineTypeResponse>>> getCuisineTypes({
     required String languageCode,
     bool? isHomePage,
+    bool? countRestaurants,
+    bool? countMenuItems,
   });
 }
 
@@ -241,12 +243,18 @@ class CuisineTypesApiImpl extends CuisineTypesApi {
   Future<NetworkResponse<ListResponse<CuisineTypeResponse>>> getCuisineTypes({
     required String languageCode,
     bool? isHomePage,
+    bool? countRestaurants,
+    bool? countMenuItems,
   }) async {
-    Map<String, dynamic> queryParameters = {
-      'language_code': languageCode, 
-    };
+    Map<String, dynamic> queryParameters = {'language_code': languageCode};
     if (isHomePage != null) {
       queryParameters['is_home_page'] = isHomePage;
+    }
+    if (countRestaurants != null) {
+      queryParameters['count_restaurants'] = countRestaurants;
+    }
+    if (countMenuItems != null) {
+      queryParameters['count_menu_items'] = countMenuItems;
     }
     return await handleNetworkError(
       proccess: () async {
