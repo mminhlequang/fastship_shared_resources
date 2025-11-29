@@ -212,6 +212,9 @@ abstract class MenuApi {
     int? offset,
     String? search,
     RestaurantResponseOptions? responseOptions,
+    bool? isActive,
+    bool? isOpen,
+    bool? isFeatured,
   });
   Future<NetworkResponse<ListResponse<MenuCategoryResponse>>>
   getMenuRestaurantCategories(
@@ -1037,6 +1040,9 @@ class MenuApiImpl extends MenuApi {
     int? limit,
     int? offset,
     RestaurantResponseOptions? responseOptions,
+    bool? isActive,
+    bool? isOpen,
+    bool? isFeatured,
   }) async {
     return await handleNetworkError(
       proccess: () async {
@@ -1063,6 +1069,9 @@ class MenuApiImpl extends MenuApi {
               responseOptions.restaurantBanners;
           params['response_cuisine_types'] = responseOptions.cuisineTypes;
         }
+        if (isActive != null) params['restaurant_is_active'] = isActive;
+        if (isOpen != null) params['restaurant_is_open'] = isOpen;
+        if (isFeatured != null) params['restaurant_is_featured'] = isFeatured;
         Response response = await AppClient(
           token: await appPrefs.getNormalToken(),
         ).get(_MenuEndpoint.customerMenuItems(), queryParameters: params);

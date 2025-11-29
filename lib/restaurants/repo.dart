@@ -69,6 +69,7 @@ class RestaurantsRepo {
     List<String>?
     cuisineTypeStrings, // Danh sách tên loại ẩm thực để tìm kiếm (có thể null)
     bool? isOpen,
+    bool? isActive,
     bool? isFeatured,
     bool? isVerified,
     double? minRating,
@@ -84,6 +85,7 @@ class RestaurantsRepo {
     cuisineTypeIds: cuisineTypeIds,
     cuisineTypeStrings: cuisineTypeStrings,
     isOpen: isOpen,
+    isActive: isActive,
     isFeatured: isFeatured,
     isVerified: isVerified,
     minRating: minRating,

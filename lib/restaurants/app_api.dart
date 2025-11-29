@@ -61,6 +61,7 @@ abstract class RestaurantsApi {
     List<int>? cuisineTypeIds, // Danh sách ID loại ẩm thực (có thể null)
     List<String>?
     cuisineTypeStrings, // Danh sách tên loại ẩm thực để tìm kiếm (có thể null)
+    bool? isActive,
     bool? isOpen,
     bool? isFeatured,
     bool? isVerified,
@@ -219,6 +220,7 @@ class RestaurantsApiImpl extends RestaurantsApi {
     List<int>? cuisineTypeIds, // Danh sách ID loại ẩm thực (có thể null)
     List<String>?
     cuisineTypeStrings, // Danh sách tên loại ẩm thực để tìm kiếm (có thể null)
+    bool? isActive,
     bool? isOpen,
     bool? isFeatured,
     bool? isVerified,
@@ -239,6 +241,7 @@ class RestaurantsApiImpl extends RestaurantsApi {
         if (cuisineTypeStrings != null) {
           params['cuisine_type_strings'] = cuisineTypeStrings;
         }
+        if (isActive != null) params['is_active'] = isActive;
         if (isOpen != null) params['is_open'] = isOpen;
         if (isFeatured != null) params['is_featured'] = isFeatured;
         if (isVerified != null) params['is_verified'] = isVerified;

@@ -52,6 +52,7 @@ class CheckoutRequest {
   final String? couponCode;
   final CheckoutRequestDeliveryAddress? deliveryAddress;
   final String? deliveryInstructions;
+  final bool? usePaymentIntent;
 
   CheckoutRequest({
     required this.carts,
@@ -59,6 +60,7 @@ class CheckoutRequest {
     this.couponCode,
     this.deliveryAddress,
     this.deliveryInstructions,
+    this.usePaymentIntent,
   });
 
   /// Chuyển sang JSON
@@ -69,6 +71,7 @@ class CheckoutRequest {
       'coupon_code': couponCode,
       'delivery_address': deliveryAddress?.toJson(),
       'delivery_instructions': deliveryInstructions,
+      'use_payment_intent': usePaymentIntent,
     };
   }
 }
@@ -582,8 +585,13 @@ class OrderResponse {
     return cartSnapshot?['restaurant']?['name']?.toString() ?? 'N/A';
   }
 
+  String? get restaurantLogoUrl {
+    return cartSnapshot?['restaurant']?['logo_url'];
+  }
+
   String get restaurantAddress {
-    return cartSnapshot?['restaurant']?['formatted_address']?.toString() ?? 'N/A';
+    return cartSnapshot?['restaurant']?['formatted_address']?.toString() ??
+        'N/A';
   }
 
   String get restaurantPhone {
@@ -609,7 +617,7 @@ class OrderResponse {
   String get formattedCreatedAt {
     if (createdAt == null) return 'N/A';
     try {
-      final date = DateTime.parse(createdAt!);
+      final date = DateTime.parse(createdAt!).toLocal();
       return '${date.day.toString().padLeft(2, '0')}/${date.month.toString().padLeft(2, '0')} ${date.hour.toString().padLeft(2, '0')}:${date.minute.toString().padLeft(2, '0')}';
     } catch (e) {
       return createdAt!;

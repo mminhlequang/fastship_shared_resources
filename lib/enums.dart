@@ -4,19 +4,13 @@ const String foodPlaceholderAsset = 'assets/images/food_placeholder.png';
 const String restaurantPlaceholderAsset =
     'assets/images/restaurant_placeholder.png';
 
-// Fastship Stripe key:
-// Demo
-// pk_test_51QSzj8G67xsdbExOLHTKXtPDWDdH7DwAfdpQjQS2b0UEL47RkQJ3IAw6O4SIBRLX8P19isjt3JdTAUIhVEDuZbwx00DVBSbC9H
-// sk_test_51QSzj8G67xsdbExOcyrdBflQ11c6Tx7EKSitEI0OoV39qEPXV2DGuhcCCdN3JagZtur2Ndohb3v4ZFDgELNVQ4UJ00PVneYi0W
-
-// Live
-// pk_live_51QSzj8G67xsdbExOREzmoWHdDCxGDlylVrXX1nwpiKW8ylSoBH0fqUMPErlQUmmDClzJc6N5aebfKTN4ujUEbYS600YEC6swxf
-// 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
-
 const String stripePublishableKey =
-    kDebugMode || kProfileMode
-        ? "pk_test_51S60pd4zut6r6rN5APa2tSLo0alGOPaUOzoMQoGrgQkw1lmK7Fzc3FoN5kJpHl9J5hfyxJytM2P6yqho6MsPy43W00uLdIJxn2"
-        : "pk_live_51QSzj8G67xsdbExOREzmoWHdDCxGDlylVrXX1nwpiKW8ylSoBH0fqUMPErlQUmmDClzJc6N5aebfKTN4ujUEbYS600YEC6swxf";
+    // kDebugMode || kProfileMode
+    //     ?
+    "pk_test_51S60pd4zut6r6rN5APa2tSLo0alGOPaUOzoMQoGrgQkw1lmK7Fzc3FoN5kJpHl9J5hfyxJytM2P6yqho6MsPy43W00uLdIJxn2"
+// :
+// "pk_live_51QSzj8G67xsdbExOREzmoWHdDCxGDlylVrXX1nwpiKW8ylSoBH0fqUMPErlQUmmDClzJc6N5aebfKTN4ujUEbYS600YEC6swxf"
+;
 
 const String appMessengerUrl = "https://m.me/fastship.vn";
 const String appWhatsappUrl = "https://wa.me/84909090909";
@@ -30,7 +24,10 @@ const String appCurrency = "HUF";
 const String appCurrencySymbol = "Ft";
 
 String get appMapUrlTemplate =>
-    kDebugMode ? appMapUrlTemplateGg : appMapUrlTemplateHERE;
+    // kDebugMode ?
+    appMapUrlTemplateGg
+//  : appMapUrlTemplateHERE
+;
 
 const String hereMapApiKey = "HxCn0uXDho1pV2wM59D_QWzCgPtWB_E5aIiqIdnBnV0";
 String get appMapUrlTemplateHERE =>
@@ -41,14 +38,14 @@ const String appMapUrlTemplateGg =
 const String googlevapidKey =
     "BC1YTu_3h-ZnaH8WL7h3SHLRaJ3EAntdHATxAKJQO_KqqCLnOeqMOOik10NzXQ5AHMLrR_QzKK3c7wQu3sMGx2k"; // Thay thế bằng VAPID key thực tế
 
-String _urlDebug = 'http://192.168.1.14:8002';
+String _urlDebug = 'http://192.168.1.13:8002';
 
 String _urlProd = 'https://api.fastshiphu.com';
 String _urlAsset = 'https://fastship.sgp1.digitaloceanspaces.com';
 
-String get apiBaseUrl => 
-kDebugMode ? _urlDebug :
- _urlProd;
+String get apiBaseUrl =>
+    // kDebugMode ? _urlDebug :
+    _urlProd;
 String get socketIOBaseUrl => "$apiBaseUrl";
 
 String correctAssetUrl(String url) {

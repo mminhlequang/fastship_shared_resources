@@ -237,6 +237,9 @@ class MenuRepo {
     int? limit,
     int? offset,
     RestaurantResponseOptions? responseOptions,
+    bool? isActive,
+    bool? isOpen,
+    bool? isFeatured,
   }) => _api.getMenuItemsCustomer(
     lat: lat,
     lng: lng,
@@ -251,6 +254,9 @@ class MenuRepo {
     limit: limit,
     offset: offset,
     responseOptions: responseOptions,
+    isActive: isActive,
+    isOpen: isOpen,
+    isFeatured: isFeatured,
   );
 
   Future<NetworkResponse<ListResponse<MenuCategoryResponse>>>
