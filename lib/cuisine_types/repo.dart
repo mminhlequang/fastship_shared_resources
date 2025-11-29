@@ -69,10 +69,14 @@ class CuisineTypesRepo {
     bool? isHomePage,
     bool? countRestaurants,
     bool? countMenuItems,
+    bool? isCountRestaurantActive,
+    bool? isCountRestaurantOpen,
   }) => _api.getCuisineTypes(
     languageCode: languageCode,
     isHomePage: isHomePage,
     countRestaurants: countRestaurants,
     countMenuItems: countMenuItems,
+    isCountRestaurantActive: isCountRestaurantActive,
+    isCountRestaurantOpen: isCountRestaurantOpen,
   );
 }

@@ -67,6 +67,8 @@ abstract class CuisineTypesApi {
     bool? isHomePage,
     bool? countRestaurants,
     bool? countMenuItems,
+    bool? isCountRestaurantActive,
+    bool? isCountRestaurantOpen,
   });
 }
 
@@ -245,6 +247,8 @@ class CuisineTypesApiImpl extends CuisineTypesApi {
     bool? isHomePage,
     bool? countRestaurants,
     bool? countMenuItems,
+    bool? isCountRestaurantActive,
+    bool? isCountRestaurantOpen,
   }) async {
     Map<String, dynamic> queryParameters = {'language_code': languageCode};
     if (isHomePage != null) {
@@ -256,6 +260,15 @@ class CuisineTypesApiImpl extends CuisineTypesApi {
     if (countMenuItems != null) {
       queryParameters['count_menu_items'] = countMenuItems;
     }
+
+    if (isCountRestaurantOpen != null) {
+      queryParameters['is_count_restaurant_open'] = isCountRestaurantOpen;
+    }
+
+    if (isCountRestaurantActive != null) {
+      queryParameters['is_count_restaurant_active'] = isCountRestaurantActive;
+    }
+
     return await handleNetworkError(
       proccess: () async {
         final response = await AppClient(

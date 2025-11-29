@@ -14,7 +14,8 @@ class CuisineTypeResponse {
   String getName(String languageCode) {
     return translations
             ?.firstWhere(
-              (e) => e.languageCode?.toLowerCase() == languageCode.toLowerCase(),
+              (e) =>
+                  e.languageCode?.toLowerCase() == languageCode.toLowerCase(),
               orElse:
                   () => translations?.first ?? CuisineTypeResponseTranslation(),
             )
@@ -25,7 +26,8 @@ class CuisineTypeResponse {
   String getDescription(String languageCode) {
     return translations
             ?.firstWhere(
-              (e) => e.languageCode == languageCode,
+              (e) =>
+                  e.languageCode?.toLowerCase() == languageCode.toLowerCase(),
               orElse:
                   () => translations?.first ?? CuisineTypeResponseTranslation(),
             )
