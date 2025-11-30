@@ -264,41 +264,6 @@ enum PaymentStatus {
   }
 }
 
-/// Enum mô tả phương thức thanh toán
-enum PaymentMethod {
-  /// Thanh toán qua Stripe
-  stripe,
-
-  /// Thanh toán tiền mặt
-  cash,
-
-  /// Thanh toán qua ví FastShip
-  fastshipWallet;
-
-  /// Trả về giá trị thực tế dạng string cho phương thức thanh toán
-  String get value {
-    switch (this) {
-      case PaymentMethod.stripe:
-        return "stripe";
-      case PaymentMethod.cash:
-        return "cash";
-      case PaymentMethod.fastshipWallet:
-        return "fastship_wallet";
-    }
-  }
-
-  String get displayName {
-    switch (this) {
-      case PaymentMethod.stripe:
-        return 'Stripe';
-      case PaymentMethod.cash:
-        return 'Cash';
-      case PaymentMethod.fastshipWallet:
-        return 'Wallet';
-    }
-  }
-}
-
 enum AppOrderDeliveryType {
   ship, // Giao hàng
   pickup, // Món đặt lấy
@@ -308,6 +273,18 @@ enum AppPaymentMethod {
   stripe,
   faship_wallet,
   cash;
+
+  /// Trả về giá trị thực tế dạng string cho phương thức thanh toán
+  String get value {
+    switch (this) {
+      case AppPaymentMethod.stripe:
+        return "stripe";
+      case AppPaymentMethod.cash:
+        return "cash";
+      case AppPaymentMethod.faship_wallet:
+        return "fastship_wallet";
+    }
+  }
 
   String get description {
     switch (this) {

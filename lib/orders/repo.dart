@@ -26,9 +26,9 @@ class OrdersRepo {
   ) => _api.processCheckout(request);
 
   Future<NetworkResponse<CheckoutResponse>> createPaymentSession(
-    String orderId, {
-    bool usePaymentIntent = false,
-  }) => _api.createPaymentSession(orderId, usePaymentIntent);
+    String orderId, 
+    bool usePaymentIntent  ,
+  ) => _api.createPaymentSession(orderId, usePaymentIntent);
 
   // Admin APIs (yêu cầu authentication)
   Future<NetworkResponse<ListResponse<OrderResponse>>> getAllOrders({

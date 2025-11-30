@@ -631,10 +631,10 @@ class OrderResponse {
     );
   }
 
-  PaymentMethod get paymentMethodEnum {
-    return PaymentMethod.values.firstWhere(
+  AppPaymentMethod get paymentMethodEnum {
+    return AppPaymentMethod.values.firstWhere(
       (e) => e.value == paymentMethod,
-      orElse: () => PaymentMethod.cash,
+      orElse: () => AppPaymentMethod.cash,
     );
   }
 
