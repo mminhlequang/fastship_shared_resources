@@ -11,6 +11,8 @@ class _OrdersEndpoint {
   // Order APIs
   static String calculateCheckout() => "/api/v1/orders/checkout/calculate";
   static String processCheckout() => "/api/v1/orders/checkout";
+  static String createPaymentSession(orderId) =>
+      "/api/v1/orders/$orderId/create_payment_session";
 
   // Admin APIs
   static String adminOrders() => "/api/v1/admin/orders/all";
@@ -43,6 +45,10 @@ abstract class OrdersApi {
   );
   Future<NetworkResponse<CheckoutResponse>> processCheckout(
     CheckoutRequest request,
+  );
+  Future<NetworkResponse<CheckoutResponse>> createPaymentSession(
+    String orderId,
+    bool usePaymentIntent,
   );
 
   // Admin APIs (yêu cầu authentication)
@@ -119,6 +125,27 @@ class OrdersApiImpl extends OrdersApi {
         final response = await AppClient(
           token: await appPrefs.getNormalToken(),
         ).post(_OrdersEndpoint.processCheckout(), data: request.toJson());
+        return NetworkResponse.fromResponse(
+          response,
+          converter: (json) => CheckoutResponse.fromJson(json),
+        );
+      },
+    );
+  }
+
+  @override
+  Future<NetworkResponse<CheckoutResponse>> createPaymentSession(
+    String orderId,
+    bool usePaymentIntent,
+  ) async {
+    return await handleNetworkError(
+      proccess: () async {
+        final response = await AppClient(
+          token: await appPrefs.getNormalToken(),
+        ).post(
+          _OrdersEndpoint.createPaymentSession(orderId),
+          queryParameters: {'use_payment_intent': usePaymentIntent},
+        );
         return NetworkResponse.fromResponse(
           response,
           converter: (json) => CheckoutResponse.fromJson(json),
