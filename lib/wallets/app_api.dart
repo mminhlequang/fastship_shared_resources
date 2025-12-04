@@ -1,5 +1,6 @@
 import 'package:internal_core/internal_core.dart';
 import 'package:internal_network/internal_network.dart';
+import 'package:shared_resources/orders/orders.dart';
 import 'package:internal_network/network_resources/resources.dart';
 
 import '../models/models.dart' show ListResponse;
@@ -46,11 +47,11 @@ abstract class WalletsApi {
     int? offset,
     int? limit,
   });
-  Future<NetworkResponse<WalletTopupCheckoutSessionResponse>>
-  createTopupCheckoutSession({
+  Future<NetworkResponse<CheckoutResponse>> createTopupCheckoutSession({
     String? customerId,
     String? driverId,
     int? amount,
+    bool usePaymentIntent = false,
   });
   Future<NetworkResponse<WalletWithdrawRequestResponse>> createWithdrawRequest({
     String? customerId,
@@ -166,11 +167,11 @@ class WalletsApiImpl extends WalletsApi {
   }
 
   @override
-  Future<NetworkResponse<WalletTopupCheckoutSessionResponse>>
-  createTopupCheckoutSession({
+  Future<NetworkResponse<CheckoutResponse>> createTopupCheckoutSession({
     String? customerId,
     String? driverId,
     int? amount,
+    bool usePaymentIntent = false,
   }) async {
     return await handleNetworkError(
       proccess: () async {
@@ -178,6 +179,7 @@ class WalletsApiImpl extends WalletsApi {
         if (customerId != null) queryParams['customer_id'] = customerId;
         if (driverId != null) queryParams['driver_id'] = driverId;
         if (amount != null) queryParams['amount'] = amount;
+        queryParams['use_payment_intent'] = usePaymentIntent;
 
         final response = await AppClient(
           token: await appPrefs.getNormalToken(),
@@ -187,8 +189,7 @@ class WalletsApiImpl extends WalletsApi {
         );
         return NetworkResponse.fromResponse(
           response,
-          converter:
-              (json) => WalletTopupCheckoutSessionResponse.fromJson(json),
+          converter: (json) => CheckoutResponse.fromJson(json),
         );
       },
     );

@@ -218,42 +218,4 @@ class WalletWithdrawRequestResponse {
     };
   }
 }
-
-/// Checkout Session Data Model
-class WalletTopupCheckoutSessionResponse {
-  final String checkoutUrl;
-  final String sessionId;
-  final int amount;
-  final String currency;
-  final String walletId;
-
-  WalletTopupCheckoutSessionResponse({
-    required this.checkoutUrl,
-    required this.sessionId,
-    required this.amount,
-    required this.currency,
-    required this.walletId,
-  });
-
-  factory WalletTopupCheckoutSessionResponse.fromJson(
-    Map<String, dynamic> response,
-  ) {
-    return WalletTopupCheckoutSessionResponse(
-      checkoutUrl: response['checkout_url'] ?? '',
-      sessionId: response['session_id'] ?? '',
-      amount: response['amount'] ?? 0,
-      currency: response['currency'] ?? 'HUF',
-      walletId: response['wallet_id'] ?? '',
-    );
-  }
-
-  Map<String, dynamic> toJson() {
-    return {
-      'checkout_url': checkoutUrl,
-      'session_id': sessionId,
-      'amount': amount,
-      'currency': currency,
-      'wallet_id': walletId,
-    };
-  }
-}
+ 

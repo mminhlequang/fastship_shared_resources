@@ -186,7 +186,14 @@ class CartItemModel {
   num? menuItemPrice;
   String? menuItemDescription;
   String? menuItemImageUrl;
+  CommonAssetResponse? menuItemImage;
   num? totalPrice;
+
+  String get itemImageUrl =>
+      menuItemImage?.fileCompressedUrl ??
+      menuItemImage?.fileUrl ??
+      menuItemImageUrl ??
+      '';
 
   CartItemModel({
     this.id,
@@ -199,6 +206,7 @@ class CartItemModel {
     this.menuItemPrice,
     this.menuItemDescription,
     this.menuItemImageUrl,
+    this.menuItemImage,
     this.totalPrice,
   });
 
@@ -223,6 +231,10 @@ class CartItemModel {
     menuItemPrice = json["menu_item_price"];
     menuItemDescription = json["menu_item_description"];
     menuItemImageUrl = json["menu_item_image_url"];
+    menuItemImage =
+        json["menu_item_image"] == null
+            ? null
+            : CommonAssetResponse.fromJson(json["menu_item_image"]);
     totalPrice = json["total_price"];
   }
 
@@ -248,6 +260,7 @@ class CartItemModel {
     _data["menu_item_price"] = menuItemPrice;
     _data["menu_item_description"] = menuItemDescription;
     _data["menu_item_image_url"] = menuItemImageUrl;
+    _data["menu_item_image"] = menuItemImage?.toJson();
     _data["total_price"] = totalPrice;
     return _data;
   }

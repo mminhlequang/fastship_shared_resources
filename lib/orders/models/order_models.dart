@@ -335,9 +335,11 @@ class CheckoutResponse {
   factory CheckoutResponse.fromJson(Map<String, dynamic> json) {
     return CheckoutResponse(
       orders:
-          (json['orders'] as List)
-              .map((e) => OrderResponse.fromJson(e))
-              .toList(),
+          json['orders'] is List
+              ? (json['orders'] as List)
+                  .map((e) => OrderResponse.fromJson(e))
+                  .toList()
+              : [],
       checkoutCalculation:
           json['checkout_calculation'] != null
               ? CheckoutCalculationResponse.fromJson(

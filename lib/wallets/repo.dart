@@ -1,4 +1,5 @@
 import 'package:internal_network/network_resources/resources.dart';
+import 'package:shared_resources/orders/orders.dart';
 
 import '../models/models.dart' show ListResponse;
 import 'app_api.dart';
@@ -46,15 +47,16 @@ class WalletsRepo {
     limit: limit,
   );
 
-  Future<NetworkResponse<WalletTopupCheckoutSessionResponse>>
-  createTopupCheckoutSession({
+  Future<NetworkResponse<CheckoutResponse>> createTopupCheckoutSession({
     String? customerId,
     String? driverId,
     int? amount,
+    bool usePaymentIntent = false,
   }) => _api.createTopupCheckoutSession(
     customerId: customerId,
     driverId: driverId,
     amount: amount,
+    usePaymentIntent: usePaymentIntent, 
   );
 
   Future<NetworkResponse<WalletWithdrawRequestResponse>> createWithdrawRequest({
