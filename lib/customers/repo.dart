@@ -1,4 +1,4 @@
-import 'package:internal_network/network_resources/resources.dart';
+import 'package:internal_core/network/network_resources/resources.dart';
 
 import 'app_api.dart';
 import 'models/models.dart';
@@ -22,18 +22,18 @@ class CustomersRepo {
     bool? isActive,
     bool? isOnline,
     String? accountStatus,
-  }) =>
-      _api.getCustomersAdmin(
-        offset: offset,
-        limit: limit,
-        isActive: isActive,
-        isOnline: isOnline,
-        accountStatus: accountStatus,
-      );
+  }) => _api.getCustomersAdmin(
+    offset: offset,
+    limit: limit,
+    isActive: isActive,
+    isOnline: isOnline,
+    accountStatus: accountStatus,
+  );
 
   Future<NetworkResponse<CustomerResponse>> updateCustomerAdmin(
-          String customerId, CustomerUpdate update) =>
-      _api.updateCustomerAdmin(customerId, update);
+    String customerId,
+    CustomerUpdate update,
+  ) => _api.updateCustomerAdmin(customerId, update);
 
   Future<NetworkResponse<void>> deleteCustomerAdmin(String customerId) =>
       _api.deleteCustomerAdmin(customerId);

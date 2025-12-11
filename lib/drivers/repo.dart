@@ -1,4 +1,4 @@
-import 'package:internal_network/network_resources/resources.dart';
+import 'package:internal_core/network/network_resources/resources.dart';
 
 import '../admin/models/models.dart';
 import 'app_api.dart';
@@ -18,8 +18,8 @@ class DriversRepo {
   late DriversApi _api;
 
   Future<NetworkResponse<UnifiedUserResponse>> createDriverAdmin(
-          DriverCreate create) =>
-      _api.createDriverAdmin(create);
+    DriverCreate create,
+  ) => _api.createDriverAdmin(create);
 
   Future<NetworkResponse<ListResponse<UnifiedUserResponse>>> getDriversAdmin({
     int offset = 0,
@@ -43,39 +43,38 @@ class DriversRepo {
     String? createdBefore,
     String? lastActivityAfter,
     String? lastActivityBefore,
-  }) =>
-      _api.getDriversAdmin(
-        offset: offset,
-        limit: limit,
-        type: type,
-        driverOrgId: driverOrgId,
-        onboardingStatus: onboardingStatus,
-        gender: gender,
-        nationality: nationality,
-        isActive: isActive,
-        isAvailable: isAvailable,
-        isOnline: isOnline,
-        minRating: minRating,
-        maxRating: maxRating,
-        minOrders: minOrders,
-        maxOrders: maxOrders,
-        minEarnings: minEarnings,
-        maxEarnings: maxEarnings,
-        search: search,
-        createdAfter: createdAfter,
-        createdBefore: createdBefore,
-        lastActivityAfter: lastActivityAfter,
-        lastActivityBefore: lastActivityBefore,
-      );
+  }) => _api.getDriversAdmin(
+    offset: offset,
+    limit: limit,
+    type: type,
+    driverOrgId: driverOrgId,
+    onboardingStatus: onboardingStatus,
+    gender: gender,
+    nationality: nationality,
+    isActive: isActive,
+    isAvailable: isAvailable,
+    isOnline: isOnline,
+    minRating: minRating,
+    maxRating: maxRating,
+    minOrders: minOrders,
+    maxOrders: maxOrders,
+    minEarnings: minEarnings,
+    maxEarnings: maxEarnings,
+    search: search,
+    createdAfter: createdAfter,
+    createdBefore: createdBefore,
+    lastActivityAfter: lastActivityAfter,
+    lastActivityBefore: lastActivityBefore,
+  );
 
   Future<NetworkResponse<UnifiedUserResponse>> getDriverAdmin(int driverId) =>
       _api.getDriverAdmin(driverId);
 
   Future<NetworkResponse<UnifiedUserResponse>> updateDriverAdmin(
-          int driverId, DriverUpdate update) =>
-      _api.updateDriverAdmin(driverId, update);
+    int driverId,
+    DriverUpdate update,
+  ) => _api.updateDriverAdmin(driverId, update);
 
   Future<NetworkResponse<void>> deleteDriverAdmin(int driverId) =>
       _api.deleteDriverAdmin(driverId);
- 
 }

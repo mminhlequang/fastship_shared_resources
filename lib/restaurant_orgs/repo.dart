@@ -1,4 +1,4 @@
-import 'package:internal_network/network_resources/resources.dart';
+import 'package:internal_core/network/network_resources/resources.dart';
 import 'package:shared_resources/admin/admin.dart';
 
 import 'app_api.dart';

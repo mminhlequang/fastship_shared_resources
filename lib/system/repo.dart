@@ -1,4 +1,4 @@
-import 'package:internal_network/network_resources/resources.dart';
+import 'package:internal_core/network/network_resources/resources.dart';
 
 import '../models/models.dart' show ListResponse;
 import 'app_api.dart';

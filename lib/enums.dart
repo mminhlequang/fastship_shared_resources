@@ -66,9 +66,6 @@ enum OrderStatus {
   /// Restaurant đã xác nhận, đang tìm driver
   confirmed,
 
-  /// Restaurant đang chuẩn bị món ăn
-  preparing,
-
   /// Món ăn sẵn sàng, driver có thể đến lấy
   readyForPickup,
 
@@ -97,8 +94,6 @@ enum OrderStatus {
         return "pending";
       case OrderStatus.confirmed:
         return "confirmed";
-      case OrderStatus.preparing:
-        return "preparing";
       case OrderStatus.readyForPickup:
         return "ready_for_pickup";
       case OrderStatus.pickedUp:
@@ -123,8 +118,6 @@ enum OrderStatus {
         return Colors.grey;
       case OrderStatus.confirmed:
         return Colors.blue;
-      case OrderStatus.preparing:
-        return Colors.orange;
       case OrderStatus.readyForPickup:
         return Colors.amber;
       case OrderStatus.pickedUp:
@@ -149,8 +142,6 @@ enum OrderStatus {
         return FontAwesomeIcons.clock;
       case OrderStatus.confirmed:
         return FontAwesomeIcons.checkCircle;
-      case OrderStatus.preparing:
-        return FontAwesomeIcons.store;
       case OrderStatus.readyForPickup:
         return FontAwesomeIcons.box;
       case OrderStatus.pickedUp:
@@ -174,8 +165,6 @@ enum OrderStatus {
         return 'Waiting confirmation';
       case OrderStatus.confirmed:
         return 'Confirmed';
-      case OrderStatus.preparing:
-        return 'Preparing';
       case OrderStatus.readyForPickup:
         return 'Ready for pickup';
       case OrderStatus.pickedUp:
@@ -199,7 +188,6 @@ enum OrderStatus {
     switch (this) {
       case OrderStatus.pending:
       case OrderStatus.confirmed:
-      case OrderStatus.preparing:
       case OrderStatus.readyForPickup:
         return 'Waiting for restaurant';
 

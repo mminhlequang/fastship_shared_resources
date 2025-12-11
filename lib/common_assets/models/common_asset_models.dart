@@ -13,6 +13,8 @@ class CommonAssetResponse {
   final DateTime? createdAt;
   final DateTime? updatedAt;
 
+  String? get displayUrl => fileCompressedUrl ?? fileUrl;
+
   CommonAssetResponse({
     required this.id,
     this.refType,

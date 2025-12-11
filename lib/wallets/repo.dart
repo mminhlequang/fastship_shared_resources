@@ -1,4 +1,4 @@
-import 'package:internal_network/network_resources/resources.dart';
+import 'package:internal_core/network/network_resources/resources.dart';
 import 'package:shared_resources/orders/orders.dart';
 
 import '../models/models.dart' show ListResponse;
@@ -56,7 +56,7 @@ class WalletsRepo {
     customerId: customerId,
     driverId: driverId,
     amount: amount,
-    usePaymentIntent: usePaymentIntent, 
+    usePaymentIntent: usePaymentIntent,
   );
 
   Future<NetworkResponse<WalletWithdrawRequestResponse>> createWithdrawRequest({

@@ -1,5 +1,6 @@
-import 'package:internal_network/internal_network.dart';
-import 'package:internal_network/network_resources/resources.dart';
+import 'package:internal_core/network/network.dart'; 
+
+import 'package:internal_core/network/network_resources/resources.dart';
 import 'package:dio/dio.dart';
 import '../admin/models/unified_user_response.dart';
 import 'models/models.dart';

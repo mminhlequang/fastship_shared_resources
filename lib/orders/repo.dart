@@ -1,4 +1,4 @@
-import 'package:internal_network/network_resources/resources.dart';
+import 'package:internal_core/network/network_resources/resources.dart';
 
 import '../models/models.dart' show ListResponse;
 import 'app_api.dart';
@@ -25,9 +25,14 @@ class OrdersRepo {
     CheckoutRequest request,
   ) => _api.processCheckout(request);
 
+
+  Future<NetworkResponse<CheckoutResponse>> processCheckoutV2(
+    CheckoutRequest request,
+  ) => _api.processCheckoutV2(request);
+
   Future<NetworkResponse<CheckoutResponse>> createPaymentSession(
-    String orderId, 
-    bool usePaymentIntent  ,
+    String orderId,
+    bool usePaymentIntent,
   ) => _api.createPaymentSession(orderId, usePaymentIntent);
 
   // Admin APIs (yêu cầu authentication)

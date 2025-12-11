@@ -1,6 +1,7 @@
 import 'package:internal_core/internal_core.dart';
-import 'package:internal_network/internal_network.dart';
-import 'package:internal_network/network_resources/resources.dart';
+import 'package:internal_core/network/network.dart';
+
+import 'package:internal_core/network/network_resources/resources.dart';
 
 import '../models/models.dart' show ListResponse;
 import 'models/models.dart';
@@ -11,6 +12,7 @@ class _OrdersEndpoint {
   // Order APIs
   static String calculateCheckout() => "/api/v1/orders/checkout/calculate";
   static String processCheckout() => "/api/v1/orders/checkout";
+  static String processCheckoutV2() => "/api/v1/orders/checkout_v2";
   static String createPaymentSession(orderId) =>
       "/api/v1/orders/$orderId/create_payment_session";
 
@@ -44,6 +46,9 @@ abstract class OrdersApi {
     CheckoutRequest request,
   );
   Future<NetworkResponse<CheckoutResponse>> processCheckout(
+    CheckoutRequest request,
+  );
+  Future<NetworkResponse<CheckoutResponse>> processCheckoutV2(
     CheckoutRequest request,
   );
   Future<NetworkResponse<CheckoutResponse>> createPaymentSession(
@@ -125,6 +130,23 @@ class OrdersApiImpl extends OrdersApi {
         final response = await AppClient(
           token: await appPrefs.getNormalToken(),
         ).post(_OrdersEndpoint.processCheckout(), data: request.toJson());
+        return NetworkResponse.fromResponse(
+          response,
+          converter: (json) => CheckoutResponse.fromJson(json),
+        );
+      },
+    );
+  }
+
+  @override
+  Future<NetworkResponse<CheckoutResponse>> processCheckoutV2(
+    CheckoutRequest request,
+  ) async {
+    return await handleNetworkError(
+      proccess: () async {
+        final response = await AppClient(
+          token: await appPrefs.getNormalToken(),
+        ).post(_OrdersEndpoint.processCheckoutV2(), data: request.toJson());
         return NetworkResponse.fromResponse(
           response,
           converter: (json) => CheckoutResponse.fromJson(json),

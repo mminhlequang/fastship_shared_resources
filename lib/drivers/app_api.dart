@@ -1,6 +1,7 @@
 import 'package:internal_core/internal_core.dart';
-import 'package:internal_network/internal_network.dart';
-import 'package:internal_network/network_resources/resources.dart';
+import 'package:internal_core/network/network.dart';
+
+import 'package:internal_core/network/network_resources/resources.dart';
 
 import '../admin/models/models.dart';
 import '../models/list_response.dart';

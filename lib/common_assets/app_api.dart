@@ -3,8 +3,9 @@ import 'dart:typed_data';
 
 import 'package:dio/dio.dart';
 
-import 'package:internal_network/internal_network.dart';
-import 'package:internal_network/network_resources/resources.dart';
+import 'package:internal_core/network/network.dart';
+
+import 'package:internal_core/network/network_resources/resources.dart';
 import '../../common_assets/models/models.dart';
 import '../models/list_response.dart';
 

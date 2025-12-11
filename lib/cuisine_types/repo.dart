@@ -1,6 +1,6 @@
 import 'dart:typed_data';
 
-import 'package:internal_network/network_resources/resources.dart';
+import 'package:internal_core/network/network_resources/resources.dart';
 import '../models/list_response.dart';
 import 'app_api.dart';
 import 'models/models.dart';

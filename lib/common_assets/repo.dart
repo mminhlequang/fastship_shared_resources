@@ -2,7 +2,8 @@ import 'dart:typed_data';
 
 import '../../common_assets/app_api.dart';
 import '../../common_assets/models/models.dart';
-import 'package:internal_network/network_resources/resources.dart';
+
+import 'package:internal_core/network/network_resources/resources.dart';
 import '../models/list_response.dart';
 
 class CommonAssetsRepo {

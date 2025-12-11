@@ -579,8 +579,9 @@ class OrderResponse {
     return cartSnapshot?['delivery_address']?['lng']?.toDouble() ?? 0.0;
   }
 
-  String get deliveryInstructions {
-    return cartSnapshot?['delivery_instructions']?.toString() ?? 'N/A';
+  String? get deliveryInstructions {
+    return cartSnapshot?['delivery_instructions'] ??
+        cartSnapshot?['delivery_address']?['note'];
   }
 
   String get restaurantName {
@@ -588,7 +589,8 @@ class OrderResponse {
   }
 
   String? get restaurantLogoUrl {
-    return cartSnapshot?['restaurant']?['logo_url'];
+    return restaurant?.restaurantLogo?.displayUrl ??
+        cartSnapshot?['restaurant']?['logo_url'];
   }
 
   String get restaurantAddress {

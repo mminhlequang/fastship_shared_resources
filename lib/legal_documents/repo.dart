@@ -1,6 +1,7 @@
 import 'dart:io';
 import 'dart:typed_data';
-import 'package:internal_network/network_resources/resources.dart';
+
+import 'package:internal_core/network/network_resources/resources.dart';
 
 import 'app_api.dart';
 import 'models/models.dart';
@@ -15,22 +16,21 @@ class LegalDocumentsRepo {
 
   // Get legal documents with filtering and pagination
   Future<NetworkResponse<ListResponse<LegalDocumentResponse>>>
-      getLegalDocuments({
+  getLegalDocuments({
     String? refType,
     String? refId,
     String? documentType,
     String? status,
     int offset = 0,
     int limit = 100,
-  }) =>
-          _api.getLegalDocuments(
-            refType: refType,
-            refId: refId,
-            documentType: documentType,
-            status: status,
-            offset: offset,
-            limit: limit,
-          );
+  }) => _api.getLegalDocuments(
+    refType: refType,
+    refId: refId,
+    documentType: documentType,
+    status: status,
+    offset: offset,
+    limit: limit,
+  );
 
   // Create and upload legal document
   Future<NetworkResponse<LegalDocumentResponse>> createLegalDocument({
@@ -68,57 +68,48 @@ class LegalDocumentsRepo {
     String? description,
     String? documentType,
     String? status,
-  }) =>
-      _api.updateLegalDocument(
-        documentId: documentId,
-        title: title,
-        description: description,
-        documentType: documentType,
-        status: status,
-      );
+  }) => _api.updateLegalDocument(
+    documentId: documentId,
+    title: title,
+    description: description,
+    documentType: documentType,
+    status: status,
+  );
 
   // Delete legal document
   Future<NetworkResponse<void>> deleteLegalDocument({
     required String documentId,
-  }) =>
-      _api.deleteLegalDocument(documentId: documentId);
+  }) => _api.deleteLegalDocument(documentId: documentId);
 
   // Convenience methods for common operations
   Future<NetworkResponse<ListResponse<LegalDocumentResponse>>>
-      getDocumentsByOwner({
+  getDocumentsByOwner({
     required String refType,
     required String refId,
     int offset = 0,
     int limit = 100,
-  }) =>
-          getLegalDocuments(
-            refType: refType,
-            refId: refId,
-            offset: offset,
-            limit: limit,
-          );
+  }) => getLegalDocuments(
+    refType: refType,
+    refId: refId,
+    offset: offset,
+    limit: limit,
+  );
 
   Future<NetworkResponse<ListResponse<LegalDocumentResponse>>>
-      getDocumentsByType({
+  getDocumentsByType({
     required String documentType,
     int offset = 0,
     int limit = 100,
-  }) =>
-          getLegalDocuments(
-            documentType: documentType,
-            offset: offset,
-            limit: limit,
-          );
+  }) => getLegalDocuments(
+    documentType: documentType,
+    offset: offset,
+    limit: limit,
+  );
 
   Future<NetworkResponse<ListResponse<LegalDocumentResponse>>>
-      getDocumentsByStatus({
+  getDocumentsByStatus({
     required String status,
     int offset = 0,
     int limit = 100,
-  }) =>
-          getLegalDocuments(
-            status: status,
-            offset: offset,
-            limit: limit,
-          );
+  }) => getLegalDocuments(status: status, offset: offset, limit: limit);
 }

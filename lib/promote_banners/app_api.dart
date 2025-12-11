@@ -1,6 +1,7 @@
 import 'package:internal_core/internal_core.dart';
-import 'package:internal_network/internal_network.dart';
-import 'package:internal_network/network_resources/resources.dart';
+import 'package:internal_core/network/network.dart';
+
+import 'package:internal_core/network/network_resources/resources.dart';
 
 import '../models/models.dart';
 import 'models/models.dart';
@@ -39,10 +40,7 @@ abstract class PromoteBannersApi {
 
   // Customer
   Future<NetworkResponse<ListResponse<PromoteBannerResponse>>>
-  getPromoteBannersCustomer({
-    String? countryCode,
-    String? positionInapp,
-  });
+  getPromoteBannersCustomer({String? countryCode, String? positionInapp});
 }
 
 class PromoteBannersApiImpl extends PromoteBannersApi {
