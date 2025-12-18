@@ -14,7 +14,7 @@ dependencies:
   internal_core:
     git:
       url: https://github.com/mminhlequang/internal_libs_flutter.git
-      ref: ae6799936108e506b6ddcbb32871cdab2e1374b6
+      ref: 6346256c040c9b2926bbfca67e3177cf60a3f0c9
   
   tuple: ^2.0.2
   easy_localization: ^3.0.8

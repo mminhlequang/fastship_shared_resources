@@ -546,6 +546,8 @@ class OrderResponse {
     return _data;
   }
 
+  String get shortId => id!.substring(0, 8);
+
   // Getters để lấy thông tin từ cartSnapshot một cách đồng bộ
   String get customerName {
     return cartSnapshot?['customer']?['full_name']?.toString() ?? 'Khách hàng';
@@ -612,10 +614,6 @@ class OrderResponse {
 
   List get items {
     return (cartSnapshot?['items'] as List?) ?? [];
-  }
-
-  String get shortId {
-    return id?.substring(0, 8) ?? 'N/A';
   }
 
   String get formattedCreatedAt {

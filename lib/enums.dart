@@ -1,5 +1,7 @@
 part of 'shared_resources.dart';
 
+const List<String> appCustomerCountriesAllowed = ['hu', 'vn'];
+
 const String foodPlaceholderAsset = 'assets/images/food_placeholder.png';
 const String restaurantPlaceholderAsset =
     'assets/images/restaurant_placeholder.png';
@@ -7,9 +9,9 @@ const String restaurantPlaceholderAsset =
 const String stripePublishableKey =
     // kDebugMode || kProfileMode
     //     ?
-    "pk_test_51S60pd4zut6r6rN5APa2tSLo0alGOPaUOzoMQoGrgQkw1lmK7Fzc3FoN5kJpHl9J5hfyxJytM2P6yqho6MsPy43W00uLdIJxn2"
+    // "pk_test_51S60pd4zut6r6rN5APa2tSLo0alGOPaUOzoMQoGrgQkw1lmK7Fzc3FoN5kJpHl9J5hfyxJytM2P6yqho6MsPy43W00uLdIJxn2"
 // :
-// "pk_live_51QSzj8G67xsdbExOREzmoWHdDCxGDlylVrXX1nwpiKW8ylSoBH0fqUMPErlQUmmDClzJc6N5aebfKTN4ujUEbYS600YEC6swxf"
+"pk_live_51QSzj8G67xsdbExOREzmoWHdDCxGDlylVrXX1nwpiKW8ylSoBH0fqUMPErlQUmmDClzJc6N5aebfKTN4ujUEbYS600YEC6swxf"
 ;
 
 const String appMessengerUrl = "https://m.me/fastship.vn";
@@ -24,9 +26,9 @@ const String appCurrency = "HUF";
 const String appCurrencySymbol = "Ft";
 
 String get appMapUrlTemplate =>
-    // kDebugMode ?
+    kDebugMode ?
     appMapUrlTemplateGg
-//  : appMapUrlTemplateHERE
+ : appMapUrlTemplateHERE
 ;
 
 const String hereMapApiKey = "HxCn0uXDho1pV2wM59D_QWzCgPtWB_E5aIiqIdnBnV0";
