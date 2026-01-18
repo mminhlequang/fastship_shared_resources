@@ -15,6 +15,10 @@ class _AuthEndpoint {
   static String passwordRecovery(String email) =>
       "/api/v1/auth/password-recovery/$email";
   static String resetPassword() => "/api/v1/auth/reset-password/";
+  static String requestPasswordResetOTP() =>
+      "/api/v1/auth/password-reset-otp/request";
+  static String verifyPasswordResetOTP() =>
+      "/api/v1/auth/password-reset-otp/verify";
 }
 
 abstract class AuthApi {
@@ -32,6 +36,12 @@ abstract class AuthApi {
   );
   Future<NetworkResponse<Message>> recoverPassword(String email);
   Future<NetworkResponse<Message>> resetPassword(NewPassword newPassword);
+  Future<NetworkResponse<Message>> requestPasswordResetOTP(
+    RequestPasswordResetOTP requestPasswordResetOTP,
+  );
+  Future<NetworkResponse<Message>> verifyPasswordResetOTP(
+    VerifyPasswordResetOTP verifyPasswordResetOTP,
+  );
 }
 
 class AuthApiImpl extends AuthApi {
@@ -131,6 +141,42 @@ class AuthApiImpl extends AuthApi {
         Response response = await AppClient().post(
           _AuthEndpoint.resetPassword(),
           data: newPassword.toJson(),
+        );
+        return NetworkResponse.fromResponse(
+          response,
+          converter: (json) => Message.fromJson(json),
+        );
+      },
+    );
+  }
+
+  @override
+  Future<NetworkResponse<Message>> requestPasswordResetOTP(
+    RequestPasswordResetOTP requestPasswordResetOTP,
+  ) async {
+    return await handleNetworkError(
+      proccess: () async {
+        Response response = await AppClient().post(
+          _AuthEndpoint.requestPasswordResetOTP(),
+          data: requestPasswordResetOTP.toJson(),
+        );
+        return NetworkResponse.fromResponse(
+          response,
+          converter: (json) => Message.fromJson(json),
+        );
+      },
+    );
+  }
+
+  @override
+  Future<NetworkResponse<Message>> verifyPasswordResetOTP(
+    VerifyPasswordResetOTP verifyPasswordResetOTP,
+  ) async {
+    return await handleNetworkError(
+      proccess: () async {
+        Response response = await AppClient().post(
+          _AuthEndpoint.verifyPasswordResetOTP(),
+          data: verifyPasswordResetOTP.toJson(),
         );
         return NetworkResponse.fromResponse(
           response,

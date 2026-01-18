@@ -4,5 +4,7 @@ export 'social_login_request.dart';
 export 'token_response.dart';
 export 'refresh_token_request.dart';
 export 'new_password.dart';
+export 'request_password_reset_otp.dart';
+export 'verify_password_reset_otp.dart';
 export 'message.dart';
 export 'http_validation_error.dart';

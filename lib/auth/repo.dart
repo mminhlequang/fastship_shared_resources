@@ -55,6 +55,22 @@ class AuthRepo {
     return await _api.resetPassword(newPassword);
   }
 
+  /// Request OTP for password reset
+  Future<NetworkResponse<Message>> requestPasswordResetOTP(
+    RequestPasswordResetOTP requestPasswordResetOTP,
+  ) async {
+    return await _api.requestPasswordResetOTP(requestPasswordResetOTP);
+  }
+
+  /// Verify OTP and reset password
+  Future<NetworkResponse<Message>> verifyPasswordResetOTP(
+    VerifyPasswordResetOTP verifyPasswordResetOTP,
+  ) async {
+    return await _api.verifyPasswordResetOTP(verifyPasswordResetOTP);
+  }
+
+  
+
   /// Convenience method to check if login was successful
   Future<bool> isLoginSuccessful(LoginRequest loginRequest) async {
     final response = await login(loginRequest);
@@ -78,4 +94,5 @@ class AuthRepo {
     final response = await resetPassword(newPassword);
     return response.data != null;
   }
+ 
 }
