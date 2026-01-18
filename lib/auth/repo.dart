@@ -62,14 +62,18 @@ class AuthRepo {
     return await _api.requestPasswordResetOTP(requestPasswordResetOTP);
   }
 
-  /// Verify OTP and reset password
-  Future<NetworkResponse<Message>> verifyPasswordResetOTP(
-    VerifyPasswordResetOTP verifyPasswordResetOTP,
-  ) async {
+  /// Verify OTP and get reset token
+  Future<NetworkResponse<VerifyPasswordResetOTPResponse>>
+  verifyPasswordResetOTP(VerifyPasswordResetOTP verifyPasswordResetOTP) async {
     return await _api.verifyPasswordResetOTP(verifyPasswordResetOTP);
   }
 
-  
+  /// Reset password with reset token (3-step OTP flow - Step 3)
+  Future<NetworkResponse<Message>> confirmPasswordReset(
+    ConfirmPasswordReset confirmPasswordReset,
+  ) async {
+    return await _api.confirmPasswordReset(confirmPasswordReset);
+  }
 
   /// Convenience method to check if login was successful
   Future<bool> isLoginSuccessful(LoginRequest loginRequest) async {
@@ -94,5 +98,28 @@ class AuthRepo {
     final response = await resetPassword(newPassword);
     return response.data != null;
   }
- 
+
+  /// Convenience method to check if OTP request was successful (3-step OTP flow - Step 1)
+  Future<bool> isPasswordResetOTPRequestSuccessful(
+    RequestPasswordResetOTP request,
+  ) async {
+    final response = await requestPasswordResetOTP(request);
+    return response.data != null;
+  }
+
+  /// Convenience method to check if OTP verification was successful (3-step OTP flow - Step 2)
+  Future<bool> isPasswordResetOTPVerificationSuccessful(
+    VerifyPasswordResetOTP verify,
+  ) async {
+    final response = await verifyPasswordResetOTP(verify);
+    return response.data != null && response.data!.resetToken != null;
+  }
+
+  /// Convenience method to check if password confirm reset was successful (3-step OTP flow - Step 3)
+  Future<bool> isPasswordConfirmResetSuccessful(
+    ConfirmPasswordReset confirm,
+  ) async {
+    final response = await confirmPasswordReset(confirm);
+    return response.data != null;
+  }
 }

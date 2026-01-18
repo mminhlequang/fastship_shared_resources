@@ -6,5 +6,7 @@ export 'refresh_token_request.dart';
 export 'new_password.dart';
 export 'request_password_reset_otp.dart';
 export 'verify_password_reset_otp.dart';
+export 'verify_password_reset_otp_response.dart';
+export 'confirm_password_reset.dart';
 export 'message.dart';
 export 'http_validation_error.dart';

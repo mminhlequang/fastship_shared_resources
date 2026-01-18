@@ -1,4 +1,4 @@
-import 'package:internal_core/network/network.dart'; 
+import 'package:internal_core/network/network.dart';
 
 import 'package:internal_core/network/network_resources/resources.dart';
 import 'package:dio/dio.dart';
@@ -19,6 +19,7 @@ class _AuthEndpoint {
       "/api/v1/auth/password-reset-otp/request";
   static String verifyPasswordResetOTP() =>
       "/api/v1/auth/password-reset-otp/verify";
+  static String confirmPasswordReset() => "/api/v1/auth/password-reset/confirm";
 }
 
 abstract class AuthApi {
@@ -39,8 +40,10 @@ abstract class AuthApi {
   Future<NetworkResponse<Message>> requestPasswordResetOTP(
     RequestPasswordResetOTP requestPasswordResetOTP,
   );
-  Future<NetworkResponse<Message>> verifyPasswordResetOTP(
-    VerifyPasswordResetOTP verifyPasswordResetOTP,
+  Future<NetworkResponse<VerifyPasswordResetOTPResponse>>
+  verifyPasswordResetOTP(VerifyPasswordResetOTP verifyPasswordResetOTP);
+  Future<NetworkResponse<Message>> confirmPasswordReset(
+    ConfirmPasswordReset confirmPasswordReset,
   );
 }
 
@@ -169,14 +172,31 @@ class AuthApiImpl extends AuthApi {
   }
 
   @override
-  Future<NetworkResponse<Message>> verifyPasswordResetOTP(
-    VerifyPasswordResetOTP verifyPasswordResetOTP,
-  ) async {
+  Future<NetworkResponse<VerifyPasswordResetOTPResponse>>
+  verifyPasswordResetOTP(VerifyPasswordResetOTP verifyPasswordResetOTP) async {
     return await handleNetworkError(
       proccess: () async {
         Response response = await AppClient().post(
           _AuthEndpoint.verifyPasswordResetOTP(),
           data: verifyPasswordResetOTP.toJson(),
+        );
+        return NetworkResponse.fromResponse(
+          response,
+          converter: (json) => VerifyPasswordResetOTPResponse.fromJson(json),
+        );
+      },
+    );
+  }
+
+  @override
+  Future<NetworkResponse<Message>> confirmPasswordReset(
+    ConfirmPasswordReset confirmPasswordReset,
+  ) async {
+    return await handleNetworkError(
+      proccess: () async {
+        Response response = await AppClient().post(
+          _AuthEndpoint.confirmPasswordReset(),
+          data: confirmPasswordReset.toJson(),
         );
         return NetworkResponse.fromResponse(
           response,
