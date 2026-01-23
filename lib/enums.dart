@@ -10,9 +10,8 @@ const String stripePublishableKey =
     // kDebugMode || kProfileMode
     //     ?
     // "pk_test_51S60pd4zut6r6rN5APa2tSLo0alGOPaUOzoMQoGrgQkw1lmK7Fzc3FoN5kJpHl9J5hfyxJytM2P6yqho6MsPy43W00uLdIJxn2"
-// :
-"pk_live_51QSzj8G67xsdbExOREzmoWHdDCxGDlylVrXX1nwpiKW8ylSoBH0fqUMPErlQUmmDClzJc6N5aebfKTN4ujUEbYS600YEC6swxf"
-;
+    // :
+    "pk_live_51QSzj8G67xsdbExOREzmoWHdDCxGDlylVrXX1nwpiKW8ylSoBH0fqUMPErlQUmmDClzJc6N5aebfKTN4ujUEbYS600YEC6swxf";
 
 const String appMessengerUrl = "https://m.me/fastship.vn";
 const String appWhatsappUrl = "https://wa.me/84909090909";
@@ -26,10 +25,7 @@ const String appCurrency = "HUF";
 const String appCurrencySymbol = "Ft";
 
 String get appMapUrlTemplate =>
-    kDebugMode ?
-    appMapUrlTemplateGg
- : appMapUrlTemplateHERE
-;
+    kDebugMode ? appMapUrlTemplateGg : appMapUrlTemplateHERE;
 
 const String hereMapApiKey = "HxCn0uXDho1pV2wM59D_QWzCgPtWB_E5aIiqIdnBnV0";
 String get appMapUrlTemplateHERE =>
@@ -523,4 +519,150 @@ enum CommonAssetType {
 
   final String value;
   const CommonAssetType(this.value);
+}
+
+/// Enum mô tả loại giao dịch ví (mã loại giao dịch <= 20 ký tự)
+enum WalletTransactionType {
+  /// Thanh toán nhận được
+  paymentReceived('pay_in'),
+
+  /// Phân phối thanh toán
+  paymentDistribution('dist_out'),
+
+  /// Hoa hồng
+  commission('comm'),
+
+  /// Thanh toán nhà hàng
+  restaurantPayment('rest_in'),
+
+  /// Khấu trừ thanh toán tiền mặt
+  cashPaymentDeduction('cash_out'),
+
+  /// Khấu trừ thanh toán ví
+  walletPaymentDeduction('wall_out'),
+
+  /// Thanh toán rút
+  payout('payout'),
+
+  /// Nạp tiền
+  topup('topup'),
+
+  /// Hoàn tiền
+  refund('refund'),
+
+  /// Driver nhận phí giao hàng
+  driverPayment('driver_pay'),
+
+  /// Khấu trừ hoa hồng nhà hàng
+  commissionDeduction('comm_deduct');
+
+  final String value;
+  const WalletTransactionType(this.value);
+
+  /// Parse từ string value về enum
+  static WalletTransactionType? fromValue(String? value) {
+    if (value == null) return null;
+    try {
+      return WalletTransactionType.values.firstWhere(
+        (type) => type.value == value,
+      );
+    } catch (e) {
+      return null;
+    }
+  }
+
+  /// Trả về tên hiển thị cho từng loại giao dịch
+  String get displayName {
+    switch (this) {
+      case WalletTransactionType.paymentReceived:
+        return 'Payment Received';
+      case WalletTransactionType.paymentDistribution:
+        return 'Payment Distribution';
+      case WalletTransactionType.commission:
+        return 'Platform Commission';
+      case WalletTransactionType.restaurantPayment:
+        return 'Order Payment';
+      case WalletTransactionType.cashPaymentDeduction:
+        return 'Cash Payment Deduction';
+      case WalletTransactionType.walletPaymentDeduction:
+        return 'Wallet Payment Deduction';
+      case WalletTransactionType.payout:
+        return 'Withdrawal';
+      case WalletTransactionType.topup:
+        return 'Top Up';
+      case WalletTransactionType.refund:
+        return 'Refund';
+      case WalletTransactionType.driverPayment:
+        return 'Driver Payment';
+      case WalletTransactionType.commissionDeduction:
+        return 'Commission Deduction';
+    }
+  }
+
+  /// Trả về icon đại diện cho từng loại giao dịch
+  IconData get icon {
+    switch (this) {
+      case WalletTransactionType.paymentReceived:
+      case WalletTransactionType.restaurantPayment:
+        return FontAwesomeIcons.bagShopping;
+      case WalletTransactionType.paymentDistribution:
+        return FontAwesomeIcons.arrowsSplitUpAndLeft;
+      case WalletTransactionType.commission:
+      case WalletTransactionType.commissionDeduction:
+        return FontAwesomeIcons.percent;
+      case WalletTransactionType.cashPaymentDeduction:
+      case WalletTransactionType.walletPaymentDeduction:
+        return FontAwesomeIcons.moneyBillWave;
+      case WalletTransactionType.payout:
+        return FontAwesomeIcons.moneyBillTransfer;
+      case WalletTransactionType.topup:
+        return FontAwesomeIcons.plus;
+      case WalletTransactionType.refund:
+        return FontAwesomeIcons.arrowRotateLeft;
+      case WalletTransactionType.driverPayment:
+        return FontAwesomeIcons.motorcycle;
+    }
+  }
+
+  /// Trả về màu sắc đại diện cho từng loại giao dịch
+  Color get color {
+    switch (this) {
+      case WalletTransactionType.paymentReceived:
+      case WalletTransactionType.restaurantPayment:
+      case WalletTransactionType.topup:
+        return Colors.green;
+      case WalletTransactionType.paymentDistribution:
+        return Colors.blue;
+      case WalletTransactionType.commission:
+      case WalletTransactionType.commissionDeduction:
+        return Colors.deepPurple;
+      case WalletTransactionType.cashPaymentDeduction:
+      case WalletTransactionType.walletPaymentDeduction:
+        return Colors.orange;
+      case WalletTransactionType.payout:
+        return Colors.amber;
+      case WalletTransactionType.refund:
+        return Colors.red;
+      case WalletTransactionType.driverPayment:
+        return Colors.teal;
+    }
+  }
+
+  /// Kiểm tra xem giao dịch có phải là thu nhập không
+  bool get isIncome {
+    switch (this) {
+      case WalletTransactionType.paymentReceived:
+      case WalletTransactionType.restaurantPayment:
+      case WalletTransactionType.topup:
+      case WalletTransactionType.refund:
+        return true;
+      default:
+        return false;
+    }
+  }
+
+  /// Kiểm tra xem giao dịch có phải là chi phí không
+  bool get isExpense {
+    return !isIncome;
+  }
 }

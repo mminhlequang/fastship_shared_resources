@@ -373,6 +373,7 @@ class DriverInfo {
   final String? id;
   final String? fullName;
   final String? phone;
+  final String? email;
   final String? avatarUrl;
   final bool? isOnline;
   final bool? isAvailable;
@@ -383,6 +384,7 @@ class DriverInfo {
     this.id,
     this.fullName,
     this.phone,
+    this.email,
     this.avatarUrl,
     this.isOnline,
     this.isAvailable,
@@ -395,6 +397,7 @@ class DriverInfo {
       id: json['id'] as String?,
       fullName: json['full_name'] as String?,
       phone: json['phone'] as String?,
+      email: json['email'] as String?,
       avatarUrl: json['avatar_url'] as String?,
       isOnline: json['is_online'] as bool?,
       isAvailable: json['is_available'] as bool?,
@@ -411,6 +414,7 @@ class DriverInfo {
       'id': id,
       'full_name': fullName,
       'phone': phone,
+      'email': email,
       'avatar_url': avatarUrl,
       'is_online': isOnline,
       'is_available': isAvailable,
