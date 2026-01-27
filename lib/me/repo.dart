@@ -96,4 +96,39 @@ class MeRepo {
   Future<NetworkResponse<Message>> unlinkSocialAccount(String provider) async {
     return await _api.unlinkSocialAccount(provider);
   }
+
+  /// Step 1: Request OTP for email update
+  Future<NetworkResponse<Message>> requestUpdateEmailOTP(
+    RequestUpdateEmailOTP request,
+  ) async {
+    return await _api.requestUpdateEmailOTP(request);
+  }
+
+  /// Step 2: Verify OTP and get confirmation token
+  Future<NetworkResponse<EmailUpdateTokenResponse>> verifyUpdateEmailOTP(
+    VerifyUpdateEmailOTP verify,
+  ) async {
+    return await _api.verifyUpdateEmailOTP(verify);
+  }
+
+  /// Step 3: Confirm email update with token
+  Future<NetworkResponse<Message>> confirmUpdateEmail(
+    ConfirmUpdateEmail confirm,
+  ) async {
+    return await _api.confirmUpdateEmail(confirm);
+  }
+
+  /// Check if phone number is available for update
+  Future<NetworkResponse<PhoneAvailabilityResponse>> checkPhoneAvailability(
+    RequestUpdatePhoneCheck request,
+  ) async {
+    return await _api.checkPhoneAvailability(request);
+  }
+
+  /// Confirm phone update with Firebase ID token
+  Future<NetworkResponse<Message>> confirmUpdatePhone(
+    ConfirmUpdatePhone confirm,
+  ) async {
+    return await _api.confirmUpdatePhone(confirm);
+  }
 }

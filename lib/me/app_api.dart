@@ -20,6 +20,12 @@ class _UsersEndpoint {
   static String getMySocialAccounts() => "/api/v1/me/social/accounts";
   static String unlinkSocialAccount(String provider) =>
       "/api/v1/me/social/$provider";
+  static String requestUpdateEmailOTP() =>
+      "/api/v1/me/update-email/otp-request";
+  static String verifyUpdateEmailOTP() => "/api/v1/me/update-email/otp-verify";
+  static String confirmUpdateEmail() => "/api/v1/me/update-email/confirm";
+  static String checkPhoneAvailability() => "/api/v1/me/update-phone/check";
+  static String confirmUpdatePhone() => "/api/v1/me/update-phone/confirm";
 }
 
 abstract class UsersApi {
@@ -70,6 +76,33 @@ abstract class UsersApi {
 
   // Unlink social account
   Future<NetworkResponse<Message>> unlinkSocialAccount(String provider);
+
+  // Email Update Flow (OTP-based - 3 steps)
+  // Step 1: Request OTP for email update
+  Future<NetworkResponse<Message>> requestUpdateEmailOTP(
+    RequestUpdateEmailOTP request,
+  );
+
+  // Step 2: Verify OTP and get confirmation token
+  Future<NetworkResponse<EmailUpdateTokenResponse>> verifyUpdateEmailOTP(
+    VerifyUpdateEmailOTP verify,
+  );
+
+  // Step 3: Confirm email update with token
+  Future<NetworkResponse<Message>> confirmUpdateEmail(
+    ConfirmUpdateEmail confirm,
+  );
+
+  // Phone Update Flow
+  // Check phone availability
+  Future<NetworkResponse<PhoneAvailabilityResponse>> checkPhoneAvailability(
+    RequestUpdatePhoneCheck request,
+  );
+
+  // Confirm phone update with Firebase ID token
+  Future<NetworkResponse<Message>> confirmUpdatePhone(
+    ConfirmUpdatePhone confirm,
+  );
 }
 
 class UsersApiImpl extends UsersApi {
@@ -294,6 +327,91 @@ class UsersApiImpl extends UsersApi {
         Response response = await AppClient(
           token: await appPrefs.getNormalToken(),
         ).delete(_UsersEndpoint.unlinkSocialAccount(provider));
+        return NetworkResponse.fromResponse(
+          response,
+          converter: (json) => Message.fromJson(json),
+        );
+      },
+    );
+  }
+
+  @override
+  Future<NetworkResponse<Message>> requestUpdateEmailOTP(
+    RequestUpdateEmailOTP request,
+  ) async {
+    return await handleNetworkError(
+      proccess: () async {
+        Response response = await AppClient(
+          token: await appPrefs.getNormalToken(),
+        ).post(_UsersEndpoint.requestUpdateEmailOTP(), data: request.toJson());
+        return NetworkResponse.fromResponse(
+          response,
+          converter: (json) => Message.fromJson(json),
+        );
+      },
+    );
+  }
+
+  @override
+  Future<NetworkResponse<EmailUpdateTokenResponse>> verifyUpdateEmailOTP(
+    VerifyUpdateEmailOTP verify,
+  ) async {
+    return await handleNetworkError(
+      proccess: () async {
+        Response response = await AppClient(
+          token: await appPrefs.getNormalToken(),
+        ).post(_UsersEndpoint.verifyUpdateEmailOTP(), data: verify.toJson());
+        return NetworkResponse.fromResponse(
+          response,
+          converter: (json) => EmailUpdateTokenResponse.fromJson(json),
+        );
+      },
+    );
+  }
+
+  @override
+  Future<NetworkResponse<Message>> confirmUpdateEmail(
+    ConfirmUpdateEmail confirm,
+  ) async {
+    return await handleNetworkError(
+      proccess: () async {
+        Response response = await AppClient(
+          token: await appPrefs.getNormalToken(),
+        ).post(_UsersEndpoint.confirmUpdateEmail(), data: confirm.toJson());
+        return NetworkResponse.fromResponse(
+          response,
+          converter: (json) => Message.fromJson(json),
+        );
+      },
+    );
+  }
+
+  @override
+  Future<NetworkResponse<PhoneAvailabilityResponse>> checkPhoneAvailability(
+    RequestUpdatePhoneCheck request,
+  ) async {
+    return await handleNetworkError(
+      proccess: () async {
+        Response response = await AppClient(
+          token: await appPrefs.getNormalToken(),
+        ).post(_UsersEndpoint.checkPhoneAvailability(), data: request.toJson());
+        return NetworkResponse.fromResponse(
+          response,
+          converter: (json) => PhoneAvailabilityResponse.fromJson(json),
+        );
+      },
+    );
+  }
+
+  @override
+  Future<NetworkResponse<Message>> confirmUpdatePhone(
+    ConfirmUpdatePhone confirm,
+  ) async {
+    return await handleNetworkError(
+      proccess: () async {
+        Response response = await AppClient(
+          token: await appPrefs.getNormalToken(),
+        ).post(_UsersEndpoint.confirmUpdatePhone(), data: confirm.toJson());
         return NetworkResponse.fromResponse(
           response,
           converter: (json) => Message.fromJson(json),
