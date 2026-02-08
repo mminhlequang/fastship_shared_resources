@@ -5,17 +5,17 @@ import 'app_api.dart';
 import 'models/models.dart';
 import '../models/models.dart';
 
-class DriversRepo {
-  DriversRepo._();
-  static DriversRepo? _instance;
+class AdminDriversRepo {
+  AdminDriversRepo._();
+  static AdminDriversRepo? _instance;
 
-  factory DriversRepo([DriversApi? api]) {
-    _instance ??= DriversRepo._();
+  factory AdminDriversRepo([AdminDriversApi? api]) {
+    _instance ??= AdminDriversRepo._();
     _instance!._api = api ?? DriversApiImpl();
     return _instance!;
   }
 
-  late DriversApi _api;
+  late AdminDriversApi _api;
 
   Future<NetworkResponse<UnifiedUserResponse>> createDriverAdmin(
     DriverCreate create,
@@ -24,47 +24,27 @@ class DriversRepo {
   Future<NetworkResponse<ListResponse<UnifiedUserResponse>>> getDriversAdmin({
     int offset = 0,
     int limit = 100,
-    String? type,
-    int? driverOrgId,
-    String? onboardingStatus,
-    String? gender,
-    String? nationality,
-    bool? isActive,
-    bool? isAvailable,
-    bool? isOnline,
-    num? minRating,
-    num? maxRating,
-    int? minOrders,
-    int? maxOrders,
-    int? minEarnings,
-    int? maxEarnings,
     String? search,
-    String? createdAfter,
-    String? createdBefore,
-    String? lastActivityAfter,
-    String? lastActivityBefore,
+    bool? isOnline,
+    bool? isAvailable,
+    bool? isActive,
+    int? driverOrgId,
+    num? minRating,
+    num? centerLat,
+    num? centerLng,
+    num? radiusKm,
   }) => _api.getDriversAdmin(
     offset: offset,
     limit: limit,
-    type: type,
-    driverOrgId: driverOrgId,
-    onboardingStatus: onboardingStatus,
-    gender: gender,
-    nationality: nationality,
-    isActive: isActive,
-    isAvailable: isAvailable,
-    isOnline: isOnline,
-    minRating: minRating,
-    maxRating: maxRating,
-    minOrders: minOrders,
-    maxOrders: maxOrders,
-    minEarnings: minEarnings,
-    maxEarnings: maxEarnings,
     search: search,
-    createdAfter: createdAfter,
-    createdBefore: createdBefore,
-    lastActivityAfter: lastActivityAfter,
-    lastActivityBefore: lastActivityBefore,
+    isOnline: isOnline,
+    isAvailable: isAvailable,
+    isActive: isActive,
+    driverOrgId: driverOrgId,
+    minRating: minRating,
+    centerLat: centerLat,
+    centerLng: centerLng,
+    radiusKm: radiusKm,
   );
 
   Future<NetworkResponse<UnifiedUserResponse>> getDriverAdmin(int driverId) =>

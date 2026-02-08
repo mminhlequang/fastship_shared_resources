@@ -21,9 +21,9 @@ class OrdersRepo {
     CheckoutRequest request,
   ) => _api.calculateCheckout(request);
 
-  Future<NetworkResponse<CheckoutResponse>> processCheckout(
-    CheckoutRequest request,
-  ) => _api.processCheckout(request);
+  // Future<NetworkResponse<CheckoutResponse>> processCheckout(
+  //   CheckoutRequest request,
+  // ) => _api.processCheckout(request);
 
 
   Future<NetworkResponse<CheckoutResponse>> processCheckoutV2(
@@ -42,6 +42,7 @@ class OrdersRepo {
     String? customerId,
     int? restaurantId,
     String? driverId,
+    int? driverOrgId,
     String? status,
     String? statusIn, //List of statuses separated by ,
     String? paymentStatus,
@@ -52,6 +53,7 @@ class OrdersRepo {
     customerId: customerId,
     restaurantId: restaurantId,
     driverId: driverId,
+    driverOrgId: driverOrgId,
     status: status,
     statusIn: statusIn,
     paymentStatus: paymentStatus,

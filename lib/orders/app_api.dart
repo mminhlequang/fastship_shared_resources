@@ -63,6 +63,7 @@ abstract class OrdersApi {
     String? customerId,
     int? restaurantId,
     String? driverId,
+    int? driverOrgId,
     String? status,
     String? statusIn, //List of statuses separated by ,
     String? paymentStatus,
@@ -184,6 +185,7 @@ class OrdersApiImpl extends OrdersApi {
     String? customerId,
     int? restaurantId,
     String? driverId,
+    int? driverOrgId,
     String? status,
     String? statusIn, //List of statuses separated by ,
     String? paymentStatus,
@@ -197,6 +199,7 @@ class OrdersApiImpl extends OrdersApi {
         if (customerId != null) queryParams['customer_id'] = customerId;
         if (restaurantId != null) queryParams['restaurant_id'] = restaurantId;
         if (driverId != null) queryParams['driver_id'] = driverId;
+        if (driverOrgId != null) queryParams['driver_org_id'] = driverOrgId;
         if (status != null) queryParams['status'] = status;
         if (statusIn != null) queryParams['status_in'] = statusIn;
         if (paymentStatus != null)

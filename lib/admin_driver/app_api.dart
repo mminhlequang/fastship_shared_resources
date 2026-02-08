@@ -7,14 +7,14 @@ import '../admin/models/models.dart';
 import '../models/list_response.dart';
 import 'models/models.dart';
 
-class _DriversEndpoint {
-  _DriversEndpoint._();
+class _AdminDriversEndpoint {
+  _AdminDriversEndpoint._();
 
   static String base() => "/api/v1/admin/drivers/";
   static String byId(int driverId) => "/api/v1/admin/drivers/$driverId";
 }
 
-abstract class DriversApi {
+abstract class AdminDriversApi {
   Future<NetworkResponse<UnifiedUserResponse>> createDriverAdmin(
     DriverCreate create,
   );
@@ -22,25 +22,15 @@ abstract class DriversApi {
   Future<NetworkResponse<ListResponse<UnifiedUserResponse>>> getDriversAdmin({
     int offset,
     int limit,
-    String? type,
-    int? driverOrgId,
-    String? onboardingStatus,
-    String? gender,
-    String? nationality,
-    bool? isActive,
-    bool? isAvailable,
-    bool? isOnline,
-    num? minRating,
-    num? maxRating,
-    int? minOrders,
-    int? maxOrders,
-    int? minEarnings,
-    int? maxEarnings,
     String? search,
-    String? createdAfter,
-    String? createdBefore,
-    String? lastActivityAfter,
-    String? lastActivityBefore,
+    bool? isOnline,
+    bool? isAvailable,
+    bool? isActive,
+    int? driverOrgId,
+    num? minRating,
+    num? centerLat,
+    num? centerLng,
+    num? radiusKm,
   });
 
   Future<NetworkResponse<UnifiedUserResponse>> getDriverAdmin(int driverId);
@@ -53,7 +43,7 @@ abstract class DriversApi {
   Future<NetworkResponse<void>> deleteDriverAdmin(int driverId);
 }
 
-class DriversApiImpl extends DriversApi {
+class DriversApiImpl extends AdminDriversApi {
   @override
   Future<NetworkResponse<UnifiedUserResponse>> createDriverAdmin(
     DriverCreate create,
@@ -62,7 +52,7 @@ class DriversApiImpl extends DriversApi {
       proccess: () async {
         final response = await AppClient(
           token: await appPrefs.getNormalToken(),
-        ).post(_DriversEndpoint.base(), data: create.toJson());
+        ).post(_AdminDriversEndpoint.base(), data: create.toJson());
         return NetworkResponse.fromResponse(
           response,
           converter: (json) => UnifiedUserResponse.fromJson(json),
@@ -75,25 +65,15 @@ class DriversApiImpl extends DriversApi {
   Future<NetworkResponse<ListResponse<UnifiedUserResponse>>> getDriversAdmin({
     int offset = 0,
     int limit = 100,
-    String? type,
-    int? driverOrgId,
-    String? onboardingStatus,
-    String? gender,
-    String? nationality,
-    bool? isActive,
-    bool? isAvailable,
-    bool? isOnline,
-    num? minRating,
-    num? maxRating,
-    int? minOrders,
-    int? maxOrders,
-    int? minEarnings,
-    int? maxEarnings,
     String? search,
-    String? createdAfter,
-    String? createdBefore,
-    String? lastActivityAfter,
-    String? lastActivityBefore,
+    bool? isOnline,
+    bool? isAvailable,
+    bool? isActive,
+    int? driverOrgId,
+    num? minRating,
+    num? centerLat,
+    num? centerLng,
+    num? radiusKm,
   }) async {
     return await handleNetworkError(
       proccess: () async {
@@ -102,29 +82,19 @@ class DriversApiImpl extends DriversApi {
           if (v != null) params[k] = v;
         }
 
-        put('type', type);
-        put('driver_org_id', driverOrgId);
-        put('onboarding_status', onboardingStatus);
-        put('gender', gender);
-        put('nationality', nationality);
-        put('is_active', isActive);
-        put('is_available', isAvailable);
-        put('is_online', isOnline);
-        put('min_rating', minRating);
-        put('max_rating', maxRating);
-        put('min_orders', minOrders);
-        put('max_orders', maxOrders);
-        put('min_earnings', minEarnings);
-        put('max_earnings', maxEarnings);
         put('search', search);
-        put('created_after', createdAfter);
-        put('created_before', createdBefore);
-        put('last_activity_after', lastActivityAfter);
-        put('last_activity_before', lastActivityBefore);
+        put('is_online', isOnline);
+        put('is_available', isAvailable);
+        put('is_active', isActive);
+        put('driver_org_id', driverOrgId);
+        put('min_rating', minRating);
+        put('center_lat', centerLat);
+        put('center_lng', centerLng);
+        put('radius_km', radiusKm);
 
         final response = await AppClient(
           token: await appPrefs.getNormalToken(),
-        ).get(_DriversEndpoint.base(), queryParameters: params);
+        ).get(_AdminDriversEndpoint.base(), queryParameters: params);
 
         return NetworkResponse.fromResponse(
           response,
@@ -148,7 +118,7 @@ class DriversApiImpl extends DriversApi {
       proccess: () async {
         final response = await AppClient(
           token: await appPrefs.getNormalToken(),
-        ).get(_DriversEndpoint.byId(driverId));
+        ).get(_AdminDriversEndpoint.byId(driverId));
         return NetworkResponse.fromResponse(
           response,
           converter: (json) => UnifiedUserResponse.fromJson(json),
@@ -166,7 +136,7 @@ class DriversApiImpl extends DriversApi {
       proccess: () async {
         final response = await AppClient(
           token: await appPrefs.getNormalToken(),
-        ).put(_DriversEndpoint.byId(driverId), data: update.toJson());
+        ).put(_AdminDriversEndpoint.byId(driverId), data: update.toJson());
         return NetworkResponse.fromResponse(
           response,
           converter: (json) => UnifiedUserResponse.fromJson(json),
@@ -181,7 +151,7 @@ class DriversApiImpl extends DriversApi {
       proccess: () async {
         final response = await AppClient(
           token: await appPrefs.getNormalToken(),
-        ).delete(_DriversEndpoint.byId(driverId));
+        ).delete(_AdminDriversEndpoint.byId(driverId));
         return NetworkResponse.fromResponse(response, converter: (_) => null);
       },
     );

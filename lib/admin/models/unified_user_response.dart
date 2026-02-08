@@ -278,8 +278,8 @@ class UserDriverInfo {
   bool? isActive;
   bool? isAvailable;
   bool? isOnline;
-  int? currentLocationLatitude;
-  int? currentLocationLongitude;
+  double? currentLocationLatitude;
+  double? currentLocationLongitude;
   String? lastLocationUpdate;
   String? lastActivity;
   String? createdAt;
@@ -399,10 +399,10 @@ class UserDriverInfo {
     if (json["is_online"] is bool) {
       isOnline = json["is_online"];
     }
-    if (json["current_location_latitude"] is int) {
+    if (json["current_location_latitude"] is double) {
       currentLocationLatitude = json["current_location_latitude"];
     }
-    if (json["current_location_longitude"] is int) {
+    if (json["current_location_longitude"] is double) {
       currentLocationLongitude = json["current_location_longitude"];
     }
     if (json["last_location_update"] is String) {

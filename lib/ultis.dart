@@ -1,5 +1,10 @@
 part of 'shared_resources.dart';
 
+String? uuidShort(String? uuid) {
+  if (uuid == null) return null;
+  return uuid.substring(0, 8);
+}
+
 double getCurrencyValue(String value) {
   var amount = 0.0;
   final cleanedText = value.replaceAll(RegExp(r'[^\d.]'), '');

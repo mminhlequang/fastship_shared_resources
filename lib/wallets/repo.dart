@@ -28,18 +28,36 @@ class WalletsRepo {
     restaurantId: restaurantId,
   );
 
+  Future<NetworkResponse<ListResponse<WalletResponse>>> getAllWallets({
+    int offset = 0,
+    int limit = 100,
+    String? type,
+    int? driverOrgId,
+    int? minBalance,
+  }) => _api.getAllWallets(
+    offset: offset,
+    limit: limit,
+    type: type,
+    driverOrgId: driverOrgId,
+    minBalance: minBalance,
+  );
+
   Future<NetworkResponse<ListResponse<WalletTransactionResponse>>>
   getTransactions({
+    String? walletId,
     String? customerId,
     String? driverId,
+    int? driverOrgId,
     int? restaurantId,
     String? transactionType,
     String? orderId,
     int? offset,
     int? limit,
   }) => _api.getTransactions(
+    walletId: walletId,
     customerId: customerId,
     driverId: driverId,
+    driverOrgId: driverOrgId,
     restaurantId: restaurantId,
     transactionType: transactionType,
     orderId: orderId,

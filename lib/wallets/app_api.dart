@@ -12,6 +12,7 @@ class _WalletsEndpoint {
 
   // User APIs
   static String getWallet() => "/api/v1/wallets/get";
+  static String getAllWallets() => "/api/v1/wallets/get_all";
   static String getTransactions() => "/api/v1/wallets/transactions";
   static String createTopupCheckoutSession() =>
       "/api/v1/wallets/topup/create-checkout-session";
@@ -38,10 +39,19 @@ abstract class WalletsApi {
     String? driverId,
     int? restaurantId,
   });
+  Future<NetworkResponse<ListResponse<WalletResponse>>> getAllWallets({
+    int offset,
+    int limit,
+    String? type,
+    int? driverOrgId,
+    int? minBalance,
+  });
   Future<NetworkResponse<ListResponse<WalletTransactionResponse>>>
   getTransactions({
+    String? walletId,
     String? customerId,
     String? driverId,
+    int? driverOrgId,
     int? restaurantId,
     String? transactionType,
     String? orderId,
@@ -130,10 +140,42 @@ class WalletsApiImpl extends WalletsApi {
   }
 
   @override
+  Future<NetworkResponse<ListResponse<WalletResponse>>> getAllWallets({
+    int offset = 0,
+    int limit = 100,
+    String? type,
+    int? driverOrgId,
+    int? minBalance,
+  }) async {
+    return await handleNetworkError(
+      proccess: () async {
+        final queryParams = <String, dynamic>{'offset': offset, 'limit': limit};
+        if (type != null) queryParams['type'] = type;
+        if (driverOrgId != null) queryParams['driver_org_id'] = driverOrgId;
+        if (minBalance != null) queryParams['min_balance'] = minBalance;
+
+        final response = await AppClient(
+          token: await appPrefs.getNormalToken(),
+        ).get(_WalletsEndpoint.getAllWallets(), queryParameters: queryParams);
+        return NetworkResponse.fromResponse(
+          response,
+          converter:
+              (json) => ListResponse<WalletResponse>.fromJson(
+                json,
+                (item) => WalletResponse.fromJson(item),
+              ),
+        );
+      },
+    );
+  }
+
+  @override
   Future<NetworkResponse<ListResponse<WalletTransactionResponse>>>
   getTransactions({
+    String? walletId,
     String? customerId,
     String? driverId,
+    int? driverOrgId,
     int? restaurantId,
     String? transactionType,
     String? orderId,
@@ -143,8 +185,10 @@ class WalletsApiImpl extends WalletsApi {
     return await handleNetworkError(
       proccess: () async {
         final queryParams = <String, dynamic>{};
+        if (walletId != null) queryParams['wallet_id'] = walletId;
         if (customerId != null) queryParams['customer_id'] = customerId;
         if (driverId != null) queryParams['driver_id'] = driverId;
+        if (driverOrgId != null) queryParams['driver_org_id'] = driverOrgId;
         if (restaurantId != null) queryParams['restaurant_id'] = restaurantId;
         if (transactionType != null)
           queryParams['transaction_type'] = transactionType;
