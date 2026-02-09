@@ -210,7 +210,8 @@ class CouponCreateInput {
     data['discount_value'] = discountValue;
     if (maxDiscount != null) data['max_discount'] = maxDiscount;
     if (usageLimit != null) data['usage_limit'] = usageLimit;
-    if (usageLimitPerUser != null) data['usage_limit_per_user'] = usageLimitPerUser;
+    if (usageLimitPerUser != null)
+      data['usage_limit_per_user'] = usageLimitPerUser;
     if (minOrderAmount != null) data['min_order_amount'] = minOrderAmount;
     data['applicable_on'] = applicableOn;
     data['created_by'] = createdBy;
@@ -289,7 +290,8 @@ class CouponUpdateInput {
     if (discountValue != null) data['discount_value'] = discountValue;
     if (maxDiscount != null) data['max_discount'] = maxDiscount;
     if (usageLimit != null) data['usage_limit'] = usageLimit;
-    if (usageLimitPerUser != null) data['usage_limit_per_user'] = usageLimitPerUser;
+    if (usageLimitPerUser != null)
+      data['usage_limit_per_user'] = usageLimitPerUser;
     if (minOrderAmount != null) data['min_order_amount'] = minOrderAmount;
     if (applicableOn != null) data['applicable_on'] = applicableOn;
     if (validFrom != null) data['valid_from'] = validFrom;
@@ -352,9 +354,8 @@ class CouponValidationResponse {
 
   CouponValidationResponse.fromJson(Map<String, dynamic> json) {
     isValid = json['is_valid'];
-    coupon = json['coupon'] != null
-        ? CouponResponse.fromJson(json['coupon'])
-        : null;
+    coupon =
+        json['coupon'] != null ? CouponResponse.fromJson(json['coupon']) : null;
     discountAmount = json['discount_amount'];
     errorMessage = json['error_message'];
   }

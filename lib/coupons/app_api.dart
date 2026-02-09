@@ -32,25 +32,26 @@ abstract class CouponApi {
   });
   Future<NetworkResponse<CouponResponse>> getCouponById(String id);
   Future<NetworkResponse<CouponResponse>> updateCoupon(
-      String id, CouponUpdateInput input);
+    String id,
+    CouponUpdateInput input,
+  );
   Future<NetworkResponse<void>> deleteCoupon(String id);
   Future<NetworkResponse<CouponValidationResponse>> validateCoupon(
-      CouponValidationRequest input);
+    CouponValidationRequest input,
+  );
   Future<NetworkResponse<CouponUsageStats>> getCouponStatistics(String id);
 }
 
 class CouponApiImpl extends CouponApi {
   @override
   Future<NetworkResponse<CouponResponse>> createCoupon(
-      CouponCreateInput input) async {
+    CouponCreateInput input,
+  ) async {
     return await handleNetworkError(
       proccess: () async {
         final response = await AppClient(
           token: await appPrefs.getNormalToken(),
-        ).post(
-          _CouponEndpoint.coupons(),
-          data: input.toJson(),
-        );
+        ).post(_CouponEndpoint.coupons(), data: input.toJson());
         return NetworkResponse.fromResponse(
           response,
           converter: (json) => CouponResponse.fromJson(json),
@@ -69,26 +70,21 @@ class CouponApiImpl extends CouponApi {
   }) async {
     return await handleNetworkError(
       proccess: () async {
-        final params = <String, dynamic>{
-          'offset': offset,
-          'limit': limit,
-        };
+        final params = <String, dynamic>{'offset': offset, 'limit': limit};
         if (restaurantId != null) params['restaurant_id'] = restaurantId;
         if (createdBy != null) params['created_by'] = createdBy;
         if (isActive != null) params['is_active'] = isActive;
 
         final response = await AppClient(
           token: await appPrefs.getNormalToken(),
-        ).get(
-          _CouponEndpoint.coupons(),
-          queryParameters: params,
-        );
+        ).get(_CouponEndpoint.coupons(), queryParameters: params);
         return NetworkResponse.fromResponse(
           response,
-          converter: (json) => ListResponse.fromJson(
-            json,
-            (item) => CouponResponse.fromJson(item),
-          ),
+          converter:
+              (json) => ListResponse.fromJson(
+                json,
+                (item) => CouponResponse.fromJson(item),
+              ),
         );
       },
     );
@@ -102,24 +98,19 @@ class CouponApiImpl extends CouponApi {
   }) async {
     return await handleNetworkError(
       proccess: () async {
-        final params = <String, dynamic>{
-          'offset': offset,
-          'limit': limit,
-        };
+        final params = <String, dynamic>{'offset': offset, 'limit': limit};
         if (restaurantId != null) params['restaurant_id'] = restaurantId;
 
         final response = await AppClient(
           token: await appPrefs.getNormalToken(),
-        ).get(
-          _CouponEndpoint.activeCoupons(),
-          queryParameters: params,
-        );
+        ).get(_CouponEndpoint.activeCoupons(), queryParameters: params);
         return NetworkResponse.fromResponse(
           response,
-          converter: (json) => ListResponse.fromJson(
-            json,
-            (item) => CouponResponse.fromJson(item),
-          ),
+          converter:
+              (json) => ListResponse.fromJson(
+                json,
+                (item) => CouponResponse.fromJson(item),
+              ),
         );
       },
     );
@@ -142,15 +133,14 @@ class CouponApiImpl extends CouponApi {
 
   @override
   Future<NetworkResponse<CouponResponse>> updateCoupon(
-      String id, CouponUpdateInput input) async {
+    String id,
+    CouponUpdateInput input,
+  ) async {
     return await handleNetworkError(
       proccess: () async {
         final response = await AppClient(
           token: await appPrefs.getNormalToken(),
-        ).put(
-          _CouponEndpoint.couponDetail(id),
-          data: input.toJson(),
-        );
+        ).put(_CouponEndpoint.couponDetail(id), data: input.toJson());
         return NetworkResponse.fromResponse(
           response,
           converter: (json) => CouponResponse.fromJson(json),
@@ -173,15 +163,13 @@ class CouponApiImpl extends CouponApi {
 
   @override
   Future<NetworkResponse<CouponValidationResponse>> validateCoupon(
-      CouponValidationRequest input) async {
+    CouponValidationRequest input,
+  ) async {
     return await handleNetworkError(
       proccess: () async {
         final response = await AppClient(
           token: await appPrefs.getNormalToken(),
-        ).post(
-          _CouponEndpoint.validateCoupon(),
-          data: input.toJson(),
-        );
+        ).post(_CouponEndpoint.validateCoupon(), data: input.toJson());
         return NetworkResponse.fromResponse(
           response,
           converter: (json) => CouponValidationResponse.fromJson(json),
@@ -192,7 +180,8 @@ class CouponApiImpl extends CouponApi {
 
   @override
   Future<NetworkResponse<CouponUsageStats>> getCouponStatistics(
-      String id) async {
+    String id,
+  ) async {
     return await handleNetworkError(
       proccess: () async {
         final response = await AppClient(

@@ -18,8 +18,7 @@ class CouponRepo {
 
   Future<NetworkResponse<CouponResponse>> createCoupon(
     CouponCreateInput input,
-  ) =>
-      _api.createCoupon(input);
+  ) => _api.createCoupon(input);
 
   Future<NetworkResponse<ListResponse<CouponResponse>>> getCoupons({
     int offset = 0,
@@ -27,25 +26,23 @@ class CouponRepo {
     int? restaurantId,
     String? createdBy,
     bool? isActive,
-  }) =>
-      _api.getCoupons(
-        offset: offset,
-        limit: limit,
-        restaurantId: restaurantId,
-        createdBy: createdBy,
-        isActive: isActive,
-      );
+  }) => _api.getCoupons(
+    offset: offset,
+    limit: limit,
+    restaurantId: restaurantId,
+    createdBy: createdBy,
+    isActive: isActive,
+  );
 
   Future<NetworkResponse<ListResponse<CouponResponse>>> getActiveCoupons({
     int offset = 0,
     int limit = 100,
     int? restaurantId,
-  }) =>
-      _api.getActiveCoupons(
-        offset: offset,
-        limit: limit,
-        restaurantId: restaurantId,
-      );
+  }) => _api.getActiveCoupons(
+    offset: offset,
+    limit: limit,
+    restaurantId: restaurantId,
+  );
 
   Future<NetworkResponse<CouponResponse>> getCouponById(String id) =>
       _api.getCouponById(id);
@@ -53,16 +50,14 @@ class CouponRepo {
   Future<NetworkResponse<CouponResponse>> updateCoupon(
     String id,
     CouponUpdateInput input,
-  ) =>
-      _api.updateCoupon(id, input);
+  ) => _api.updateCoupon(id, input);
 
   Future<NetworkResponse<void>> deleteCoupon(String id) =>
       _api.deleteCoupon(id);
 
   Future<NetworkResponse<CouponValidationResponse>> validateCoupon(
     CouponValidationRequest input,
-  ) =>
-      _api.validateCoupon(input);
+  ) => _api.validateCoupon(input);
 
   Future<NetworkResponse<CouponUsageStats>> getCouponStatistics(String id) =>
       _api.getCouponStatistics(id);

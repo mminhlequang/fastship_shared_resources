@@ -21,9 +21,9 @@ class OrdersRepo {
     CheckoutRequest request,
   ) => _api.calculateCheckout(request);
 
-  // Future<NetworkResponse<CheckoutResponse>> processCheckout(
-  //   CheckoutRequest request,
-  // ) => _api.processCheckout(request);
+  Future<NetworkResponse<CheckoutResponse>> processCheckout(
+    CheckoutRequest request,
+  ) => _api.processCheckout(request);
 
 
   Future<NetworkResponse<CheckoutResponse>> processCheckoutV2(
