@@ -462,17 +462,19 @@ class CheckoutResponse {
   }
 }
 
-/// Response model cho V3 checkout (single cart - payment first)
+/// Response model cho V3 checkout (single cart)
 class CheckoutV3Response {
   final CheckoutCalculationV3Response? checkoutCalculation;
   final PaymentIntent? paymentIntent;
   final CheckoutSession? checkoutSession;
+  final OrderResponse? order;
   final String? message;
 
   CheckoutV3Response({
     this.checkoutCalculation,
     this.paymentIntent,
     this.checkoutSession,
+    this.order,
     this.message,
   });
 
@@ -492,6 +494,8 @@ class CheckoutV3Response {
           json['checkout_session'] != null
               ? CheckoutSession.fromJson(json['checkout_session'])
               : null,
+      order:
+          json['order'] != null ? OrderResponse.fromJson(json['order']) : null,
       message: json['message'] as String?,
     );
   }
@@ -501,6 +505,7 @@ class CheckoutV3Response {
       'checkout_calculation': checkoutCalculation?.toJson(),
       'payment_intent': paymentIntent?.toJson(),
       'checkout_session': checkoutSession?.toJson(),
+      'order': order?.toJson(),
       'message': message,
     };
   }

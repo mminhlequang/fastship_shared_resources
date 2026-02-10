@@ -25,7 +25,6 @@ class OrdersRepo {
     CheckoutRequest request,
   ) => _api.processCheckout(request);
 
-
   Future<NetworkResponse<CheckoutResponse>> processCheckoutV2(
     CheckoutRequest request,
   ) => _api.processCheckoutV2(request);
