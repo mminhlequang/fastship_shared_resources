@@ -19,16 +19,21 @@ class _CouponEndpoint {
 abstract class CouponApi {
   Future<NetworkResponse<CouponResponse>> createCoupon(CouponCreateInput input);
   Future<NetworkResponse<ListResponse<CouponResponse>>> getCoupons({
-    int offset,
-    int limit,
+    int offset = 0,
+    int limit = 100,
     int? restaurantId,
     String? createdBy,
     bool? isActive,
+    String? couponType,
+    String? search,
   });
   Future<NetworkResponse<ListResponse<CouponResponse>>> getActiveCoupons({
-    int offset,
-    int limit,
+    int offset = 0,
+    int limit = 100,
     int? restaurantId,
+    String? createdBy,
+    String? couponType,
+    String? search,
   });
   Future<NetworkResponse<CouponResponse>> getCouponById(String id);
   Future<NetworkResponse<CouponResponse>> updateCoupon(
@@ -67,6 +72,8 @@ class CouponApiImpl extends CouponApi {
     int? restaurantId,
     String? createdBy,
     bool? isActive,
+    String? couponType,
+    String? search,
   }) async {
     return await handleNetworkError(
       proccess: () async {
@@ -74,6 +81,8 @@ class CouponApiImpl extends CouponApi {
         if (restaurantId != null) params['restaurant_id'] = restaurantId;
         if (createdBy != null) params['created_by'] = createdBy;
         if (isActive != null) params['is_active'] = isActive;
+        if (couponType != null) params['coupon_type'] = couponType;
+        if (search != null) params['search'] = search;
 
         final response = await AppClient(
           token: await appPrefs.getNormalToken(),
@@ -95,11 +104,17 @@ class CouponApiImpl extends CouponApi {
     int offset = 0,
     int limit = 100,
     int? restaurantId,
+    String? createdBy,
+    String? couponType,
+    String? search,
   }) async {
     return await handleNetworkError(
       proccess: () async {
         final params = <String, dynamic>{'offset': offset, 'limit': limit};
         if (restaurantId != null) params['restaurant_id'] = restaurantId;
+        if (createdBy != null) params['created_by'] = createdBy;
+        if (couponType != null) params['coupon_type'] = couponType;
+        if (search != null) params['search'] = search;
 
         final response = await AppClient(
           token: await appPrefs.getNormalToken(),

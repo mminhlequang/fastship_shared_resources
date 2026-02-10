@@ -26,22 +26,32 @@ class CouponRepo {
     int? restaurantId,
     String? createdBy,
     bool? isActive,
+    String? couponType,
+    String? search,
   }) => _api.getCoupons(
     offset: offset,
     limit: limit,
     restaurantId: restaurantId,
     createdBy: createdBy,
     isActive: isActive,
+    couponType: couponType,
+    search: search,
   );
 
   Future<NetworkResponse<ListResponse<CouponResponse>>> getActiveCoupons({
     int offset = 0,
     int limit = 100,
     int? restaurantId,
+    String? createdBy,
+    String? couponType,
+    String? search,
   }) => _api.getActiveCoupons(
     offset: offset,
     limit: limit,
     restaurantId: restaurantId,
+    createdBy: createdBy,
+    couponType: couponType,
+    search: search,
   );
 
   Future<NetworkResponse<CouponResponse>> getCouponById(String id) =>
