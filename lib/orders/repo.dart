@@ -30,6 +30,14 @@ class OrdersRepo {
     CheckoutRequest request,
   ) => _api.processCheckoutV2(request);
 
+  Future<NetworkResponse<CheckoutCalculationV3Response>> calculateCheckoutV3(
+    CheckoutRequestV3 request,
+  ) => _api.calculateCheckoutV3(request);
+
+  Future<NetworkResponse<CheckoutV3Response>> processCheckoutV3(
+    CheckoutRequestV3 request,
+  ) => _api.processCheckoutV3(request);
+
   Future<NetworkResponse<CheckoutResponse>> createPaymentSession(
     String orderId,
     bool usePaymentIntent,

@@ -13,6 +13,8 @@ class _OrdersEndpoint {
   static String calculateCheckout() => "/api/v1/orders/checkout/calculate";
   static String processCheckout() => "/api/v1/orders/checkout";
   static String processCheckoutV2() => "/api/v1/orders/checkout_v2";
+  static String calculateCheckoutV3() => "/api/v1/orders/checkout/calculate_v3";
+  static String processCheckoutV3() => "/api/v1/orders/checkout_v3";
   static String createPaymentSession(orderId) =>
       "/api/v1/orders/$orderId/create_payment_session";
 
@@ -50,6 +52,12 @@ abstract class OrdersApi {
   );
   Future<NetworkResponse<CheckoutResponse>> processCheckoutV2(
     CheckoutRequest request,
+  );
+  Future<NetworkResponse<CheckoutCalculationV3Response>> calculateCheckoutV3(
+    CheckoutRequestV3 request,
+  );
+  Future<NetworkResponse<CheckoutV3Response>> processCheckoutV3(
+    CheckoutRequestV3 request,
   );
   Future<NetworkResponse<CheckoutResponse>> createPaymentSession(
     String orderId,
@@ -151,6 +159,40 @@ class OrdersApiImpl extends OrdersApi {
         return NetworkResponse.fromResponse(
           response,
           converter: (json) => CheckoutResponse.fromJson(json),
+        );
+      },
+    );
+  }
+
+  @override
+  Future<NetworkResponse<CheckoutCalculationV3Response>> calculateCheckoutV3(
+    CheckoutRequestV3 request,
+  ) async {
+    return await handleNetworkError(
+      proccess: () async {
+        final response = await AppClient(
+          token: await appPrefs.getNormalToken(),
+        ).post(_OrdersEndpoint.calculateCheckoutV3(), data: request.toJson());
+        return NetworkResponse.fromResponse(
+          response,
+          converter: (json) => CheckoutCalculationV3Response.fromJson(json),
+        );
+      },
+    );
+  }
+
+  @override
+  Future<NetworkResponse<CheckoutV3Response>> processCheckoutV3(
+    CheckoutRequestV3 request,
+  ) async {
+    return await handleNetworkError(
+      proccess: () async {
+        final response = await AppClient(
+          token: await appPrefs.getNormalToken(),
+        ).post(_OrdersEndpoint.processCheckoutV3(), data: request.toJson());
+        return NetworkResponse.fromResponse(
+          response,
+          converter: (json) => CheckoutV3Response.fromJson(json),
         );
       },
     );

@@ -76,6 +76,37 @@ class CheckoutRequest {
   }
 }
 
+/// Model cho request thanh toán V3 (single cart - 1 order = 1 restaurant)
+class CheckoutRequestV3 {
+  final CheckoutCart cart;
+  final String paymentMethod;
+  final String? couponCode;
+  final CheckoutRequestDeliveryAddress? deliveryAddress;
+  final String? deliveryInstructions;
+  final bool? usePaymentIntent;
+
+  CheckoutRequestV3({
+    required this.cart,
+    required this.paymentMethod,
+    this.couponCode,
+    this.deliveryAddress,
+    this.deliveryInstructions,
+    this.usePaymentIntent,
+  });
+
+  /// Chuyển sang JSON
+  Map<String, dynamic> toJson() {
+    return {
+      'cart': cart.toJson(),
+      'payment_method': paymentMethod,
+      'coupon_code': couponCode,
+      'delivery_address': deliveryAddress?.toJson(),
+      'delivery_instructions': deliveryInstructions,
+      'use_payment_intent': usePaymentIntent,
+    };
+  }
+}
+
 /// Model cho từng giỏ hàng trong request thanh toán
 class CheckoutCart {
   final String cartId;
@@ -215,6 +246,69 @@ class CheckoutCalculationResponse {
       _data["restaurant_breakdown"] =
           restaurantBreakdown?.map((e) => e.toJson()).toList();
     }
+    return _data;
+  }
+}
+
+/// Response model cho V3 checkout calculation (single cart - no breakdown)
+class CheckoutCalculationV3Response {
+  int? subtotal;
+  int? discountAmount;
+  int? deliveryFee;
+  int? taxAmount;
+  int? totalAmount;
+  String? currencyCode;
+  String? currencySymbol;
+  dynamic appliedCoupon;
+  int? restaurantId;
+  int? itemCount;
+  String? polyline;
+  int? duration;
+
+  CheckoutCalculationV3Response({
+    this.subtotal,
+    this.discountAmount,
+    this.deliveryFee,
+    this.taxAmount,
+    this.totalAmount,
+    this.currencyCode,
+    this.currencySymbol,
+    this.appliedCoupon,
+    this.restaurantId,
+    this.itemCount,
+    this.polyline,
+    this.duration,
+  });
+
+  CheckoutCalculationV3Response.fromJson(Map<String, dynamic> json) {
+    subtotal = json["subtotal"];
+    discountAmount = json["discount_amount"];
+    deliveryFee = json["delivery_fee"];
+    taxAmount = json["tax_amount"];
+    totalAmount = json["total_amount"];
+    currencyCode = json["currency_code"];
+    currencySymbol = json["currency_symbol"];
+    appliedCoupon = json["applied_coupon"];
+    restaurantId = json["restaurant_id"];
+    itemCount = json["item_count"];
+    polyline = json["polyline"];
+    duration = json["duration"];
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> _data = <String, dynamic>{};
+    _data["subtotal"] = subtotal;
+    _data["discount_amount"] = discountAmount;
+    _data["delivery_fee"] = deliveryFee;
+    _data["tax_amount"] = taxAmount;
+    _data["total_amount"] = totalAmount;
+    _data["currency_code"] = currencyCode;
+    _data["currency_symbol"] = currencySymbol;
+    _data["applied_coupon"] = appliedCoupon;
+    _data["restaurant_id"] = restaurantId;
+    _data["item_count"] = itemCount;
+    _data["polyline"] = polyline;
+    _data["duration"] = duration;
     return _data;
   }
 }
@@ -364,6 +458,50 @@ class CheckoutResponse {
       'checkout_calculation': checkoutCalculation?.toJson(),
       'payment_intent': paymentIntent?.toJson(),
       'checkout_session': checkoutSession?.toJson(),
+    };
+  }
+}
+
+/// Response model cho V3 checkout (single cart - payment first)
+class CheckoutV3Response {
+  final CheckoutCalculationV3Response? checkoutCalculation;
+  final PaymentIntent? paymentIntent;
+  final CheckoutSession? checkoutSession;
+  final String? message;
+
+  CheckoutV3Response({
+    this.checkoutCalculation,
+    this.paymentIntent,
+    this.checkoutSession,
+    this.message,
+  });
+
+  factory CheckoutV3Response.fromJson(Map<String, dynamic> json) {
+    return CheckoutV3Response(
+      checkoutCalculation:
+          json['checkout_calculation'] != null
+              ? CheckoutCalculationV3Response.fromJson(
+                json['checkout_calculation'],
+              )
+              : null,
+      paymentIntent:
+          json['payment_intent'] != null
+              ? PaymentIntent.fromJson(json['payment_intent'])
+              : null,
+      checkoutSession:
+          json['checkout_session'] != null
+              ? CheckoutSession.fromJson(json['checkout_session'])
+              : null,
+      message: json['message'] as String?,
+    );
+  }
+
+  Map<String, dynamic> toJson() {
+    return {
+      'checkout_calculation': checkoutCalculation?.toJson(),
+      'payment_intent': paymentIntent?.toJson(),
+      'checkout_session': checkoutSession?.toJson(),
+      'message': message,
     };
   }
 }
