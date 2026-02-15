@@ -275,7 +275,7 @@ enum AppPaymentMethod {
   String get description {
     switch (this) {
       case AppPaymentMethod.stripe:
-        return 'Pay with credit/debit card on Stripe';
+        return 'Pay with credit/debit card or mobile wallet (Apple Pay / Google Pay)';
       case AppPaymentMethod.faship_wallet:
         return 'Pay with FastShip wallet';
       case AppPaymentMethod.cash:
@@ -286,7 +286,7 @@ enum AppPaymentMethod {
   String get displayName {
     switch (this) {
       case AppPaymentMethod.stripe:
-        return 'Stripe Payment';
+        return 'Pay with Card';
       case AppPaymentMethod.faship_wallet:
         return 'FastShip Wallet';
       case AppPaymentMethod.cash:
