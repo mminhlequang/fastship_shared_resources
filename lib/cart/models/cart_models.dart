@@ -389,3 +389,35 @@ class CartItemOption {
     return _data;
   }
 }
+
+/// Bulk sync request – sends local cart items to the server after login
+class CartSyncRequest {
+  final List<CartItemAddRequest> items;
+
+  CartSyncRequest({required this.items});
+
+  Map<String, dynamic> toJson() => {
+    'items': items.map((e) => e.toJson()).toList(),
+  };
+}
+
+/// Response returned by POST /cart/sync
+class CartSyncResponse {
+  final int syncedCount;
+  final int restaurantCount;
+  final List<String> errors;
+
+  CartSyncResponse({
+    required this.syncedCount,
+    required this.restaurantCount,
+    this.errors = const [],
+  });
+
+  factory CartSyncResponse.fromJson(Map<String, dynamic> json) =>
+      CartSyncResponse(
+        syncedCount: json['synced_count'] as int? ?? 0,
+        restaurantCount: json['restaurant_count'] as int? ?? 0,
+        errors:
+            (json['errors'] as List?)?.map((e) => e as String).toList() ?? [],
+      );
+}

@@ -27,7 +27,7 @@ const String appCurrencySymbol = "Ft";
 String get appMapUrlTemplate =>
     kDebugMode ? appMapUrlTemplateGg : appMapUrlTemplateHERE;
 
-const String hereMapApiKey = "HxCn0uXDho1pV2wM59D_QWzCgPtWB_E5aIiqIdnBnV0";
+const String hereMapApiKey = "a-kIGIlqHE0x-1oIx7Ng4jQiLyExf8WXdAHty1nn4aY";
 String get appMapUrlTemplateHERE =>
     "https://maps.hereapi.com/v3/base/mc/{z}/{x}/{y}/png8?lang=${appPrefs.languageCode}&size=256&style=lite.day&apiKey=$hereMapApiKey";
 const String appMapUrlTemplateGg =
@@ -275,7 +275,7 @@ enum AppPaymentMethod {
   String get description {
     switch (this) {
       case AppPaymentMethod.stripe:
-        return 'Pay with credit/debit card or mobile wallet (Apple Pay / Google Pay)';
+        return 'Pay with credit/debit card on Stripe';
       case AppPaymentMethod.faship_wallet:
         return 'Pay with FastShip wallet';
       case AppPaymentMethod.cash:
@@ -286,7 +286,7 @@ enum AppPaymentMethod {
   String get displayName {
     switch (this) {
       case AppPaymentMethod.stripe:
-        return 'Pay with Card';
+        return 'Stripe Payment';
       case AppPaymentMethod.faship_wallet:
         return 'FastShip Wallet';
       case AppPaymentMethod.cash:

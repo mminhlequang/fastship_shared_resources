@@ -12,6 +12,7 @@ class _CartEndpoint {
   static String myCarts() => "/api/v1/cart/my-carts";
   static String addItem() => "/api/v1/cart/add-item";
   static String updateItem() => "/api/v1/cart/update-item";
+  static String syncCart() => "/api/v1/cart/sync";
 }
 
 abstract class CartApi {
@@ -23,6 +24,7 @@ abstract class CartApi {
   Future<NetworkResponse<CartItemModel>> updateCartItem(
     CartItemUpdateRequest request,
   );
+  Future<NetworkResponse<CartSyncResponse>> syncCart(CartSyncRequest request);
 }
 
 class CartApiImpl extends CartApi {
@@ -72,6 +74,23 @@ class CartApiImpl extends CartApi {
         return NetworkResponse.fromResponse(
           response,
           converter: (json) => CartItemModel.fromJson(json),
+        );
+      },
+    );
+  }
+
+  @override
+  Future<NetworkResponse<CartSyncResponse>> syncCart(
+    CartSyncRequest request,
+  ) async {
+    return await handleNetworkError(
+      proccess: () async {
+        final response = await AppClient(
+          token: await appPrefs.getNormalToken(),
+        ).post(_CartEndpoint.syncCart(), data: request.toJson());
+        return NetworkResponse.fromResponse(
+          response,
+          converter: (json) => CartSyncResponse.fromJson(json),
         );
       },
     );

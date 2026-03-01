@@ -25,4 +25,7 @@ class CartRepo {
   Future<NetworkResponse<CartItemModel>> updateCartItem(
     CartItemUpdateRequest request,
   ) => _api.updateCartItem(request);
+
+  Future<NetworkResponse<CartSyncResponse>> syncCart(CartSyncRequest request) =>
+      _api.syncCart(request);
 }
